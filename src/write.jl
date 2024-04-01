@@ -6,46 +6,46 @@ function write(
     id::Union{String,Missing}=missing,
     classes::Union{Vector{String},String,Missing}=missing
 )
-    table_html = "<table"
+    html_table = "<table"
 
     if id !== missing
-        table_html *= " id=\"$id\""
+        html_table *= " id=\"$id\""
     end
 
     if classes !== missing
         if isa(classes, String)
-            table_html *= " class=\"$classes\""
+            html_table *= " class=\"$classes\""
         elseif isa(classes, Vector{String})
-            table_html *= " class=\"" * join(classes, " ") * "\""
+            html_table *= " class=\"" * join(classes, " ") * "\""
         end
     end
 
-    table_html *= ">"
+    html_table *= ">"
 
     if headers
-        table_html *= "<thead><tr>"
+        html_table *= "<thead><tr>"
         for col in names(df)
-            table_html *= "<th>$col</th>"
+            html_table *= "<th>$col</th>"
         end
-        table_html *= "</tr></thead>"
+        html_table *= "</tr></thead>"
     end
 
-    table_html *= "<tbody>"
+    html_table *= "<tbody>"
 
     for row in 1:nrow(df)
-        table_html *= "<tr>"
+        html_table *= "<tr>"
         for col in 1:ncol(df)
-            table_html *= "<td>$(df[row, col])</td>"
+            html_table *= "<td>$(df[row, col])</td>"
         end
-        table_html *= "</tr>"
+        html_table *= "</tr>"
     end
 
-    table_html *= "</tbody></table>"
+    html_table *= "</tbody></table>"
 
     path = joinpath(save_location, "$filename.html")
 
     Base.open(path, "w") do io
-        Base.write(io, table_html)
+        Base.write(io, html_table)
     end
 
     return path

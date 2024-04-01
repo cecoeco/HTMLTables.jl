@@ -8,11 +8,12 @@ Read and write HTML tables.
 """
 module HTMLTables
 
-using Cascadia, DataFrames, Gumbo, HTTP
+using Cascadia, DataFrames, Gumbo, HTTP, Tables
 
-export read, write
+export read, write, writetbody
 
 include("read.jl")
 include("write.jl")
+include("tbody.jl")
 
 end
