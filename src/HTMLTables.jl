@@ -10,10 +10,9 @@ module HTMLTables
 
 using Cascadia, DataFrames, Gumbo, HTTP, Tables
 
-export read, write, writetbody
+export read, readtbody, write, writetbody
 
 include("read.jl")
 include("write.jl")
-include("tbody.jl")
 
 end
