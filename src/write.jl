@@ -6,7 +6,7 @@ function write(
     id::Union{String,Missing}=missing,
     classes::Union{Vector{String},String,Missing}=missing
 )
-    html_table = "<table"
+    html_table::String = "<table"
 
     if id !== missing
         html_table *= " id=\"$id\""
@@ -42,7 +42,7 @@ function write(
 
     html_table *= "</tbody></table>"
 
-    path = joinpath(save_location, "$filename.html")
+    path::String = Base.joinpath(save_location, "$filename.html")
 
     Base.open(path, "w") do io
         Base.write(io, html_table)
