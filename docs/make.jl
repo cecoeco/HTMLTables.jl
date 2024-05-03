@@ -2,7 +2,7 @@ using Documenter
 using DocumenterCitations
 using HTMLTables
 
-bib_filepath = Base.joinpath(Base.dirname(@__FILE__), "src/assets/references.bib")
+bib_filepath = Base.joinpath(Base.dirname(Base.@__FILE__), "src/assets/references.bib")
 bib = DocumenterCitations.CitationBibliography(bib_filepath, style=:authoryear)
 
 Documenter.makedocs(
