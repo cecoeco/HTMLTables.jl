@@ -2,8 +2,8 @@ function writetbody(
     df::DataFrame;
     filename::String="table",
     save_location::String=Base.Filesystem.pwd(),
-    id::Union{String,Missing}=missing,
-    classes::Union{Vector{String},String,Missing}=missing
+    id::Union{String}="",
+    classes::Union{Vector{String},String}=""
 )
     tbody_content::String = ""
 
@@ -17,11 +17,11 @@ function writetbody(
 
     table_html::String = "<table"
 
-    if id !== missing
+    if id !== ""
         table_html *= " id=\"$id\""
     end
 
-    if classes !== missing
+    if classes !== ""
         if Base.isa(classes, String)
             table_html *= " class=\"$classes\""
         elseif Base.isa(classes, Vector{String})

@@ -1,12 +1,10 @@
 function read(
     source::String;
-    id::Union{String,Missing}=missing,
-    classes::Union{Vector{String},String,Missing}=missing
+    id::Union{String}="",
+    classes::Union{Vector{String},String}=""
 )
-    is_url::Bool = Base.startswith(source, "http://") || Base.startswith(source, "https://")
-
-    if is_url
-        response = HTTP.get(source)
+    if isurl(source)
+        response::HTTP.Response = HTTP.get(source)
         html_content = Base.String(response.body)
     else
         html_content = Base.read(source, String)
@@ -15,8 +13,8 @@ function read(
     html::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
 
     selector::String = ""
-    if Base.ismissing(id)
-        if Base.ismissing(classes)
+    if id == ""
+        if classes !== ""
             if Base.isa(classes, String)
                 selector *= ".$classes"
             elseif Base.isa(classes, Vector{String})
@@ -25,7 +23,7 @@ function read(
                 Base.throw(Base.ArgumentError("classes must be a String or Vector{String}"))
             end
         end
-    elseif Base.ismissing(id)
+    elseif id !== ""
         selector *= "#$id"
     else
         Base.throw(Base.ArgumentError("id must be a String or missing"))

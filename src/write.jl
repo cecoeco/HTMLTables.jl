@@ -3,16 +3,16 @@ function write(
     filename::String="table",
     save_location::String=Base.Filesystem.pwd(),
     headers::Bool=true,
-    id::Union{String,Missing}=missing,
-    classes::Union{Vector{String},String,Missing}=missing
+    id::Union{String}="",
+    classes::Union{Vector{String},String}=""
 )
     html_table::String = "<table"
 
-    if id !== missing
+    if id !== ""
         html_table *= " id=\"$id\""
     end
 
-    if classes !== missing
+    if classes !== ""
         if Base.isa(classes, String)
             html_table *= " class=\"$classes\""
         elseif Base.isa(classes, Vector{String})
