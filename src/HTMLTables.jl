@@ -1,5 +1,5 @@
 """
-    HTMLTables 
+    HTMLTables
 
 Julia package for reading and writing HTML tables.
 

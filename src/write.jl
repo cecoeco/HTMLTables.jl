@@ -1,7 +1,7 @@
 function write(
     df::DataFrame;
     filename::String="table",
-    save_location::String=Base.pwd(),
+    save_location::String=Base.Filesystem.pwd(),
     headers::Bool=true,
     id::Union{String,Missing}=missing,
     classes::Union{Vector{String},String,Missing}=missing
@@ -13,10 +13,10 @@ function write(
     end
 
     if classes !== missing
-        if isa(classes, String)
+        if Base.isa(classes, String)
             html_table *= " class=\"$classes\""
-        elseif isa(classes, Vector{String})
-            html_table *= " class=\"" * join(classes, " ") * "\""
+        elseif Base.isa(classes, Vector{String})
+            html_table *= " class=\"" * Base.join(classes, " ") * "\""
         end
     end
 
@@ -24,7 +24,7 @@ function write(
 
     if headers
         html_table *= "<thead><tr>"
-        for col in names(df)
+        for col in Base.names(df)
             html_table *= "<th>$col</th>"
         end
         html_table *= "</tr></thead>"
@@ -32,9 +32,9 @@ function write(
 
     html_table *= "<tbody>"
 
-    for row in 1:nrow(df)
+    for row in 1:DataFrames.nrow(df)
         html_table *= "<tr>"
-        for col in 1:ncol(df)
+        for col in 1:DataFrames.ncol(df)
             html_table *= "<td>$(df[row, col])</td>"
         end
         html_table *= "</tr>"
@@ -42,7 +42,7 @@ function write(
 
     html_table *= "</tbody></table>"
 
-    path::String = Base.joinpath(save_location, "$filename.html")
+    path::String = Base.Filesystem.joinpath(save_location, "$filename.html")
 
     Base.open(path, "w") do io
         Base.write(io, html_table)
