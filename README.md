@@ -3,10 +3,10 @@
 Julia package for reading and writing HTML tables.
 
 ## Reading HTML tables
-- `HTMLTables.read`: read HTML table into a `DataFrame`.
+- `HTMLTables.read`: extracts data from HTML tables.
 
 ## Writing HTML tables
-- `HTMLTables.write`: write a `DataFrame` into an HTML table.
+- `HTMLTables.write`: uses the Tables.jl interface to write an HTML table.
 
 ## License
 Copyright © 2024 Ceco Elijah Maples

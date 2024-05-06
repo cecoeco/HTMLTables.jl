@@ -4,21 +4,20 @@ table {
   color: black;
   width: 100%;
   border-collapse: collapse;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 thead {
   font-weight: bold;
   background-color: hsl(115, 100%, 60%);
+  border-bottom: 1px solid black;
 }
 
 tfoot {
   height: 20px;
   background-color: hsl(115, 100%, 65%);
-}
-
-thead, tfoot {
   border-top: 1px solid black;
-  border-bottom: 1px solid black;
 }
 
 tbody tr:nth-child(even) {

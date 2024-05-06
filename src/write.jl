@@ -64,7 +64,7 @@ function write(
 )
     html_table::String = ""
 
-    if css
+    if theme !== "" && css
         html_table *= loadtheme(theme)
     end
 
