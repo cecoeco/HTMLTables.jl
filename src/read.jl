@@ -1,6 +1,18 @@
+"""
+    HTMLTables.read(source::String; id::String="", classes::Union{Vector{String},String}="")
+
+Reads a HTML table into a `DataFrame`.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML table.
+- `id::String`: The id of the HTML table.
+- `classes::Union{Vector{String},String}`: The classes of the HTML table.
+
+"""
 function read(
     source::String;
-    id::Union{String}="",
+    id::String="",
     classes::Union{Vector{String},String}=""
 )
     if isurl(source)
@@ -13,6 +25,7 @@ function read(
     html::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
 
     selector::String = ""
+
     if id == ""
         if classes !== ""
             if Base.isa(classes, String)
@@ -26,7 +39,7 @@ function read(
     elseif id !== ""
         selector *= "#$id"
     else
-        Base.throw(Base.ArgumentError("id must be a String or missing"))
+        Base.throw(Base.ArgumentError("id must be of type String"))
     end
 
     tables = Base.eachmatch(Cascadia.Selector(selector), html.root)
@@ -36,6 +49,7 @@ function read(
         rows = Base.eachmatch(Cascadia.Selector("tr"), table)
         headers = []
         data = []
+
         for (i, row) in Base.Iterators.enumerate(rows)
             cells = Base.eachmatch(Cascadia.Selector("td,th"), row)
             if i == 1 && Base.isempty(headers)
@@ -44,6 +58,7 @@ function read(
                 Base.push!(data, [Cascadia.nodeText(cell) for cell in cells])
             end
         end
+        
         return DataFrames.DataFrame(data, Symbol.(headers))
     else
         return DataFrames.DataFrame()
