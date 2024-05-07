@@ -16,6 +16,7 @@ Documenter.makedocs(
         "Home" => "index.md",
         "Reading" => "reading.md",
         "Writing" => "writing.md",
+        "Viewing" => "viewing.md",
         "Examples" => "examples.md",
         "References" => "references.md"
     ],
