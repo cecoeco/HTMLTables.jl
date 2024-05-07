@@ -1,5 +1,5 @@
 ## Viewing
 ```@docs
-HTMLTables.open()
-HTMLTables.display()
+HTMLTables.open
+HTMLTables.display
 ```

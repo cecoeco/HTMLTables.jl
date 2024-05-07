@@ -1,5 +1,5 @@
 ## Reading
 ```@docs
-HTMLTables.get()
-HTMLTables.read()
+HTMLTables.get
+HTMLTables.read
 ```

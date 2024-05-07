@@ -1,5 +1,5 @@
 ## Writing
 ```@docs
-HTMLTables.table()
-HTMLTables.write()
+HTMLTables.table
+HTMLTables.write
 ```
