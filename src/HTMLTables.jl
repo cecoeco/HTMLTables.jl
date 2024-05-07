@@ -1,6 +1,4 @@
 """
-    HTMLTables
-
 Julia package for reading, writing, and viewing HTML tables.
 
 Reading HTML tables:
@@ -21,12 +19,15 @@ using Cascadia, Colors, ColorSchemes, Gumbo, HTTP, Tables
 
 export get, read, table, write, display, open
 
+# reading HTML tables
 include("get.jl")
 include("read.jl")
 
+# writing HTML tables
 include("table.jl")
 include("write.jl")
 
+# viewing HTML tables
 include("display.jl")
 include("open.jl")
 
