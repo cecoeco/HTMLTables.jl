@@ -64,6 +64,7 @@ end
 
 function getnumbers(tbl)
     numbers::Vector{Float64} = Float64[]
+    
     for col in Base.names(tbl)
         for val in tbl[!, col]
             if Base.isa(val, Number)
@@ -92,14 +93,14 @@ function toCSSrgb(color::Colors.Colorant)::String
 
 end
 
-function cellcolor(tbl; colorscale::String="", cell_value, css::Bool=true)::String
-    if colorscale == "" && !Base.isa(cell_value, Number) || !css
+function cellcolor(tbl; colorscale::String="", cell_value::Any, css::Bool=true)::String
+    numbers::Vector{Float64} = getnumbers(tbl)
+
+    if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !css
         return ""
     end
 
     colors::ColorSchemes.ColorScheme = Base.getfield(ColorSchemes, Base.Symbol(colorscale))
-
-    numbers::Vector{Float64} = getnumbers(tbl)
 
     min_num::Float64 = Base.minimum(numbers)
     max_num::Float64 = Base.maximum(numbers)
@@ -124,17 +125,17 @@ function writetbody(tbl; colorscale::String="", tooltips::Bool=true, css::Bool=t
 
         for col in Base.names(tbl)
             cell_value = row[Base.Symbol(col)]
-            cell_value = numeric_string_to_number(cell_value)
+            cell_value::Any = numeric_string_to_number(cell_value)
 
             if tooltips
-                title_attribute = " title=\"$cell_value\""
+                cell_tooltip = " title=\"$cell_value\""
             else
-                title_attribute = ""
+                cell_tooltip = ""
             end
 
-            cell_color = cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
+            cell_color::String = cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
 
-            tbody *= "<td$title_attribute $cell_color>$cell_value</td>\n"
+            tbody *= "<td$cell_tooltip $cell_color>$cell_value</td>\n"
         end
 
         tbody *= "</tr>\n"
