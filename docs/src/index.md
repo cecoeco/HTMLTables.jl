@@ -1,4 +1,4 @@
-## Reading
+# HTMLTables
 ```@docs
 HTMLTables.HTMLTables
 ```
