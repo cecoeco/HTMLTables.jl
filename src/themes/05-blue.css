@@ -1,51 +1,17 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  width: fit-content;
-  height: fit-content;
-}
-
-table {
-  font-family: Helvetica;
-  font-size: 15px;
-  color: black;
-  width: 100%;
-  border: 0;
-  border-spacing: 0;
-  border-collapse: collapse;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  cursor: default;
-}
+@import "table.css";
 
 thead {
-  font-weight: bold;
   background-color: hsl(205, 100%, 60%);
-  border-bottom: 1px solid black;
-}
-
-tfoot {
-  height: 20px;
-  background-color: hsl(205, 100%, 65%);
-  border-top: 1px solid black;
-}
-
-tbody tr:nth-child(even) {
-  background-color: hsl(205, 100%, 85%);
 }
 
 tbody tr:nth-child(odd) {
   background-color: hsl(205, 100%, 75%);
 }
 
-tbody td:hover {
-  text-decoration: underline;
+tbody tr:nth-child(even) {
+  background-color: hsl(205, 100%, 85%);
 }
 
-th, td {
-  padding: 5px 10px;
-  text-align: center;
+tfoot {
+  background-color: hsl(205, 100%, 65%);
 }

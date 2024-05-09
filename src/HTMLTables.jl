@@ -22,6 +22,7 @@ using Cascadia, Colors, ColorSchemes, Gumbo, HTTP, NodeJS_20_jll, Tables
 
 export get, read, table, write, jpg, pdf, png, display, open
 
+include("kwargs_docstrings.jl")
 include("reading.jl")
 include("writing.jl")
 include("viewing.jl")

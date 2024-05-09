@@ -7,23 +7,13 @@ const puppeteer = require("puppeteer");
  * @param {string} outputPath - Path to save the JPEG image
  */
 async function html2jpg(htmlString, outputPath) {
-  try {
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
-
     await page.goto(
       `data:text/html;charset=utf-8,${encodeURIComponent(htmlString)}`,
       { waitUntil: "domcontentloaded" }
     );
-
     const jpegBuffer = await page.screenshot({ fullPage: true, type: "jpeg" });
-
     fs.writeFileSync(outputPath, jpegBuffer);
-
-    console.log("Image saved:", outputPath);
-
     await browser.close();
-  } catch (error) {
-    console.error("Error:", error);
-  }
 }

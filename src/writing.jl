@@ -16,35 +16,40 @@ function writestyle(theme::String; css::Bool=true)::String
         return ""
     end
 
+    main_css_path::String = ""
+    main_css_dir::String = ""
+
     if Base.haskey(THEMES, theme)
-        theme_path::String = Base.Filesystem.joinpath(@__DIR__, THEMES[theme])
-        css_string::String = Base.read(theme_path, String)
-
-        return "<style>\n$css_string\n</style>\n"
+        main_css_path *= Base.Filesystem.joinpath(@__DIR__, THEMES[theme])
+        main_css_dir *= dirname(main_css_path)
     elseif Base.Filesystem.ispath(theme) && Base.Filesystem.isfile(theme)
-        css_string = Base.read(theme, String)
-
-        return "<style>\n$css_string\n</style>\n"
+        main_css_path *= theme
+        main_css_dir *= Base.Filesystem.dirname(main_css_path)
     else
-        Base.throw(Base.ArgumentError("$theme is not a valid theme or CSS file."))
-    end
-end
-
-function writeid(id::String="")::String
-    if id == ""
-        return ""
+        Base.throw(Base.ArgumentError("$theme is not a valid theme or CSS file"))
     end
 
-    return "id=\"$id\""
-end
+    css_string::String = Base.read(main_css_path, String)
 
-function writeclasses(classes::String)::String
-    if classes == ""
-        return ""
+    import_regex::Regex = r"@import\s+\"([^\"]+)\";"
+
+    matches::Base.RegexMatchIterator = Base.eachmatch(import_regex, css_string)
+
+    for match in matches
+        import_path::String = match.captures[1]
+        import_full_path::String = Base.Filesystem.joinpath(main_css_dir, import_path)
+        import_content::String = Base.read(import_full_path, String)
+        css_string = Base.replace(css_string, match.match => import_content)
     end
 
-    return "class=\"$classes\""
+    return "<style>\n$css_string\n</style>\n"
 end
+
+writeid(id::String="")::String = id == "" ? "" : " id=\"$id\""
+
+writeclasses(classes::String="")::String = classes == "" ? "" : " class=\"$classes\""
+
+writetooltip(tooltips::Bool=true, cell_value="")::String = tooltips ? " title=\"$cell_value\"" : ""
 
 function writethead(tbl; header::Bool=true)::String
     if !header
@@ -62,7 +67,7 @@ function writethead(tbl; header::Bool=true)::String
     return thead
 end
 
-function getnumbers(tbl)
+function getnumbers(tbl)::Vector{Float64}
     numbers::Vector{Float64} = Float64[]
     
     for col in Base.names(tbl)
@@ -76,45 +81,30 @@ function getnumbers(tbl)
     return numbers
 end
 
-function toCSSrgb(color::Colors.Colorant)::String
-    r::Float64 = Colors.red(color)
-    g::Float64 = Colors.green(color)
-    b::Float64 = Colors.blue(color)
+function css_rgb(color::Colors.Colorant)::String
+    r::Float64 = Colors.red(color) * 255
+    g::Float64 = Colors.green(color) * 255
+    b::Float64 = Colors.blue(color) * 255
 
-    r_int::Int = Base.round(Int, r * 255)
-    g_int::Int = Base.round(Int, g * 255)
-    b_int::Int = Base.round(Int, b * 255)
-
-    r_string::String = Base.string(r_int)
-    g_string::String = Base.string(g_int)
-    b_string::String = Base.string(b_int)
-
-    return "rgb(" * Base.join([r_string, g_string, b_string], ",") * ")"
-
+    return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
 function cellcolor(tbl; colorscale::String="", cell_value::Any, css::Bool=true)::String
-    numbers::Vector{Float64} = getnumbers(tbl)
+    numbers::Vector{Number} = getnumbers(tbl)
 
     if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !css
         return ""
     end
 
-    colors::ColorSchemes.ColorScheme = Base.getfield(ColorSchemes, Base.Symbol(colorscale))
+    colorscheme::ColorSchemes.ColorScheme = getfield(ColorSchemes, Symbol(colorscale))
 
-    min_num::Float64 = Base.minimum(numbers)
-    max_num::Float64 = Base.maximum(numbers)
+    cell_position::Float64 = (cell_value - Base.minimum(numbers)) / (Base.maximum(numbers) - Base.minimum(numbers))
 
-    normalized_value::Float64 = (cell_value - min_num) / (max_num - min_num)
+    color::Colors.Colorant = ColorSchemes.get(colorscheme, cell_position)
 
-    color_index = normalized_value * (Base.length(colors) - 1) + 1
-    color_index = Base.ceil(Int, color_index)
-    color_index = Base.min(Base.max(color_index, 1), Base.length(colors))
+    css_color::String = css_rgb(color)
 
-    julia_color::Colors.Colorant = colors[color_index]
-    css_color::String = toCSSrgb(julia_color)
-
-    return "style=\"background-color: $css_color;\""
+    return " style=\"background-color: $css_color;\""
 end
 
 function writetbody(tbl; colorscale::String="", tooltips::Bool=true, css::Bool=true)::String
@@ -125,17 +115,13 @@ function writetbody(tbl; colorscale::String="", tooltips::Bool=true, css::Bool=t
 
         for col in Base.names(tbl)
             cell_value = row[Base.Symbol(col)]
-            cell_value::Any = numeric_string_to_number(cell_value)
 
-            if tooltips
-                cell_tooltip = " title=\"$cell_value\""
-            else
-                cell_tooltip = ""
-            end
+            cell::String = "<td"
+            cell *= writetooltip(tooltips, cell_value)
+            cell *= cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
+            cell *= ">$cell_value</td>\n"
 
-            cell_color::String = cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
-
-            tbody *= "<td$cell_tooltip $cell_color>$cell_value</td>\n"
+            tbody *= cell
         end
 
         tbody *= "</tr>\n"
@@ -162,16 +148,16 @@ function writetfoot(tbl; footer::Bool=true)::String
     return tfoot
 end
 
-function numeric_string_to_number(i)
+function numeric_string_to_number(cell_value)
     try
-        parsed = Base.parse(Float64, i)
+        parsed = Base.parse(Float64, cell_value)
         if parsed == Base.floor(parsed)
             return Base.Int(parsed)
         else
             return parsed
         end
     catch
-        return i
+        return cell_value
     end
 end
 
@@ -215,25 +201,19 @@ function table(
     theme::String="default",
     colorscale="",
     tooltips::Bool=true
-)
+)::String
+    if !isa(getfield(ColorSchemes, Symbol(colorscale)), ColorScheme)
+        Base.throw(Base.ArgumentError("$colorscale is not a valid color scheme"))
+    end
+
+    tbl = numeric_string_to_number.(tbl)
+
     html_table::String = ""
-
     html_table *= writestyle(theme, css=css)
-
-    html_table *= "<table"
-
-    html_table *= " " * writeid(id)
-
-    html_table *= " " * writeclasses(classes)
-
-    html_table *= ">\n"
-
+    html_table *= "<table$(writeid(id))$(writeclasses(classes))>\n"
     html_table *= writethead(tbl, header=header)
-
     html_table *= writetbody(tbl, colorscale=colorscale, tooltips=tooltips, css=css)
-
     html_table *= writetfoot(tbl, footer=footer)
-
     html_table *= "</table>"
 
     return html_table
@@ -282,14 +262,16 @@ function write(
         Base.write(io, html_table_content)
     end
 
+    Base.println("HTML table saved as $html_table_path")
+
     return html_table_path
 end
 
 function npminstall(npm_packages::Vector{String})
+    installed_packages::String = Base.read(`$(NodeJS_20_jll.npm) list --global --depth 0`, String)
+
     for npm_package in npm_packages
-        try
-            Base.run(`$(NodeJS_20_jll.npm) list --global $npm_package`)
-        catch
+        if !Base.occursin(npm_package, installed_packages)
             Base.run(`$(NodeJS_20_jll.npm) install --global $npm_package`)
         end
     end
@@ -310,98 +292,69 @@ function escape_html_for_js(html::String)::String
     return Base.join(Base.get(replacements, c, c) for c in html)
 end
 
-function jpg(
-    tbl;
+function converttable(
+    tbl,
+    output_format::String;
     filename::String="table",
     save_location::String=Base.Filesystem.pwd(),
     kwargs...
 )
+    if output_format == "jpg"
+        js_file = "html2jpg.js"
+        file_extension = ".jpg"
+    elseif output_format == "pdf"
+        js_file = "html2pdf.js"
+        file_extension = ".pdf"
+    elseif output_format == "png"
+        js_file = "html2png.js"
+        file_extension = ".png"
+    else
+        Base.error("Unsupported output format: $output_format")
+    end
+
     html_table::String = table(tbl; kwargs...) |> escape_html_for_js
 
-    jpg_path::String = Base.Filesystem.joinpath(save_location, "$filename.jpg")
+    file_path::String = Base.Filesystem.joinpath(save_location, "$filename$file_extension")
 
-    jpg_js_path::String = Base.Filesystem.joinpath(@__DIR__, "html2jpg.js")
+    js_path::String = Base.Filesystem.joinpath(@__DIR__, js_file)
 
-    jpg_js_content::String = Base.read(jpg_js_path, String)
+    js_content::String = Base.read(js_path, String)
+    
+    embedded_js_content::String = "$js_content\nhtml2$output_format(\"$html_table\", \"$file_path\")"
 
-    embedded_js_content::String = """$jpg_js_content\nhtml2jpg("$html_table", "$jpg_path")"""
-
-    tempfile::String = Base.string("html2jpg_", Base.rand(1:10000000000), ".js")
+    tempfile::String = "html2$output_format" * "_" * Base.string(Base.rand(1:10^10)) * ".js"
     embedded_js_path::String = Base.Filesystem.joinpath(save_location, tempfile)
 
     Base.open(embedded_js_path, "w") do file
         Base.write(file, embedded_js_content)
     end
 
-    npminstall(["fs", "puppeteer"])
-
-    Base.run(`$(NodeJS_20_jll.node()) $embedded_js_path`)
-
-    Base.rm(embedded_js_path)
-
-    return jpg_path
-end
-
-function pdf(
-    tbl;
-    filename::String="table",
-    save_location::String=Base.Filesystem.pwd(),
-    kwargs...
-)
-    html_table::String = table(tbl; kwargs...) |> escape_html_for_js
-
-    pdf_path::String = Base.Filesystem.joinpath(save_location, "$filename.pdf")
-
-    pdf_js_path::String = Base.Filesystem.joinpath(@__DIR__, "html2pdf.js")
-
-    pdf_js_content::String = Base.read(pdf_js_path, String)
-
-    embedded_js_content::String = """$pdf_js_content\nhtml2pdf("$html_table", "$pdf_path")"""
-
-    tempfile::String = Base.string("html2pdf_", Base.rand(1:10000000000), ".js")
-    embedded_js_path::String = Base.Filesystem.joinpath(save_location, tempfile)
-
-    Base.open(embedded_js_path, "w") do file
-        Base.write(file, embedded_js_content)
+    if output_format in ["jpg", "png"]
+        npminstall(["fs", "puppeteer"])
+    elseif output_format == "pdf"
+        npminstall(["puppeteer"])
     end
 
-    npminstall(["puppeteer"])
-
     Base.run(`$(NodeJS_20_jll.node()) $embedded_js_path`)
 
     Base.rm(embedded_js_path)
 
-    return pdf_path
+    Base.println("HTML table saved as $file_path")
+
+    return file_path
 end
 
-function png(
-    tbl;
-    filename::String="table",
-    save_location::String=Base.Filesystem.pwd(),
-    kwargs...
-)
-    html_table::String = table(tbl; kwargs...) |> escape_html_for_js
+"""
+    HTMLTables.jpg(tbl; kwargs...)
+"""
+jpg(tbl; kwargs...) = converttable(tbl, "jpg"; kwargs...)
 
-    png_path::String = Base.Filesystem.joinpath(save_location, "$filename.png")
+"""
+    HTMLTables.pdf(tbl; kwargs...)
+"""
+pdf(tbl; kwargs...) = converttable(tbl, "pdf"; kwargs...)
 
-    png_js_path::String = Base.Filesystem.joinpath(@__DIR__, "html2png.js")
-
-    png_js_content::String = Base.read(png_js_path, String)
-
-    embedded_js_content::String = """$png_js_content\nhtml2png("$html_table", "$png_path")"""
-
-    tempfile::String = Base.string("html2png_", Base.rand(1:10000000000), ".js")
-    embedded_js_path::String = Base.Filesystem.joinpath(save_location, tempfile)
-
-    Base.open(embedded_js_path, "w") do file
-        Base.write(file, embedded_js_content)
-    end
-
-    npminstall(["fs", "puppeteer"])
-
-    Base.run(`$(NodeJS_20_jll.node()) $embedded_js_path`)
-
-    Base.rm(embedded_js_path)
-
-    return png_path
-end
+"""
+    HTMLTables.png(tbl; kwargs...)
+"""
+png(tbl; kwargs...) = converttable(tbl, "png"; kwargs...)
