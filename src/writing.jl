@@ -8,7 +8,10 @@ const THEMES::Dict{String,String} = Base.Dict(
     "violet" => "themes/06-violet.css",
     "magenta" => "themes/07-magenta.css",
     "brown" => "themes/08-brown.css",
-    "gray" => "themes/09-gray.css"
+    "gray" => "themes/09-gray.css",
+    "julia" => "themes/10-julia.css",
+    "sunstone" => "themes/11-sunstone.css",
+    "moonstone" => "themes/12-moonstone.css"
 )
 
 function writestyle(theme::String; css::Bool=true)::String
@@ -48,6 +51,8 @@ end
 writeid(id::String="")::String = id == "" ? "" : " id=\"$id\""
 
 writeclasses(classes::String="")::String = classes == "" ? "" : " class=\"$classes\""
+
+writecaption(caption::String="")::String = caption == "" ? "" : "<caption>$caption</caption>\n"
 
 writetooltip(tooltips::Bool=true, cell_value="")::String = tooltips ? " title=\"$cell_value\"" : ""
 
@@ -96,7 +101,7 @@ function cellcolor(tbl; colorscale::String="", cell_value::Any, css::Bool=true):
         return ""
     end
 
-    colorscheme::ColorSchemes.ColorScheme = getfield(ColorSchemes, Symbol(colorscale))
+    colorscheme::ColorSchemes.ColorScheme = Base.getfield(ColorSchemes, Symbol(colorscale))
 
     cell_position::Float64 = (cell_value - Base.minimum(numbers)) / (Base.maximum(numbers) - Base.minimum(numbers))
 
@@ -197,18 +202,22 @@ function table(
     footer::Bool=true,
     id::String="",
     classes::String="",
+    caption::String="",
     css::Bool=true,
     theme::String="default",
     colorscale="",
     tooltips::Bool=true
 )::String
-    if !isa(getfield(ColorSchemes, Symbol(colorscale)), ColorScheme)
-        Base.throw(Base.ArgumentError("$colorscale is not a valid color scheme"))
+    if colorscale != ""
+        if !Base.isa(Base.getfield(ColorSchemes, Symbol(colorscale)), ColorScheme)
+            Base.throw(Base.ArgumentError("$colorscale is not a valid color scheme"))
+        end
     end
 
     tbl = numeric_string_to_number.(tbl)
 
     html_table::String = ""
+    html_table *= writecaption(caption)
     html_table *= writestyle(theme, css=css)
     html_table *= "<table$(writeid(id))$(writeclasses(classes))>\n"
     html_table *= writethead(tbl, header=header)

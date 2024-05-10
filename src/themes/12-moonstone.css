@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@import "normalize.css";
+
+table {
+  font-family: "Arial";
+  font-size: 15px;
+  color: hsl(220, 100%, 20%);
+  border: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-top: 2px solid #477edf;
+  border-bottom: 2px solid #477edf;
+  cursor: default;
+}
+
+caption {
+  caption-side: top;
+  padding: 10px;
+}
+
+thead {
+  font-family: "Caladea";
+  font-weight: bold;
+  border-bottom: 2px solid #477edf;
+  color: #fffdcc
+}
+
+thead,
+tfoot {
+  height: 25px;
+  min-height: 25px;
+  background-color: #88c3ff;
+}
+
+tbody td:hover {
+  text-decoration: underline;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f5faff;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #c8e4ff;
+}
+
+th, td {
+  padding: 5px 10px;
+  text-align: center;
+}
+
+tfoot {
+  border-top: 2px solid #477edf;
+}
