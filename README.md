@@ -31,7 +31,8 @@ df = DataFrame(
     "j" => [091, 092, 093, 094, 095, 096, 097, 098, 099, 100]
 )
 
-HTMLTables.write(df, theme="green", colorscale="Greens")
+HTMLTables.png(df, filename="example", caption="example table: 10x10", colorscale="Blues")
+
 ```
 the resulting table:
 ![example table](docs/src/assets/example.png)
