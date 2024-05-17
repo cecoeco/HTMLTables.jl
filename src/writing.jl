@@ -74,7 +74,7 @@ end
 
 function getnumbers(tbl)::Vector{Float64}
     numbers::Vector{Float64} = Float64[]
-    
+
     for col in Base.names(tbl)
         for val in tbl[!, col]
             if Base.isa(val, Number)
@@ -248,6 +248,72 @@ function escape_html_for_js(html::String)::String
     return Base.join(Base.get(replacements, c, c) for c in html)
 end
 
+function html2jpg(html_table, file_path)
+    return """
+        const fs = require("fs");
+        const puppeteer = require("puppeteer");
+
+        async function html2jpg(htmlString, outputPath) {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto(
+            `data:text/html;charset=utf-8,\${encodeURIComponent(htmlString)}`,
+            { waitUntil: "domcontentloaded" }
+            );
+            const jpegBuffer = await page.screenshot({ fullPage: true, type: "jpeg" });
+            fs.writeFileSync(outputPath, jpegBuffer);
+            await browser.close();
+        }
+
+        html2jpg(\"$html_table\", \"$file_path\")
+    """
+end
+
+function html2pdf(html_table, file_path)
+    return """
+        const puppeteer = require("puppeteer");
+
+        async function html2pdf(htmlString, outputPath) {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        await page.setContent(htmlString, { waitUntil: "networkidle0" });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        const pdfOptions = {
+            path: outputPath,
+            printBackground: true,
+        };
+
+        await page.pdf(pdfOptions);
+        await browser.close();
+        }
+
+        html2pdf(\"$html_table\", \"$file_path\")
+    """
+end
+
+function html2png(html_table, file_path)
+    return """
+    const fs = require("fs");
+    const puppeteer = require("puppeteer");
+
+        async function html2png(htmlString, outputPath) {
+            const browser = await puppeteer.launch();
+            const page = await browser.newPage();
+            await page.goto(
+            `data:text/html;charset=utf-8,\${encodeURIComponent(htmlString)}`,
+            { waitUntil: "domcontentloaded" }
+            );
+            const pngBuffer = await page.screenshot({ fullPage: true });
+            fs.writeFileSync(outputPath, pngBuffer);
+            await browser.close();
+        }
+
+        html2png(\"$html_table\", \"$file_path\")
+    """
+end
+
 function converttable(
     tbl,
     output_format::String;
@@ -255,28 +321,21 @@ function converttable(
     save_location::String=Base.Filesystem.pwd(),
     kwargs...
 )
-    if output_format == "jpg"
-        js_file = "html2jpg.js"
-        file_extension = ".jpg"
-    elseif output_format == "pdf"
-        js_file = "html2pdf.js"
-        file_extension = ".pdf"
-    elseif output_format == "png"
-        js_file = "html2png.js"
-        file_extension = ".png"
-    else
-        Base.error("Unsupported output format: $output_format")
-    end
 
     html_table::String = table(tbl; kwargs...) |> escape_html_for_js
 
-    file_path::String = Base.Filesystem.joinpath(save_location, "$filename$file_extension")
+    file_path::String = Base.Filesystem.joinpath(save_location, "$filename.$output_format")
 
-    js_path::String = Base.Filesystem.joinpath(@__DIR__, js_file)
-
-    js_content::String = Base.read(js_path, String)
-    
-    embedded_js_content::String = "$js_content\nhtml2$output_format(\"$html_table\", \"$file_path\")"
+    embedded_js_content::String = ""
+    if output_format == "jpg"
+        embedded_js_content = html2jpg(html_table, file_path)
+    elseif output_format == "pdf"
+        embedded_js_content = html2pdf(html_table, file_path)
+    elseif output_format == "png"
+        embedded_js_content = html2png(html_table, file_path)
+    else
+        Base.throw(Base.ArgumentError("Output format must be one of jpg, pdf, or png"))
+    end
 
     tempfile::String = "html2$output_format" * "_" * Base.string(Base.rand(1:10^10)) * ".js"
     embedded_js_path::String = Base.Filesystem.joinpath(save_location, tempfile)
