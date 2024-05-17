@@ -248,7 +248,7 @@ function escape_html_for_js(html::String)::String
     return Base.join(Base.get(replacements, c, c) for c in html)
 end
 
-function html2jpg(html_table, file_path)
+function html2jpg(html_table, file_path)::String
     return """
         const fs = require("fs");
         const puppeteer = require("puppeteer");
@@ -269,7 +269,7 @@ function html2jpg(html_table, file_path)
     """
 end
 
-function html2pdf(html_table, file_path)
+function html2pdf(html_table, file_path)::String
     return """
         const puppeteer = require("puppeteer");
 
@@ -293,7 +293,7 @@ function html2pdf(html_table, file_path)
     """
 end
 
-function html2png(html_table, file_path)
+function html2png(html_table, file_path)::String
     return """
     const fs = require("fs");
     const puppeteer = require("puppeteer");
