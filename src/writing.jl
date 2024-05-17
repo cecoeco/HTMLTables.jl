@@ -167,34 +167,7 @@ function numeric_string_to_number(cell_value)
 end
 
 """
-    HTMLTables.table(
-        tbl;
-        header::Bool=true,
-        footer::Bool=true,
-        id::String="",
-        classes::String="",
-        css::Bool=true,
-        theme::String="default",
-        colorscale="",
-        tooltips::Bool=true
-    )
-
-Returns a julia table as an HTML table.
-
-## Arguments
-
-- `tbl`: The table to write.
-- `filename`: The filename of the HTML table.
-- `save_location`: The location to save the HTML table.
-- `header`: Whether to include the table header.
-- `footer`: Whether to include the table footer.
-- `id`: The id of the HTML table.
-- `classes`: The classes of the HTML table.
-- `css`: Whether to include the CSS styles.
-- `theme`: The theme of the HTML table.
-- `colorscale`: The colorscale of the HTML table.
-- `tooltips`: Whether to include tooltips.
-
+$docstrings_table
 """
 function table(
     tbl;
@@ -229,33 +202,7 @@ function table(
 end
 
 """
-    HTMLTables.write(
-        tbl;
-        filename::String="table",
-        save_location::String=Base.Filesystem.pwd(),
-        kwargs...
-    )
-
-Writes a julia table as an HTML table to an HTML file.
-
-## Arguments
-
-- `tbl`: The table to write.
-- `filename`: The filename of the HTML table.
-- `save_location`: The location to save the HTML table.
-- `header`: Whether to include the table header.
-- `footer`: Whether to include the table footer.
-- `id`: The id of the HTML table.
-- `classes`: The classes of the HTML table.
-- `css`: Whether to include the CSS styles.
-- `theme`: The theme of the HTML table.
-- `colorscale`: The colorscale of the HTML table.
-- `tooltips`: Whether to include tooltips.
-
-## Returns
-
-- `path`: The path to the HTML file.
-
+$docstrings_write
 """
 function write(
     tbl;
@@ -354,16 +301,16 @@ function converttable(
 end
 
 """
-    HTMLTables.jpg(tbl; kwargs...)
+$docstrings_jpg
 """
 jpg(tbl; kwargs...) = converttable(tbl, "jpg"; kwargs...)
 
 """
-    HTMLTables.pdf(tbl; kwargs...)
+$docstrings_pdf
 """
 pdf(tbl; kwargs...) = converttable(tbl, "pdf"; kwargs...)
 
 """
-    HTMLTables.png(tbl; kwargs...)
+$docstrings_png
 """
 png(tbl; kwargs...) = converttable(tbl, "png"; kwargs...)
