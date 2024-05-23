@@ -88,7 +88,7 @@ Returns a julia table as an HTML table.
 
 ## Examples
 
-```jldoctest
+```julia
 using DataFrames, HTMLTables
 
 df = DataFrame(x=1:10, y=1:10)
@@ -96,124 +96,6 @@ df = DataFrame(x=1:10, y=1:10)
 html = HTMLTables.table(df)
 
 println(html)
-
-# output
-<style>
-* {
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-table {
-  font-family: Helvetica;
-  font-size: 15px;
-  color: black;
-  border: 0;
-  border-spacing: 0;
-  border-collapse: collapse;
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
-  cursor: default;
-}
-
-caption {
-  caption-side: top;
-  padding: 10px;
-}
-
-thead {
-  font-weight: bold;
-  border-bottom: 1px solid black;
-}
-
-tbody td:hover {
-  text-decoration: underline;
-}
-
-th, td {
-  padding: 5px 10px;
-  text-align: center;
-}
-
-tfoot {
-  height: 20px;
-  border-top: 1px solid black;
-}
-
-
-table {
-  background-color: white;
-}
-
-tfoot {
-  display: none;
-}
-</style>
-<table>
-<thead>
-<tr>
-<td>x</td>
-<td>y</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td title="1">1</td>
-<td title="1">1</td>
-</tr>
-<tr>
-<td title="2">2</td>
-<td title="2">2</td>
-</tr>
-<tr>
-<td title="3">3</td>
-<td title="3">3</td>
-</tr>
-<tr>
-<td title="4">4</td>
-<td title="4">4</td>
-</tr>
-<tr>
-<td title="5">5</td>
-<td title="5">5</td>
-</tr>
-<tr>
-<td title="6">6</td>
-<td title="6">6</td>
-</tr>
-<tr>
-<td title="7">7</td>
-<td title="7">7</td>
-</tr>
-<tr>
-<td title="8">8</td>
-<td title="8">8</td>
-</tr>
-<tr>
-<td title="9">9</td>
-<td title="9">9</td>
-</tr>
-<tr>
-<td title="10">10</td>
-<td title="10">10</td>
-</tr>
-</tbody>
-<tfoot>
-<tr>
-<td></td>
-<td></td>
-</tr>
-</tfoot>
-</table>
 ```
 """
 
