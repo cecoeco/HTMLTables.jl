@@ -89,13 +89,7 @@ Returns a julia table as an HTML table.
 ## Examples
 
 ```jldoctest
-julia> using Tables, DataFrames
-
-julia> df = DataFrame(x=1:10, y=1:10)
-
-julia> html = HTMLTables.table(df)
-
-julia> println(html)
+julia> using Tables, DataFrames; df = DataFrame(x=1:10, y=1:10); html = HTMLTables.table(df); println(html)
     <style>
     * {
     margin: 0;
