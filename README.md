@@ -1,3 +1,12 @@
+<div>
+<a href="https://github.com/cecoeco/HTMLTables.jl/blob/main/LICENSE.md"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+<a href="https://github.com/cecoeco/HTMLTables.jl/actions/workflows/CI.yml"><img alt="CI test" src="https://github.com/cecoeco/HTMLTables.jl/actions/workflows/CI.yml/badge.svg"></a>
+<a href="https://github.com/JuliaDiff/BlueStyle"><img alt="Style: Blue" src="https://img.shields.io/badge/code%20style-blue-4495d1.svg"></a>
+<a href='https://cecoeco.github.io/HTMLTables.jl/stable/'><img src='https://img.shields.io/badge/docs-stable-blue.svg' alt='Documentation Stable' /></a>
+<a href='https://www.contributor-covenant.org'><img src='https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg' alt='Contributor Covenant'></a>
+
+</div>
+
 # HTMLTables
 
 Julia package for reading, writing, and viewing HTML tables.
@@ -8,7 +17,7 @@ Reading HTML tables:
 
 Writing HTML tables:
 - `HTMLTables.table` uses the Tables.jl interface to write an HTML table as a string.
-- `HTMLTables.write` uses the Tables.jl interface to write an HTML table in a file.
+- `HTMLTables.write` uses the Tables.jl interface to write an HTML table in an HTML file.
 - `HTMLTables.jpg` writes an HTML table as a JPG image.
 - `HTMLTables.pdf` writes an HTML table as a PDF document.
 - `HTMLTables.png` writes an HTML table as a PNG image.
@@ -38,7 +47,7 @@ HTMLTables.png(df, filename="example", caption="example table: 10x10", colorscal
 
 ```
 the resulting table:
-![example table](docs/src/assets/example.png)
+![example table](assets/example.png)
 
 ## License
 Copyright © 2024 Ceco Elijah Maples

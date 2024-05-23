@@ -88,27 +88,14 @@ Returns a julia table as an HTML table.
 
 ## Examples
 
-```julia
-using Tables, DataFrames
-
-df = DataFrame(x=1:10, y=1:10)
-
-html = HTMLTables.table(df)
-
-println(html)
-```
-
 ```jldoctest
+julia> using Tables, DataFrames
 
-using Tables, DataFrames
+julia> df = DataFrame(x=1:10, y=1:10)
 
-df = DataFrame(x=1:10, y=1:10)
+julia> html = HTMLTables.table(df)
 
-html = HTMLTables.table(df)
-
-println(html)
-
-# output
+julia> println(html)
     <style>
     * {
     margin: 0;
