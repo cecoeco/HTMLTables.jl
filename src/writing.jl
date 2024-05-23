@@ -167,7 +167,7 @@ function numeric_string_to_number(cell_value)
 end
 
 """
-$docstrings_table
+$table_docstrings
 """
 function table(
     tbl;
@@ -202,7 +202,7 @@ function table(
 end
 
 """
-$docstrings_write
+$write_docstrings
 """
 function write(
     tbl;
@@ -360,16 +360,16 @@ function converttable(
 end
 
 """
-$docstrings_jpg
+$jpg_docstrings
 """
 jpg(tbl; kwargs...) = converttable(tbl, "jpg"; kwargs...)
 
 """
-$docstrings_pdf
+$pdf_docstrings
 """
 pdf(tbl; kwargs...) = converttable(tbl, "pdf"; kwargs...)
 
 """
-$docstrings_png
+$png_docstrings
 """
 png(tbl; kwargs...) = converttable(tbl, "png"; kwargs...)

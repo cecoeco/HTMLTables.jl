@@ -5,7 +5,7 @@ function isurl(source::String)::Bool
 end
 
 """
-$docstrings_get
+$get_docstrings
 """
 function get(
     source::String;
@@ -61,7 +61,7 @@ function extractrowdata(row::Gumbo.HTMLNode)::Vector
 end
 
 """
-$docstrings_read
+$read_docstrings
 """
 function read(
     source::String,

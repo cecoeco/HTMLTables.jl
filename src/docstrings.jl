@@ -1,4 +1,4 @@
-const docstrings_get::String = """
+const get_docstrings::String = """
     HTMLTables.get(source::String; id::String="", classes::Union{Vector{String},String}="", index::Int=1)
 
 Returns an HTML table a source as a string.
@@ -9,9 +9,10 @@ Returns an HTML table a source as a string.
 - `id::String`: The id of the HTML table.
 - `classes::Union{Vector{String},String}`: The classes of the HTML table.
 - `index::Int`: The index of the HTML table in the HTML document.
+
 """
 
-const docstrings_read::String = """
+const read_docstrings::String = """
     HTMLTables.read(source::String; id::String="", classes::Union{Vector{String},String}="")
 
 Reads a HTML table into a sink function such as `DataFrame`.
@@ -54,7 +55,7 @@ XLSX.writetable("table.xlsx", "Sheet 1" => df)
 ```
 """
 
-const docstrings_table::String = """
+const table_docstrings::String = """
     HTMLTables.table(
         tbl;
         header::Bool=true,
@@ -72,8 +73,6 @@ Returns a julia table as an HTML table.
 ## Arguments
 
 - `tbl`: The table to write.
-- `filename`: The filename of the HTML table.
-- `save_location`: The location to save the HTML table.
 - `header`: Whether to include the table header.
 - `footer`: Whether to include the table footer.
 - `id`: The id of the HTML table.
@@ -82,9 +81,154 @@ Returns a julia table as an HTML table.
 - `theme`: The theme of the HTML table.
 - `colorscale`: The colorscale of the HTML table.
 - `tooltips`: Whether to include tooltips.
+
+## Returns
+
+- `html_table`: A string containing the HTML table.
+
+## Examples
+
+```julia
+using Tables, DataFrames
+
+df = DataFrame(x=1:10, y=1:10)
+
+html = HTMLTables.table(df)
+
+println(html)
+```
+
+```jldoctest
+
+using Tables, DataFrames
+
+df = DataFrame(x=1:10, y=1:10)
+
+html = HTMLTables.table(df)
+
+println(html)
+
+# output
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+table {
+  font-family: Helvetica;
+  font-size: 15px;
+  color: black;
+  border: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  cursor: default;
+}
+
+caption {
+  caption-side: top;
+  padding: 10px;
+}
+
+thead {
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+tbody td:hover {
+  text-decoration: underline;
+}
+
+th, td {
+  padding: 5px 10px;
+  text-align: center;
+}
+
+tfoot {
+  height: 20px;
+  border-top: 1px solid black;
+}
+
+
+table {
+  background-color: white;
+}
+
+tfoot {
+  display: none;
+}
+</style>
+<table>
+<thead>
+<tr>
+<td>x</td>
+<td>y</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td title="1">1</td>
+<td title="1">1</td>
+</tr>
+<tr>
+<td title="2">2</td>
+<td title="2">2</td>
+</tr>
+<tr>
+<td title="3">3</td>
+<td title="3">3</td>
+</tr>
+<tr>
+<td title="4">4</td>
+<td title="4">4</td>
+</tr>
+<tr>
+<td title="5">5</td>
+<td title="5">5</td>
+</tr>
+<tr>
+<td title="6">6</td>
+<td title="6">6</td>
+</tr>
+<tr>
+<td title="7">7</td>
+<td title="7">7</td>
+</tr>
+<tr>
+<td title="8">8</td>
+<td title="8">8</td>
+</tr>
+<tr>
+<td title="9">9</td>
+<td title="9">9</td>
+</tr>
+<tr>
+<td title="10">10</td>
+<td title="10">10</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+```
 """
 
-const docstrings_write::String = """
+const write_docstrings::String = """
     HTMLTables.write(
         tbl;
         filename::String="table",
@@ -113,25 +257,31 @@ Writes a julia table as an HTML table to an HTML file.
 - `path`: The path to the HTML file.
 """
 
-const docstrings_jpg::String = """
+const jpg_docstrings::String = """
     HTMLTables.jpg(tbl; kwargs...)
+
+Writes an HTML table as a JPG image.
 """
 
-const docstrings_pdf::String = """
+const pdf_docstrings::String = """
     HTMLTables.pdf(tbl; kwargs...)
+
+Writes an HTML table as a PDF document.
 """
 
-const docstrings_png::String = """
+const png_docstrings::String = """
     HTMLTables.png(tbl; kwargs...)
+
+Writes an HTML table as a PNG image.
 """
 
-const docstrings_open::String = """
+const open_docstrings::String = """
     HTMLTables.open(tbl; kwargs...)
 
 Opens a julia table as an HTML table in the browser.
 """
 
-const docstrings_display::String = """
+const display_docstrings::String = """
     HTMLTables.display(tbl; kwargs...)
 
 Displays a julia table as an HTML table in julia.

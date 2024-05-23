@@ -1,5 +1,5 @@
 """
-$docstrings_open
+$open_docstrings
 """
 function open(tbl; kwargs...)
     path::String = write(tbl; kwargs...)
@@ -14,7 +14,7 @@ function open(tbl; kwargs...)
 end
 
 """
-$docstrings_display
+$display_docstrings
 """
 function display(tbl; kwargs...)
     html_table::String = table(tbl; kwargs...)
