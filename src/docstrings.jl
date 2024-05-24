@@ -1,4 +1,5 @@
-const get_docstrings::String = """
+const get_docstrings::String = 
+"""
     HTMLTables.get(source::String; id::String="", classes::Union{Vector{String},String}="", index::Int=1)
 
 Returns an HTML table a source as a string.
@@ -12,8 +13,9 @@ Returns an HTML table a source as a string.
 
 """
 
-const read_docstrings::String = """
-    HTMLTables.read(source::String; id::String="", classes::Union{Vector{String},String}="")
+const read_docstrings::String = 
+"""
+    HTMLTables.read(source::String, sink::Function; id::String="", classes::Union{Vector{String},String}="")
 
 Reads a HTML table into a sink function such as `DataFrame`.
 
@@ -55,7 +57,23 @@ XLSX.writetable("table.xlsx", "Sheet 1" => df)
 ```
 """
 
-const table_docstrings::String = """
+const TABLE_KEYWORDS_ARGUMENTS::String = 
+"""
+- `tbl`: The table to write.
+- `filename`: The filename of the HTML table.
+- `save_location`: The location to save the HTML table.
+- `header`: Whether to include the table header.
+- `footer`: Whether to include the table footer.
+- `id`: The id of the HTML table.
+- `classes`: The classes of the HTML table.
+- `css`: Whether to include the CSS styles.
+- `theme`: The theme of the HTML table.
+- `colorscale`: The colorscale of the HTML table.
+- `tooltips`: Whether to include tooltips.
+"""
+
+const table_docstrings::String = 
+"""
     HTMLTables.table(
         tbl;
         header::Bool=true,
@@ -72,15 +90,7 @@ Returns a julia table as an HTML table.
 
 ## Arguments
 
-- `tbl`: The table to write.
-- `header`: Whether to include the table header.
-- `footer`: Whether to include the table footer.
-- `id`: The id of the HTML table.
-- `classes`: The classes of the HTML table.
-- `css`: Whether to include the CSS styles.
-- `theme`: The theme of the HTML table.
-- `colorscale`: The colorscale of the HTML table.
-- `tooltips`: Whether to include tooltips.
+$TABLE_KEYWORDS_ARGUMENTS
 
 ## Returns
 
@@ -99,7 +109,8 @@ println(html)
 ```
 """
 
-const write_docstrings::String = """
+const write_docstrings::String = 
+"""
     HTMLTables.write(
         tbl;
         filename::String="table",
@@ -111,56 +122,72 @@ Writes a julia table as an HTML table to an HTML file.
 
 ## Arguments
 
-- `tbl`: The table to write.
-- `filename`: The filename of the HTML table.
-- `save_location`: The location to save the HTML table.
-- `header`: Whether to include the table header.
-- `footer`: Whether to include the table footer.
-- `id`: The id of the HTML table.
-- `classes`: The classes of the HTML table.
-- `css`: Whether to include the CSS styles.
-- `theme`: The theme of the HTML table.
-- `colorscale`: The colorscale of the HTML table.
-- `tooltips`: Whether to include tooltips.
+$TABLE_KEYWORDS_ARGUMENTS
 
 ## Returns
 
 - `path`: The path to the HTML file.
 """
 
-const jpg_docstrings::String = """
+const jpg_docstrings::String = 
+"""
     HTMLTables.jpg(tbl; kwargs...)
 
 Writes an HTML table as a JPG image.
+
+## Arguments
+
+$TABLE_KEYWORDS_ARGUMENTS
 """
 
-const pdf_docstrings::String = """
+const pdf_docstrings::String = 
+"""
     HTMLTables.pdf(tbl; kwargs...)
 
 Writes an HTML table as a PDF document.
+
+## Arguments
+
+$TABLE_KEYWORDS_ARGUMENTS
 """
 
-const png_docstrings::String = """
+const png_docstrings::String = 
+"""
     HTMLTables.png(tbl; kwargs...)
 
 Writes an HTML table as a PNG image.
+
+## Arguments
+
+$TABLE_KEYWORDS_ARGUMENTS
 """
 
-const open_docstrings::String = """
+const open_docstrings::String = 
+"""
     HTMLTables.open(tbl; kwargs...)
 
 Opens a julia table as an HTML table in the browser.
+
+## Arguments
+
+$TABLE_KEYWORDS_ARGUMENTS
+
+
+## Returns
+
+- `path`: The path to the HTML file.
+
 """
 
-const display_docstrings::String = """
+const display_docstrings::String = 
+"""
     HTMLTables.display(tbl; kwargs...)
 
 Displays a julia table as an HTML table in julia.
 
 ## Arguments
 
-- `tbl`: The table to display.
-- `kwargs`: Keyword arguments to pass to the `HTMLTables.table` function.
+$TABLE_KEYWORDS_ARGUMENTS
 
 ## Examples
 

@@ -1,7 +1,7 @@
 """
 $open_docstrings
 """
-function open(tbl; kwargs...)
+function open(tbl; kwargs...)::String
     path::String = write(tbl; kwargs...)
 
     if Base.Sys.iswindows()
@@ -11,6 +11,10 @@ function open(tbl; kwargs...)
     elseif Base.Sys.isapple()
         Base.run(`open $path`)
     end
+
+    Base.println("Opening $path in your default browser...")
+
+    return path
 end
 
 """
@@ -19,5 +23,5 @@ $display_docstrings
 function display(tbl; kwargs...)
     html_table::String = table(tbl; kwargs...)
 
-    Base.Multimedia.display("juliavscode/html", html_table)
+    return Base.Multimedia.display("juliavscode/html", html_table)
 end

@@ -362,14 +362,14 @@ end
 """
 $jpg_docstrings
 """
-jpg(tbl; kwargs...) = converttable(tbl, "jpg"; kwargs...)
+jpg(tbl; kwargs...)::String = converttable(tbl, "jpg"; kwargs...)
 
 """
 $pdf_docstrings
 """
-pdf(tbl; kwargs...) = converttable(tbl, "pdf"; kwargs...)
+pdf(tbl; kwargs...)::String = converttable(tbl, "pdf"; kwargs...)
 
 """
 $png_docstrings
 """
-png(tbl; kwargs...) = converttable(tbl, "png"; kwargs...)
+png(tbl; kwargs...)::String = converttable(tbl, "png"; kwargs...)
