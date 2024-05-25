@@ -1,4 +1,5 @@
-const NORMALIZE::String = """
+const NORMALIZE::String =
+"""
 * {
   margin: 0;
   padding: 0;
@@ -14,7 +15,8 @@ html, body {
 }
 """
 
-const BASIC_STYLING::String = """
+const BASIC_STYLING::String = 
+"""
 table {
   font-family: Helvetica;
   font-size: 15px;
@@ -52,9 +54,9 @@ tfoot {
 }
 """
 
-const DEFAULT::String = """
+const DEFAULT::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -69,9 +71,9 @@ tfoot {
 </style>
 """
 
-const RED::String = """
+const RED::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -94,9 +96,9 @@ tfoot {
 </style>
 """
 
-const ORANGE::String = """
+const ORANGE::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -119,9 +121,9 @@ tfoot {
 </style>
 """
 
-const YELLOW::String = """
+const YELLOW::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -144,9 +146,9 @@ tfoot {
 </style>
 """
 
-const GREEN::String = """
+const GREEN::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -169,9 +171,9 @@ tfoot {
 </style>
 """
 
-const BLUE::String = """
+const BLUE::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -194,9 +196,9 @@ tfoot {
 </style>
 """
 
-const VIOLET::String = """
+const VIOLET::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -219,9 +221,9 @@ tfoot {
 </style>
 """
 
-const MAGENTA::String = """
+const MAGENTA::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -244,9 +246,9 @@ tfoot {
 </style>
 """
 
-const BROWN::String = """
+const BROWN::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -269,9 +271,9 @@ tfoot {
 </style>
 """
 
-const GRAY::String = """
+const GRAY::String = 
+"""
 <style>
-
 $NORMALIZE
 
 $BASIC_STYLING
@@ -294,7 +296,8 @@ tfoot {
 </style>
 """
 
-const JULIA::String = """
+const JULIA::String = 
+"""
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Arya:wght@400;700");
 
@@ -315,7 +318,8 @@ thead, tfoot {
 </style>
 """
 
-const SUNSTONE::String = """
+const SUNSTONE::String = 
+"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
@@ -375,7 +379,8 @@ tfoot {
 </style>
 """
 
-const MOONSTONE::String = """
+const MOONSTONE::String = 
+"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 

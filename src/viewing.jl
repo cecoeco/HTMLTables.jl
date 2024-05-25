@@ -20,8 +20,10 @@ end
 """
 $display_docstrings
 """
-function display(tbl; kwargs...)
+function display(tbl; kwargs...)::Nothing
     html_table::String = table(tbl; kwargs...)
 
-    return Base.Multimedia.display("juliavscode/html", html_table)
+    Base.Multimedia.display("juliavscode/html", html_table)
+
+    return nothing
 end

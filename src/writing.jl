@@ -7,34 +7,26 @@ function writestyle(theme::String; css::Bool=true)::String
 
     theme = Base.lowercase(theme)
 
-    if theme == "default"
-        return NORMALIZE
-    elseif theme == "red"
-        return RED
-    elseif theme == "orange"
-        return ORANGE
-    elseif theme == "yellow"
-        return YELLOW
-    elseif theme == "green"
-        return GREEN
-    elseif theme == "blue"
-        return BLUE
-    elseif theme == "violet"
-        return VIOLET
-    elseif theme == "magent"
-        return MAGENT
-    elseif theme == "brown"
-        return BROWN
-    elseif theme == "gray"
-        return GRAY
-    elseif theme == "julia"
-        return JULIA
-    elseif theme == "sunstone"
-        return SUNSTONE
-    elseif theme == "moonstone"
-        return MOONSTONE
+    theme_dict::Dict{String,String} = Base.Dict(
+        "default" => DEFAULT,
+        "red" => RED,
+        "orange" => ORANGE,
+        "yellow" => YELLOW,
+        "green" => GREEN,
+        "blue" => BLUE,
+        "violet" => VIOLET,
+        "magenta" => MAGENTA,
+        "brown" => BROWN,
+        "gray" => GRAY,
+        "julia" => JULIA,
+        "sunstone" => SUNSTONE,
+        "moonstone" => MOONSTONE
+    )
+
+    if Base.haskey(theme_dict, theme)
+        return theme_dict[theme]
     else
-        Base.throw(Base.ArgumentError("$theme is not a valid theme"))
+        Base.throw(Base.ArgumentError("$(theme) is not a valid theme"))
     end
 end
 
@@ -199,7 +191,7 @@ function write(
     filename::String="table",
     save_location::String=Base.Filesystem.pwd(),
     kwargs...
-)
+)::String
     html_table_content::String = table(tbl; kwargs...)
 
     html_table_path::String = Base.Filesystem.joinpath(save_location, "$filename.html")
@@ -213,7 +205,7 @@ function write(
     return html_table_path
 end
 
-function npminstall(npm_packages::Vector{String})
+function npminstall(npm_packages::Vector{String})::Nothing
     installed_packages::String = Base.read(`$(NodeJS_20_jll.npm) list --global --depth 0`, String)
 
     for npm_package in npm_packages
@@ -221,6 +213,8 @@ function npminstall(npm_packages::Vector{String})
             Base.run(`$(NodeJS_20_jll.npm) install --global $npm_package`)
         end
     end
+
+    return nothing
 end
 
 function escape_html_for_js(html::String)::String
@@ -310,8 +304,7 @@ function converttable(
     filename::String="table",
     save_location::String=Base.Filesystem.pwd(),
     kwargs...
-)
-
+)::String
     html_table::String = table(tbl; kwargs...) |> escape_html_for_js
 
     file_path::String = Base.Filesystem.joinpath(save_location, "$filename.$output_format")

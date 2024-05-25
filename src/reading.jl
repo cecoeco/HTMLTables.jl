@@ -54,6 +54,15 @@ function get(
     return table
 end
 
+#=
+"""
+$getall_docstrings
+"""
+function getall()
+
+end
+=#
+
 function extractrowdata(row::Gumbo.HTMLNode)::Vector
     cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
 
@@ -89,3 +98,11 @@ function read(
 
     return sink(tuples, headers)
 end
+
+#=
+"""
+$readall_docstrings
+"""
+function readall()
+end
+=#
