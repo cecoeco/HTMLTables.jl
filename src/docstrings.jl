@@ -59,6 +59,9 @@ XLSX.writetable("table.xlsx", "Sheet 1" => df)
 
 const TABLE_KEYWORDS_ARGUMENTS::String = 
 """
+
+## Arguments
+
 - `tbl`: The table to write.
 - `filename`: The filename of the HTML table.
 - `save_location`: The location to save the HTML table.
@@ -70,6 +73,7 @@ const TABLE_KEYWORDS_ARGUMENTS::String =
 - `theme`: The theme of the HTML table.
 - `colorscale`: The colorscale of the HTML table.
 - `tooltips`: Whether to include tooltips.
+
 """
 
 const table_docstrings::String = 
@@ -87,8 +91,6 @@ const table_docstrings::String =
     )
 
 Returns a julia table as an HTML table.
-
-## Arguments
 
 $TABLE_KEYWORDS_ARGUMENTS
 
@@ -120,8 +122,6 @@ const write_docstrings::String =
 
 Writes a julia table as an HTML table to an HTML file.
 
-## Arguments
-
 $TABLE_KEYWORDS_ARGUMENTS
 
 ## Returns
@@ -135,8 +135,6 @@ const jpg_docstrings::String =
 
 Writes an HTML table as a JPG image.
 
-## Arguments
-
 $TABLE_KEYWORDS_ARGUMENTS
 
 """
@@ -146,8 +144,6 @@ const pdf_docstrings::String =
     HTMLTables.pdf(tbl; kwargs...)
 
 Writes an HTML table as a PDF document.
-
-## Arguments
 
 $TABLE_KEYWORDS_ARGUMENTS
 
@@ -159,8 +155,6 @@ const png_docstrings::String =
 
 Writes an HTML table as a PNG image.
 
-## Arguments
-
 $TABLE_KEYWORDS_ARGUMENTS
 
 """
@@ -171,10 +165,7 @@ const open_docstrings::String =
 
 Opens a julia table as an HTML table in the browser.
 
-## Arguments
-
 $TABLE_KEYWORDS_ARGUMENTS
-
 
 ## Returns
 
@@ -187,8 +178,6 @@ const display_docstrings::String =
     HTMLTables.display(tbl; kwargs...)
 
 Displays a julia table as an HTML table in julia.
-
-## Arguments
 
 $TABLE_KEYWORDS_ARGUMENTS
 
