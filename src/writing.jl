@@ -1,51 +1,41 @@
-const THEMES::Dict{String,String} = Base.Dict(
-    "default" => "themes/00-default.css",
-    "red" => "themes/01-red.css",
-    "orange" => "themes/02-orange.css",
-    "yellow" => "themes/03-yellow.css",
-    "green" => "themes/04-green.css",
-    "blue" => "themes/05-blue.css",
-    "violet" => "themes/06-violet.css",
-    "magenta" => "themes/07-magenta.css",
-    "brown" => "themes/08-brown.css",
-    "gray" => "themes/09-gray.css",
-    "julia" => "themes/10-julia.css",
-    "sunstone" => "themes/11-sunstone.css",
-    "moonstone" => "themes/12-moonstone.css"
-)
+include("themes.jl")
 
 function writestyle(theme::String; css::Bool=true)::String
     if theme == "" || !css
         return ""
     end
 
-    main_css_path::String = ""
-    main_css_dir::String = ""
+    theme = Base.lowercase(theme)
 
-    if Base.haskey(THEMES, theme)
-        main_css_path *= Base.Filesystem.joinpath(@__DIR__, THEMES[theme])
-        main_css_dir *= dirname(main_css_path)
-    elseif Base.Filesystem.ispath(theme) && Base.Filesystem.isfile(theme)
-        main_css_path *= theme
-        main_css_dir *= Base.Filesystem.dirname(main_css_path)
+    if theme == "default"
+        return NORMALIZE
+    elseif theme == "red"
+        return RED
+    elseif theme == "orange"
+        return ORANGE
+    elseif theme == "yellow"
+        return YELLOW
+    elseif theme == "green"
+        return GREEN
+    elseif theme == "blue"
+        return BLUE
+    elseif theme == "violet"
+        return VIOLET
+    elseif theme == "magent"
+        return MAGENT
+    elseif theme == "brown"
+        return BROWN
+    elseif theme == "gray"
+        return GRAY
+    elseif theme == "julia"
+        return JULIA
+    elseif theme == "sunstone"
+        return SUNSTONE
+    elseif theme == "moonstone"
+        return MOONSTONE
     else
-        Base.throw(Base.ArgumentError("$theme is not a valid theme or CSS file"))
+        Base.throw(Base.ArgumentError("$theme is not a valid theme"))
     end
-
-    css_string::String = Base.read(main_css_path, String)
-
-    import_regex::Regex = r"@import\s+\"([^\"]+)\";"
-
-    matches::Base.RegexMatchIterator = Base.eachmatch(import_regex, css_string)
-
-    for match in matches
-        import_path::String = match.captures[1]
-        import_full_path::String = Base.Filesystem.joinpath(main_css_dir, import_path)
-        import_content::String = Base.read(import_full_path, String)
-        css_string = Base.replace(css_string, match.match => import_content)
-    end
-
-    return "<style>\n$css_string\n</style>\n"
 end
 
 writeid(id::String="")::String = id == "" ? "" : " id=\"$id\""
