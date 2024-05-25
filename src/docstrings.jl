@@ -138,6 +138,7 @@ Writes an HTML table as a JPG image.
 ## Arguments
 
 $TABLE_KEYWORDS_ARGUMENTS
+
 """
 
 const pdf_docstrings::String = 
@@ -149,6 +150,7 @@ Writes an HTML table as a PDF document.
 ## Arguments
 
 $TABLE_KEYWORDS_ARGUMENTS
+
 """
 
 const png_docstrings::String = 
@@ -160,6 +162,7 @@ Writes an HTML table as a PNG image.
 ## Arguments
 
 $TABLE_KEYWORDS_ARGUMENTS
+
 """
 
 const open_docstrings::String = 
