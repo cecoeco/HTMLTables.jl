@@ -17,11 +17,12 @@ function get(
         Base.throw(Base.ArgumentError("Index must be a positive integer"))
     end
 
+    html_content::String = ""
     if isurl(source) == true
         response::HTTP.Response = HTTP.get(source)
-        html_content = Base.String(response.body)
+        html_content *= Base.String(response.body)
     else
-        html_content = Base.read(source, String)
+        html_content *= Base.read(source, String)
     end
 
     html_document::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
@@ -54,14 +55,23 @@ function get(
     return table
 end
 
-#=
 """
 $getall_docstrings
 """
-function getall()
+function getall(source::String)::Vector
+    html_content::String = ""
+    if isurl(source) == true
+        response::HTTP.Response = HTTP.get(source)
+        html_content *= Base.String(response.body)
+    else
+        html_content *= Base.read(source, String)
+    end
 
+    html_document::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
+    tables::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("table"), html_document.root)
+
+    return tables
 end
-=#
 
 function extractrowdata(row::Gumbo.HTMLNode)::Vector
     cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
@@ -99,10 +109,30 @@ function read(
     return sink(tuples, headers)
 end
 
-#=
 """
 $readall_docstrings
 """
-function readall()
+function readall(source::String, sink)
+    tables = getall(source)
+    results = Vector{Any}(undef, length(tables))
+
+    for (i, table) in pairs(tables)
+        rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
+        headers::Vector = []
+        data::Vector{Vector} = []
+
+        for (j, row) in Base.enumerate(rows)
+            rowdata = extractrowdata(row)
+            if (j == 1 && Base.isempty(headers)) == true
+                headers = rowdata
+            else
+                Base.push!(data, rowdata)
+            end
+        end
+
+        tuples::Vector = [Base.Tuple(row) for row in data]
+        results[i] = sink(tuples, headers)
+    end
+
+    return results
 end
-=#

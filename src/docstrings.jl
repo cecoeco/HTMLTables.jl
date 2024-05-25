@@ -13,6 +13,18 @@ Returns an HTML table a source as a string.
 
 """
 
+const getall_docstrings::String =
+"""
+    HTMLTables.getall(source::String)
+
+Extracts all tables from an HTML document or website.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML document or website.
+
+"""
+
 const read_docstrings::String = 
 """
     HTMLTables.read(source::String, sink::Function; id::String="", classes::Union{Vector{String},String}="")
@@ -55,6 +67,19 @@ using XLSX
 XLSX.writetable("table.xlsx", "Sheet 1" => df)
 
 ```
+"""
+
+const readall_docstrings::String = 
+"""
+    HTMLTables.readall(source::String, sink::Function)
+
+Reads all HTML tables into a sink function such as `DataFrame`.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML document or website.
+- `sink`: The function that materializes the table data.
+
 """
 
 const TABLE_KEYWORDS_ARGUMENTS::String = 

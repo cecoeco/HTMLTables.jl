@@ -21,8 +21,10 @@ Insert `using Pkg; Pkg.add("HTMLTables")` in the Julia REPL
 
 ### Functions
 Reading HTML tables:
-- `HTMLTables.get` reads an HTML table as a string.
-- `HTMLTables.read` extracts data from HTML tables.
+- `HTMLTables.get` reads an HTML table as a string based on the given index.
+- `HTMLTables.getall` extracts all tables from an HTML document or website.
+- `HTMLTables.read` extracts the data from an HTML table using a sink function.
+- `HTMLTables.readall` extracts the data from all tables of an HTML document or website.
 
 Writing HTML tables:
 - `HTMLTables.table` uses the Tables.jl interface to write an HTML table as a string.
@@ -32,8 +34,8 @@ Writing HTML tables:
 - `HTMLTables.png` writes an HTML table as a PNG image.
 
 Viewing HTML tables:
-- `HTMLTables.display` displays a julia table as an HTML table in julia.
-- `HTMLTables.open` opens a julia table as an HTML table in the browser.
+- `HTMLTables.display` displays a Julia table as an HTML table in a Julia IDE.
+- `HTMLTables.open` opens a Julia table as an HTML table in the browser.
 
 ### License
 Copyright © 2024 Ceco Elijah Maples
