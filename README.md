@@ -8,15 +8,16 @@
 </div>
 
 ## HTMLTables
-
 <i>Julia package for reading, writing, and viewing HTML tables.</i>
 
 ### Documentation
-
 <div>
 <a href="https://cecoeco.github.io/HTMLTables.jl/stable/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation Stable" /></a>
 <a href="https://cecoeco.github.io/HTMLTables.jl/dev/"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Documentation Dev"></a>
 </div>
+
+### Installation
+Insert `using Pkg; Pkg.add("HTMLTables")` in the Julia REPL
 
 ### Functions
 Reading HTML tables:
