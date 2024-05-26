@@ -13,7 +13,7 @@ function get(
     classes::Union{Vector{String},String}="",
     index::Int=1
 )
-    if index <= 0
+    if index <= 0 || Base.isinteger(index) == false
         Base.throw(Base.ArgumentError("Index must be a positive integer"))
     end
 
@@ -114,9 +114,9 @@ $readall_docstrings
 """
 function readall(source::String, sink)
     tables = getall(source)
-    results = Vector{Any}(undef, length(tables))
+    results = Vector{Any}(undef, Base.length(tables))
 
-    for (i, table) in pairs(tables)
+    for (i, table) in Base.pairs(tables)
         rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
         headers::Vector = []
         data::Vector{Vector} = []

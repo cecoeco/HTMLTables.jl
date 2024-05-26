@@ -18,6 +18,7 @@ function writestyle(theme::String; css::Bool=true)::String
         "magenta" => MAGENTA,
         "brown" => BROWN,
         "gray" => GRAY,
+        "black" => BLACK,
         "julia" => JULIA,
         "sunstone" => SUNSTONE,
         "moonstone" => MOONSTONE

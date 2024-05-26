@@ -296,6 +296,65 @@ tfoot {
 </style>
 """
 
+const BLACK::String = 
+"""
+<style>
+$NORMALIZE
+
+table {
+  font-family: Helvetica;
+  font-size: 15px;
+  color: white;
+  border: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+  cursor: default;
+}
+
+caption {
+  caption-side: top;
+  padding: 10px;
+}
+
+thead {
+  font-weight: bold;
+  border-bottom: 1px solid white;
+}
+
+tbody td:hover {
+  text-decoration: underline;
+}
+
+th, td {
+  padding: 5px 10px;
+  text-align: center;
+}
+
+tfoot {
+  height: 20px;
+  border-top: 1px solid white;
+}
+
+thead {
+  background-color: hsl(0, 0%, 0%);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: hsl(0, 0%, 10%);
+}
+
+tbody tr:nth-child(even) {
+  background-color: hsl(0, 0%, 20%);
+}
+
+tfoot {
+  background-color: hsl(0, 0%, 0%);
+}
+</style>
+"""
+
 const JULIA::String = 
 """
 <style>
