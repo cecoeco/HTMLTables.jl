@@ -17,7 +17,10 @@
 </div>
 
 ### Installation
-Insert `using Pkg; Pkg.add("HTMLTables")` in the Julia REPL
+Insert `using Pkg; Pkg.add("HTMLTables")` in the Julia REPL.
+
+To install a version containing the latest committs simply use this command instead:
+`using Pkg; Pkg.add(url="https://github.com/ceceoeco/HTMLTables.jl")`
 
 ### Functions
 Reading HTML tables:
