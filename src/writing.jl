@@ -1,6 +1,6 @@
 include("themes.jl")
 
-function writestyle(theme::String; css::Bool=true)::String
+function writestyle(theme::AbstractString; css::Bool=true)::String
     if theme == "" || !css
         return ""
     end
@@ -31,13 +31,37 @@ function writestyle(theme::String; css::Bool=true)::String
     end
 end
 
-writeid(id::String="")::String = id == "" ? "" : " id=\"$id\""
+function writeid(id::AbstractString="")::String
+    if id == ""
+        return ""
+    else
+        return " id=\"$id\""
+    end
+end
 
-writeclasses(classes::String="")::String = classes == "" ? "" : " class=\"$classes\""
+function writeclasses(classes::AbstractString)::String
+    if classes == ""
+        return ""
+    else
+        return " class=\"$classes\""
+    end
+end
 
-writecaption(caption::String="")::String = caption == "" ? "" : "<caption>$caption</caption>\n"
+function writecaption(caption::AbstractString="")::String
+    if caption == ""
+        return ""
+    else
+        return "<caption>$caption</caption>\n"
+    end
+end
 
-writetooltip(tooltips::Bool=true, cell_value="")::String = tooltips ? " title=\"$cell_value\"" : ""
+function writetooltip(tooltips::Bool=true, cell_value="")::String
+    if tooltips
+        return " title=\"$cell_value\""
+    else
+        return ""
+    end
+end
 
 function writethead(tbl; header::Bool=true)::String
     if !header
@@ -77,7 +101,7 @@ function css_rgb(color::Colors.Colorant)::String
     return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
-function cellcolor(tbl; colorscale::String="", cell_value::Any, css::Bool=true)::String
+function cellcolor(tbl; colorscale::AbstractString="", cell_value::Any, css::Bool=true)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
     if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !css
@@ -95,7 +119,7 @@ function cellcolor(tbl; colorscale::String="", cell_value::Any, css::Bool=true):
     return " style=\"background-color: $css_color;\""
 end
 
-function writetbody(tbl; colorscale::String="", tooltips::Bool=true, css::Bool=true)::String
+function writetbody(tbl; colorscale::AbstractString="", tooltips::Bool=true, css::Bool=true)::String
     tbody::String = "<tbody>\n"
 
     for row in Tables.rows(tbl)
@@ -156,11 +180,11 @@ function table(
     tbl;
     header::Bool=true,
     footer::Bool=true,
-    id::String="",
-    classes::String="",
-    caption::String="",
+    id::AbstractString="",
+    classes::AbstractString="",
+    caption::AbstractString="",
     css::Bool=true,
-    theme::String="default",
+    theme::AbstractString="default",
     colorscale="",
     tooltips::Bool=true
 )::String
@@ -189,8 +213,8 @@ $write_docstrings
 """
 function write(
     tbl;
-    filename::String="table",
-    save_location::String=Base.Filesystem.pwd(),
+    filename::AbstractString="table",
+    save_location::AbstractString=Base.Filesystem.pwd(),
     kwargs...
 )::String
     html_table_content::String = table(tbl; kwargs...)
@@ -206,19 +230,15 @@ function write(
     return html_table_path
 end
 
-function npminstall(npm_packages::Vector{String})::Nothing
-    installed_packages::String = Base.read(`$(NodeJS_20_jll.npm) list --global --depth 0`, String)
-
+function npminstall(npm_packages::AbstractVector)::Nothing
     for npm_package in npm_packages
-        if !Base.occursin(npm_package, installed_packages)
-            Base.run(`$(NodeJS_20_jll.npm) install --global $npm_package`)
-        end
+        Base.run(`$(NodeJS.npm) install $npm_package`)
     end
 
     return nothing
 end
 
-function escape_html_for_js(html::String)::String
+function escape_html_for_js(html::AbstractString)::String
     replacements::Dict{Char,String} = Base.Dict(
         '\\' => "\\\\",
         '"' => "\\\"",
@@ -233,7 +253,7 @@ function escape_html_for_js(html::String)::String
     return Base.join(Base.get(replacements, c, c) for c in html)
 end
 
-function html2jpg(html_table, file_path)::String
+function html2jpg(html_table::AbstractString, file_path::AbstractString)::String
     return """
         const fs = require("fs");
         const puppeteer = require("puppeteer");
@@ -254,7 +274,7 @@ function html2jpg(html_table, file_path)::String
     """
 end
 
-function html2pdf(html_table, file_path)::String
+function html2pdf(html_table::AbstractString, file_path::AbstractString)::String
     return """
         const puppeteer = require("puppeteer");
 
@@ -278,7 +298,7 @@ function html2pdf(html_table, file_path)::String
     """
 end
 
-function html2png(html_table, file_path)::String
+function html2png(html_table::AbstractString, file_path::AbstractString)::String
     return """
     const fs = require("fs");
     const puppeteer = require("puppeteer");
@@ -301,9 +321,9 @@ end
 
 function converttable(
     tbl,
-    output_format::String;
-    filename::String="table",
-    save_location::String=Base.Filesystem.pwd(),
+    output_format::AbstractString;
+    filename::AbstractString="table",
+    save_location::AbstractString=Base.Filesystem.pwd(),
     kwargs...
 )::String
     html_table::String = table(tbl; kwargs...) |> escape_html_for_js
@@ -321,22 +341,17 @@ function converttable(
         Base.throw(Base.ArgumentError("Output format must be one of jpg, pdf, or png"))
     end
 
-    tempfile::String = "html2$output_format" * "_" * Base.string(Base.rand(1:10^10)) * ".js"
-    embedded_js_path::String = Base.Filesystem.joinpath(save_location, tempfile)
-
-    Base.open(embedded_js_path, "w") do file
-        Base.write(file, embedded_js_content)
-    end
-
     if output_format in ["jpg", "png"]
         npminstall(["fs", "puppeteer"])
     elseif output_format == "pdf"
         npminstall(["puppeteer"])
     end
 
-    Base.run(`$(NodeJS_20_jll.node()) $embedded_js_path`)
+    node::Cmd = NodeJS.node()
 
-    Base.rm(embedded_js_path)
+    node_cmd::Cmd = `$node -e "$embedded_js_content" --input-type=module`
+
+    Base.run(node_cmd)
 
     Base.println("HTML table saved as $file_path")
 
