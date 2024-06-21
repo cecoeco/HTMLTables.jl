@@ -10,17 +10,23 @@
 ## HTMLTables
 <i>Julia package for reading, writing, and viewing HTML tables.</i>
 
-### Documentation
+### :book: Documentation
 <div>
 <a href="https://cecoeco.github.io/HTMLTables.jl/stable/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation Stable" /></a>
 <a href="https://cecoeco.github.io/HTMLTables.jl/dev/"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Documentation Dev"></a>
 </div>
 
-### Installation
-Insert `using Pkg; Pkg.add("HTMLTables")` in the Julia REPL.
+### :arrow_down: Installation
 
-To install a version containing the latest committs simply use this command instead:
-`using Pkg; Pkg.add(url="https://github.com/ceceoeco/HTMLTables.jl")`
+Installing the version that contains the latest committs:
+```julia
+using Pkg; Pkg.add(url="https://github.com/ceceoeco/HTMLTables.jl")
+```
+
+Installing the latest release from Julia's package registry:
+```julia
+using Pkg; Pkg.add("HTMLTables")
+```
 
 ### Functions
 Reading HTML tables:
@@ -40,7 +46,7 @@ Viewing HTML tables:
 - `HTMLTables.display` displays a Julia table as an HTML table in a Julia IDE.
 - `HTMLTables.open` opens a Julia table as an HTML table in the browser.
 
-### License
+### :balance_scale: License
 Copyright © 2024 Ceco Elijah Maples
 
 This work is licensed under the [MIT License](https://opensource.org/license/mit/) - see the [`LICENSE`](LICENSE.md) file for details.

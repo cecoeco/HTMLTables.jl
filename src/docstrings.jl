@@ -1,4 +1,4 @@
-const get_docstrings::String = 
+const get_docstring::String = 
 """
     HTMLTables.get(source::String; id::String="", classes::Union{Vector{String},String}="", index::Int=1)
 
@@ -13,7 +13,7 @@ Returns an HTML table a source as a string.
 
 """
 
-const getall_docstrings::String =
+const getall_docstring::String =
 """
     HTMLTables.getall(source::String)
 
@@ -25,7 +25,7 @@ Extracts all tables from an HTML document or website.
 
 """
 
-const read_docstrings::String = 
+const read_docstring::String = 
 """
     HTMLTables.read(source::String, sink::Function; id::String="", classes::Union{Vector{String},String}="")
 
@@ -69,7 +69,7 @@ XLSX.writetable("table.xlsx", "Sheet 1" => df)
 ```
 """
 
-const readall_docstrings::String = 
+const readall_docstring::String = 
 """
     HTMLTables.readall(source::String, sink::Function)
 
@@ -101,7 +101,7 @@ const TABLE_KEYWORDS_ARGUMENTS::String =
 
 """
 
-const table_docstrings::String = 
+const table_docstring::String = 
 """
     HTMLTables.table(
         tbl;
@@ -136,7 +136,7 @@ println(html)
 ```
 """
 
-const write_docstrings::String = 
+const write_docstring::String = 
 """
     HTMLTables.write(
         tbl;
@@ -154,7 +154,7 @@ $TABLE_KEYWORDS_ARGUMENTS
 - `path`: The path to the HTML file.
 """
 
-const jpg_docstrings::String = 
+const jpg_docstring::String = 
 """
     HTMLTables.jpg(tbl; kwargs...)
 
@@ -164,7 +164,7 @@ $TABLE_KEYWORDS_ARGUMENTS
 
 """
 
-const pdf_docstrings::String = 
+const pdf_docstring::String = 
 """
     HTMLTables.pdf(tbl; kwargs...)
 
@@ -174,7 +174,7 @@ $TABLE_KEYWORDS_ARGUMENTS
 
 """
 
-const png_docstrings::String = 
+const png_docstring::String = 
 """
     HTMLTables.png(tbl; kwargs...)
 
@@ -184,7 +184,7 @@ $TABLE_KEYWORDS_ARGUMENTS
 
 """
 
-const open_docstrings::String = 
+const open_docstring::String = 
 """
     HTMLTables.open(tbl; kwargs...)
 
@@ -198,7 +198,7 @@ $TABLE_KEYWORDS_ARGUMENTS
 
 """
 
-const display_docstrings::String = 
+const display_docstring::String = 
 """
     HTMLTables.display(tbl; kwargs...)
 

@@ -5,7 +5,7 @@ function isurl(source::String)::Bool
 end
 
 """
-$get_docstrings
+$get_docstring
 """
 function get(
     source::String;
@@ -56,7 +56,7 @@ function get(
 end
 
 """
-$getall_docstrings
+$getall_docstring
 """
 function getall(source::String)::Vector
     html_content::String = ""
@@ -80,7 +80,7 @@ function extractrowdata(row::Gumbo.HTMLNode)::Vector
 end
 
 """
-$read_docstrings
+$read_docstring
 """
 function read(
     source::String,
@@ -110,7 +110,7 @@ function read(
 end
 
 """
-$readall_docstrings
+$readall_docstring
 """
 function readall(source::String, sink)
     tables = getall(source)

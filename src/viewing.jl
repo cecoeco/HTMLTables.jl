@@ -1,5 +1,5 @@
 """
-$open_docstrings
+$open_docstring
 """
 function open(tbl; kwargs...)::String
     path::String = write(tbl; kwargs...)
@@ -12,13 +12,13 @@ function open(tbl; kwargs...)::String
         Base.run(`open $path`)
     end
 
-    Base.println("Opening $path in your default browser...")
+    Base.println("Opening $path in the browser...")
 
     return path
 end
 
 """
-$display_docstrings
+$display_docstring
 """
 function display(tbl; kwargs...)::Nothing
     html_table::String = table(tbl; kwargs...)
