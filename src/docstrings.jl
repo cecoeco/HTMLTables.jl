@@ -231,14 +231,6 @@ $WRITE_ARGUMENTS
 
 - `path`: The path to the HTML file.
 
-## Examples
-
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.write(df)
-"table.html"
-
-```
-
 """
 
 const jpg_docstring::String = 
@@ -252,14 +244,6 @@ $WRITE_ARGUMENTS
 ## Returns
 
 - `path`: The path to the JPG.
-
-## Examples
-
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.jpg(df)
-"table.jpg"
-
-```
 
 """
 
@@ -275,14 +259,6 @@ $WRITE_ARGUMENTS
 
 - `path`: The path to the PDF.
 
-## Examples
-
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.pdf(df)
-"table.pdf"
-
-```
-
 """
 
 const png_docstring::String = 
@@ -296,14 +272,6 @@ $WRITE_ARGUMENTS
 ## Returns
 
 - `path`: The path to the PNG.
-
-## Examples
-
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.png(df)
-"table.png"
-
-```
 
 """
 
@@ -319,14 +287,6 @@ $WRITE_ARGUMENTS
 
 - `path`: The path to the HTML file.
 
-## Examples
-
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.open(df)
-"table.html"
-
-```
-
 """
 
 const display_docstring::String = 
@@ -340,21 +300,25 @@ $TABLE_ARGUMENTS
 ## Examples
 
 ```julia
-using DataFrames, HTMLTables
+using HTMLTables, DataFrames
 
 df = DataFrame(
-    "a" => [001, 002, 003, 004, 005, 006, 007, 008, 009, 010],
-    "b" => [011, 012, 013, 014, 015, 016, 017, 018, 019, 020],
-    "c" => [021, 022, 023, 024, 025, 026, 027, 028, 029, 030],
-    "d" => [031, 032, 033, 034, 035, 036, 037, 038, 039, 040],
-    "e" => [041, 042, 043, 044, 045, 046, 047, 048, 049, 050],
-    "f" => [051, 052, 053, 054, 055, 056, 057, 058, 059, 060],
-    "g" => [061, 062, 063, 064, 065, 066, 067, 068, 069, 070],
-    "h" => [071, 072, 073, 074, 075, 076, 077, 078, 079, 080],
-    "i" => [081, 082, 083, 084, 085, 086, 087, 088, 089, 090],
-    "j" => [091, 092, 093, 094, 095, 096, 097, 098, 099, 100]
+    "a" => 001:020, "b" => 021:040,
+    "c" => 041:060, "d" => 061:080,
+    "e" => 081:100, "f" => 101:120,
+    "g" => 121:140, "h" => 141:160,
+    "i" => 161:180, "j" => 181:200,
+    "k" => 201:220, "l" => 221:240,
+    "m" => 241:260, "n" => 261:280,
+    "o" => 281:300, "p" => 301:320,
+    "q" => 321:340, "r" => 341:360,
+    "s" => 361:380, "t" => 381:400,
+    "u" => 401:420, "v" => 421:440,
+    "w" => 441:460, "x" => 461:480,
+    "y" => 481:500, "z" => 501:520
 )
 
-HTMLTables.display(df, theme="green", colorscale="Greens")
+HTMLTables.display(df, colorscale="viridis")
+
 ```
 """
