@@ -221,12 +221,7 @@ Oxygen.serve(host="127.0.0.1", port=5050)
 
 const write_docstring::String = 
 """
-    HTMLTables.write(
-        tbl;
-        filename::String="table",
-        save_location::String=Base.Filesystem.pwd(),
-        kwargs...
-    )
+    HTMLTables.write(tbl; out::AbstractString="table.html", kwargs...)::String
 
 Writes a julia table as an HTML table to an HTML file.
 
@@ -235,41 +230,78 @@ $WRITE_ARGUMENTS
 ## Returns
 
 - `path`: The path to the HTML file.
+
 """
 
 const jpg_docstring::String = 
 """
-    HTMLTables.jpg(tbl; kwargs...)
+    HTMLTables.jpg(tbl; kwargs...)::String
 
 Writes an HTML table as a JPG image.
 
 $WRITE_ARGUMENTS
 
+## Returns
+
+- `path`: The path to the JPG.
+
+## Examples
+
+```jldoctest
+julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.jpg(df, out="table.jpg")
+"table.jpg"
+
+```
+
 """
 
 const pdf_docstring::String = 
 """
-    HTMLTables.pdf(tbl; kwargs...)
+    HTMLTables.pdf(tbl; kwargs...)::String
 
 Writes an HTML table as a PDF document.
 
 $WRITE_ARGUMENTS
 
+## Returns
+
+- `path`: The path to the PDF.
+
+## Examples
+
+```jldoctest
+julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.pdf(df, out="table.pdf")
+"table.pdf"
+
+```
+
 """
 
 const png_docstring::String = 
 """
-    HTMLTables.png(tbl; kwargs...)
+    HTMLTables.png(tbl; kwargs...)::String
 
 Writes an HTML table as a PNG image.
 
 $WRITE_ARGUMENTS
 
+## Returns
+
+- `path`: The path to the PNG.
+
+## Examples
+
+```jldoctest
+julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.png(df, out="table.png")
+"table.png"
+
+```
+
 """
 
 const open_docstring::String = 
 """
-    HTMLTables.open(tbl; kwargs...)
+    HTMLTables.open(tbl; kwargs...)::String
 
 Opens a julia table as an HTML table in the browser.
 
@@ -278,6 +310,14 @@ $WRITE_ARGUMENTS
 ## Returns
 
 - `path`: The path to the HTML file.
+
+## Examples
+
+```jldoctest
+julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.open(df, out="table.html")
+"table.html"
+
+```
 
 """
 
