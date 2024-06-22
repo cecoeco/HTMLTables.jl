@@ -82,7 +82,7 @@ Reads all HTML tables into a sink function such as `DataFrame`.
 
 """
 
-const TABLE_KEYWORDS_ARGUMENTS::String = 
+const TABLE_ARGUMENTS::String = 
 """
 
 ## Arguments
@@ -95,6 +95,7 @@ const TABLE_KEYWORDS_ARGUMENTS::String =
 - `id`: The id of the HTML table.
 - `classes`: The classes of the HTML table.
 - `css`: Whether to include the CSS styles.
+- `editable`: Whether to enable table editing.
 - `theme`: The theme of the HTML table.
 - `colorscale`: The colorscale of the HTML table.
 - `tooltips`: Whether to include tooltips.
@@ -110,6 +111,7 @@ const table_docstring::String =
         id::String="",
         classes::String="",
         css::Bool=true,
+        editable::Bool=false,
         theme::String="default",
         colorscale="",
         tooltips::Bool=true
@@ -117,7 +119,7 @@ const table_docstring::String =
 
 Returns a julia table as an HTML table.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 ## Returns
 
@@ -134,6 +136,70 @@ html = HTMLTables.table(df)
 
 println(html)
 ```
+
+```julia
+using Oxygen, HTTP, HTMLTables, DataFrames
+
+function layout(table::AbstractString)::String
+    return \"\"\"
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Oxygen.jl + HTMLTables.jl</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        </head>
+        <script>
+            async function changeTheme() {
+                const theme = document.getElementById("theme").value;
+                const response = await fetch("/theme", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: theme
+                });
+                const data = await response.text();
+                document.getElementById("table-container").innerHTML = data;
+            }
+        </script>
+        <body>
+            <p>Choose the theme of the table</p>
+            <select id="theme" onchange="changeTheme()">
+                <option value="default">Default</option>
+                <option value="red">Red</option>
+                <option value="orange">Orange</option>
+                <option value="yellow">Yellow</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="violet">Violet</option>
+                <option value="magenta">Magenta</option>
+                <option value="brown">Brown</option>
+                <option value="gray">Gray</option>
+            </select>
+            <div id="table-container">
+                \$table
+            </div>
+        </body>
+    </html>
+    \"\"\"
+end
+
+df = DataFrame(x=1:10, y=1:10, z=1:10)
+
+Oxygen.get("/") do req::HTTP.Request
+    Oxygen.html(layout(HTMLTables.table(df)))
+end
+
+Oxygen.post("/theme") do req::HTTP.Request
+    Oxygen.html((HTMLTables.table(df, theme=String(req.body))))
+end
+
+Oxygen.serve(host="127.0.0.1", port=5050)
+
+```
+
 """
 
 const write_docstring::String = 
@@ -147,7 +213,7 @@ const write_docstring::String =
 
 Writes a julia table as an HTML table to an HTML file.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 ## Returns
 
@@ -160,7 +226,7 @@ const jpg_docstring::String =
 
 Writes an HTML table as a JPG image.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 """
 
@@ -170,7 +236,7 @@ const pdf_docstring::String =
 
 Writes an HTML table as a PDF document.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 """
 
@@ -180,7 +246,7 @@ const png_docstring::String =
 
 Writes an HTML table as a PNG image.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 """
 
@@ -190,7 +256,7 @@ const open_docstring::String =
 
 Opens a julia table as an HTML table in the browser.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 ## Returns
 
@@ -204,7 +270,7 @@ const display_docstring::String =
 
 Displays a julia table as an HTML table in julia.
 
-$TABLE_KEYWORDS_ARGUMENTS
+$TABLE_ARGUMENTS
 
 ## Examples
 

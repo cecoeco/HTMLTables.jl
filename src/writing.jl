@@ -39,7 +39,7 @@ function writeid(id::AbstractString="")::String
     end
 end
 
-function writeclasses(classes::AbstractString)::String
+function writeclasses(classes::AbstractString="")::String
     if classes == ""
         return ""
     else
@@ -63,15 +63,22 @@ function writetooltip(tooltips::Bool=true, cell_value="")::String
     end
 end
 
-function writethead(tbl; header::Bool=true)::String
+function writethead(tbl; header::Bool=true, editable::Bool=false)::String
     if !header
         return ""
     end
 
-    thead::String = "<thead>\n<tr>\n"
+    contenteditable::String = ""
+    if editable
+        contenteditable *= " contenteditable=\"true\""
+    else
+        contenteditable *= ""
+    end
+
+    thead::String = "<thead$contenteditable>\n<tr>\n"
 
     for col in Base.names(tbl)
-        thead *= "<td>$col</td>\n"
+        thead *= "<td$contenteditable>$col</td>\n"
     end
 
     thead *= "</tr>\n</thead>\n"
@@ -119,16 +126,29 @@ function cellcolor(tbl; colorscale::AbstractString="", cell_value::Any, css::Boo
     return " style=\"background-color: $css_color;\""
 end
 
-function writetbody(tbl; colorscale::AbstractString="", tooltips::Bool=true, css::Bool=true)::String
-    tbody::String = "<tbody>\n"
+function writetbody(
+    tbl;
+    colorscale::AbstractString="",
+    tooltips::Bool=true,
+    css::Bool=true,
+    editable::Bool=false)::String
+
+    contenteditable::String = ""
+    if editable
+        contenteditable *= " contenteditable=\"true\""
+    else
+        contenteditable *= ""
+    end
+
+    tbody::String = "<tbody $contenteditable>\n"
 
     for row in Tables.rows(tbl)
-        tbody *= "<tr>\n"
+        tbody *= "<tr $contenteditable>\n"
 
         for col in Base.names(tbl)
             cell_value = row[Base.Symbol(col)]
 
-            cell::String = "<td"
+            cell::String = "<td $contenteditable"
             cell *= writetooltip(tooltips, cell_value)
             cell *= cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
             cell *= ">$cell_value</td>\n"
@@ -144,15 +164,22 @@ function writetbody(tbl; colorscale::AbstractString="", tooltips::Bool=true, css
     return tbody
 end
 
-function writetfoot(tbl; footer::Bool=true)::String
+function writetfoot(tbl; footer::Bool=true, editable::Bool=false)::String
     if !footer
         return ""
     end
 
-    tfoot::String = "<tfoot>\n<tr>\n"
+    contenteditable::String = ""
+    if editable
+        contenteditable *= " contenteditable=\"true\""
+    else
+        contenteditable *= ""
+    end
+
+    tfoot::String = "<tfoot $contenteditable>\n<tr>\n"
 
     for _ in Base.names(tbl)
-        tfoot *= "<td></td>\n"
+        tfoot *= "<td $contenteditable></td>\n"
     end
 
     tfoot *= "</tr>\n</tfoot>\n"
@@ -181,13 +208,14 @@ function table(
     header::Bool=true,
     footer::Bool=true,
     id::AbstractString="",
-    classes::AbstractString="",
+    classes::Union{Vector{AbstractString},AbstractString}="",
     caption::AbstractString="",
     css::Bool=true,
+    editable::Bool=false,
     theme::AbstractString="default",
-    colorscale="",
-    tooltips::Bool=true
-)::String
+    colorscale::AbstractString="",
+    tooltips::Bool=true)::String
+
     if colorscale != ""
         if !Base.isa(Base.getfield(ColorSchemes, Symbol(colorscale)), ColorScheme)
             Base.throw(Base.ArgumentError("$colorscale is not a valid color scheme"))
@@ -200,9 +228,9 @@ function table(
     html_table *= writecaption(caption)
     html_table *= writestyle(theme, css=css)
     html_table *= "<table$(writeid(id))$(writeclasses(classes))>\n"
-    html_table *= writethead(tbl, header=header)
-    html_table *= writetbody(tbl, colorscale=colorscale, tooltips=tooltips, css=css)
-    html_table *= writetfoot(tbl, footer=footer)
+    html_table *= writethead(tbl, header=header, editable=editable)
+    html_table *= writetbody(tbl, colorscale=colorscale, tooltips=tooltips, css=css, editable=editable)
+    html_table *= writetfoot(tbl, footer=footer, editable=editable)
     html_table *= "</table>"
 
     return html_table
@@ -211,23 +239,14 @@ end
 """
 $write_docstring
 """
-function write(
-    tbl;
-    filename::AbstractString="table",
-    save_location::AbstractString=Base.Filesystem.pwd(),
-    kwargs...
-)::String
-    html_table_content::String = table(tbl; kwargs...)
-
-    html_table_path::String = Base.Filesystem.joinpath(save_location, "$filename.html")
-
-    Base.open(html_table_path, "w") do io
-        Base.write(io, html_table_content)
+function write(tbl; out::AbstractString="table.html", kwargs...)::String
+    Base.open(out, "w") do io
+        Base.write(io, table(tbl; kwargs...))
     end
 
-    Base.println("HTML table saved as $html_table_path")
+    Base.println("HTML table saved as $out")
 
-    return html_table_path
+    return out
 end
 
 function npminstall(npm_packages::AbstractVector)::Nothing
@@ -319,39 +338,31 @@ function html2png(html_table::AbstractString, file_path::AbstractString)::String
     """
 end
 
-function converttable(
-    tbl,
-    output_format::AbstractString;
-    filename::AbstractString="table",
-    save_location::AbstractString=Base.Filesystem.pwd(),
-    kwargs...
-)::String
+function converttable(tbl, format::AbstractString; fname::AbstractString="table",kwargs...)::String
     html_table::String = table(tbl; kwargs...) |> escape_html_for_js
 
-    file_path::String = Base.Filesystem.joinpath(save_location, "$filename.$output_format")
+    file_path::String = "$fname.$format"
 
     embedded_js_content::String = ""
-    if output_format == "jpg"
+    if format == "jpg"
         embedded_js_content = html2jpg(html_table, file_path)
-    elseif output_format == "pdf"
+    elseif format == "pdf"
         embedded_js_content = html2pdf(html_table, file_path)
-    elseif output_format == "png"
+    elseif format == "png"
         embedded_js_content = html2png(html_table, file_path)
     else
         Base.throw(Base.ArgumentError("Output format must be one of jpg, pdf, or png"))
     end
 
-    if output_format in ["jpg", "png"]
+    if format in ["jpg", "png"]
         npminstall(["fs", "puppeteer"])
-    elseif output_format == "pdf"
+    elseif format == "pdf"
         npminstall(["puppeteer"])
     end
 
     node::Cmd = NodeJS.node()
 
-    node_cmd::Cmd = `$node -e "$embedded_js_content" --input-type=module`
-
-    Base.run(node_cmd)
+    Base.run(`$node -e "$embedded_js_content" --input-type=module`)
 
     Base.println("HTML table saved as $file_path")
 
