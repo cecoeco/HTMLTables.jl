@@ -231,6 +231,14 @@ $WRITE_ARGUMENTS
 
 - `path`: The path to the HTML file.
 
+## Examples
+
+```jldoctest
+julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.write(df)
+"table.html"
+
+```
+
 """
 
 const jpg_docstring::String = 
@@ -248,7 +256,7 @@ $WRITE_ARGUMENTS
 ## Examples
 
 ```jldoctest
-julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.jpg(df, out="table.jpg")
+julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.jpg(df)
 "table.jpg"
 
 ```
@@ -270,7 +278,7 @@ $WRITE_ARGUMENTS
 ## Examples
 
 ```jldoctest
-julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.pdf(df, out="table.pdf")
+julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.pdf(df)
 "table.pdf"
 
 ```
@@ -292,7 +300,7 @@ $WRITE_ARGUMENTS
 ## Examples
 
 ```jldoctest
-julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.png(df, out="table.png")
+julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.png(df)
 "table.png"
 
 ```
@@ -314,7 +322,7 @@ $WRITE_ARGUMENTS
 ## Examples
 
 ```jldoctest
-julia> df = DataFrame(x=1:10, y=1:10); HTMLTables.open(df, out="table.html")
+julia> using Pkg; Pkg.add("DataFrames"); using DataFrames; df = DataFrame(x=1:10, y=1:10); HTMLTables.open(df)
 "table.html"
 
 ```
