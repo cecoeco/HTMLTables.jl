@@ -47,6 +47,14 @@ function writeclasses(classes::AbstractString="")::String
     end
 end
 
+function writeclasses(classes::Vector{AbstractString})::String
+    if Base.isempty(classes)
+        return ""
+    else
+        return " class=\"" * Base.join(classes, " ") * "\""
+    end
+end
+
 function writecaption(caption::AbstractString="")::String
     if caption == ""
         return ""
@@ -272,7 +280,7 @@ function escape_html_for_js(html::AbstractString)::String
     return Base.join(Base.get(replacements, c, c) for c in html)
 end
 
-function html2jpg(html_table::AbstractString, file_path::AbstractString)::String
+function html2jpg(html_table::AbstractString, out::AbstractString)::String
     return """
         const fs = require("fs");
         const puppeteer = require("puppeteer");
@@ -289,11 +297,11 @@ function html2jpg(html_table::AbstractString, file_path::AbstractString)::String
             await browser.close();
         }
 
-        html2jpg(\"$html_table\", \"$file_path\")
+        html2jpg(\"$html_table\", \"$out\")
     """
 end
 
-function html2pdf(html_table::AbstractString, file_path::AbstractString)::String
+function html2pdf(html_table::AbstractString, out::AbstractString)::String
     return """
         const puppeteer = require("puppeteer");
 
@@ -313,11 +321,11 @@ function html2pdf(html_table::AbstractString, file_path::AbstractString)::String
         await browser.close();
         }
 
-        html2pdf(\"$html_table\", \"$file_path\")
+        html2pdf(\"$html_table\", \"$out\")
     """
 end
 
-function html2png(html_table::AbstractString, file_path::AbstractString)::String
+function html2png(html_table::AbstractString, out::AbstractString)::String
     return """
     const fs = require("fs");
     const puppeteer = require("puppeteer");
@@ -334,22 +342,26 @@ function html2png(html_table::AbstractString, file_path::AbstractString)::String
             await browser.close();
         }
 
-        html2png(\"$html_table\", \"$file_path\")
+        html2png(\"$html_table\", \"$out\")
     """
 end
 
-function converttable(tbl, format::AbstractString; fname::AbstractString="table",kwargs...)::String
+function converttable(tbl, format::AbstractString; out::AbstractString="table", kwargs...)::String
     html_table::String = table(tbl; kwargs...) |> escape_html_for_js
 
-    file_path::String = "$fname.$format"
+    ext::String = Base.Filesystem.splitext(out)[end]
+
+    if ext == ""
+        out = "$out.$format"
+    end
 
     embedded_js_content::String = ""
     if format == "jpg"
-        embedded_js_content = html2jpg(html_table, file_path)
+        embedded_js_content = html2jpg(html_table, out)
     elseif format == "pdf"
-        embedded_js_content = html2pdf(html_table, file_path)
+        embedded_js_content = html2pdf(html_table, out)
     elseif format == "png"
-        embedded_js_content = html2png(html_table, file_path)
+        embedded_js_content = html2png(html_table, out)
     else
         Base.throw(Base.ArgumentError("Output format must be one of jpg, pdf, or png"))
     end
@@ -364,9 +376,9 @@ function converttable(tbl, format::AbstractString; fname::AbstractString="table"
 
     Base.run(`$node -e "$embedded_js_content" --input-type=module`)
 
-    Base.println("HTML table saved as $file_path")
+    Base.println("HTML table saved as $out")
 
-    return file_path
+    return out
 end
 
 """

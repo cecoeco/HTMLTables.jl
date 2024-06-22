@@ -1,4 +1,4 @@
-function isurl(source::String)::Bool
+function isurl(source::AbstractString)::Bool
     url_pattern::Regex = r"(?i)\b((?:https?|ftp):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?)\b"
 
     return Base.occursin(url_pattern, source)
@@ -8,9 +8,9 @@ end
 $get_docstring
 """
 function get(
-    source::String;
-    id::String="",
-    classes::Union{Vector{String},String}="",
+    source::AbstractString;
+    id::AbstractString="",
+    classes::Union{Vector{AbstractString},AbstractString}="",
     index::Int=1
 )
     if index <= 0 || Base.isinteger(index) == false
@@ -58,7 +58,7 @@ end
 """
 $getall_docstring
 """
-function getall(source::String)::Vector
+function getall(source::AbstractString)::Vector
     html_content::String = ""
     if isurl(source) == true
         response::HTTP.Response = HTTP.get(source)
@@ -83,10 +83,10 @@ end
 $read_docstring
 """
 function read(
-    source::String,
+    source::AbstractString,
     sink;
-    id::String="",
-    classes::Union{Vector{String},String}="",
+    id::AbstractString="",
+    classes::Union{Vector{AbstractString},AbstractString}="",
     index::Int=1
 )
     table::Gumbo.HTMLNode = get(source, id=id, classes=classes, index=index)
@@ -112,7 +112,7 @@ end
 """
 $readall_docstring
 """
-function readall(source::String, sink)
+function readall(source::AbstractString, sink)
     tables = getall(source)
     results = Vector{Any}(undef, Base.length(tables))
 

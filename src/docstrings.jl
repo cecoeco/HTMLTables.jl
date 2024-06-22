@@ -88,8 +88,25 @@ const TABLE_ARGUMENTS::String =
 ## Arguments
 
 - `tbl`: The table to write.
-- `filename`: The filename of the HTML table.
-- `save_location`: The location to save the HTML table.
+- `header`: Whether to include the table header.
+- `footer`: Whether to include the table footer.
+- `id`: The id of the HTML table.
+- `classes`: The classes of the HTML table.
+- `css`: Whether to include the CSS styles.
+- `editable`: Whether to enable table editing.
+- `theme`: The theme of the HTML table.
+- `colorscale`: The colorscale of the HTML table.
+- `tooltips`: Whether to include tooltips.
+
+"""
+
+const WRITE_ARGUMENTS::String = 
+"""
+
+## Arguments
+
+- `tbl`: The table to write.
+- `out`: The file to write the table to.
 - `header`: Whether to include the table header.
 - `footer`: Whether to include the table footer.
 - `id`: The id of the HTML table.
@@ -213,7 +230,7 @@ const write_docstring::String =
 
 Writes a julia table as an HTML table to an HTML file.
 
-$TABLE_ARGUMENTS
+$WRITE_ARGUMENTS
 
 ## Returns
 
@@ -226,7 +243,7 @@ const jpg_docstring::String =
 
 Writes an HTML table as a JPG image.
 
-$TABLE_ARGUMENTS
+$WRITE_ARGUMENTS
 
 """
 
@@ -236,7 +253,7 @@ const pdf_docstring::String =
 
 Writes an HTML table as a PDF document.
 
-$TABLE_ARGUMENTS
+$WRITE_ARGUMENTS
 
 """
 
@@ -246,7 +263,7 @@ const png_docstring::String =
 
 Writes an HTML table as a PNG image.
 
-$TABLE_ARGUMENTS
+$WRITE_ARGUMENTS
 
 """
 
@@ -256,7 +273,7 @@ const open_docstring::String =
 
 Opens a julia table as an HTML table in the browser.
 
-$TABLE_ARGUMENTS
+$WRITE_ARGUMENTS
 
 ## Returns
 
