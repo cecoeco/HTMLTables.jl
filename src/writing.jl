@@ -44,6 +44,11 @@ function writestyle(file::AbstractString; css::Bool)::String
         return ""
     end
 
+    if file in ["default", "red", "orange", "yellow", "green", "blue", "violet", "magenta", "brown", "gray", "black", "julia", "sunstone", "moonstone"]
+        file = Symbol(file)
+        return writestyle(file, css=css)
+    end
+
     if iscssfile(file)
         file = Base.read(file, String)
     else
