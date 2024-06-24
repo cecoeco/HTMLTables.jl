@@ -1,37 +1,72 @@
 include("themes.jl")
 
-function writestyle(theme::AbstractString; css::Bool=true)::String
+function writestyle(theme::Symbol; css::Bool)::String
     if theme == "" || !css
         return ""
     end
 
-    theme = Base.lowercase(theme)
-
-    theme_dict::Dict{String,String} = Base.Dict(
-        "default" => DEFAULT,
-        "red" => RED,
-        "orange" => ORANGE,
-        "yellow" => YELLOW,
-        "green" => GREEN,
-        "blue" => BLUE,
-        "violet" => VIOLET,
-        "magenta" => MAGENTA,
-        "brown" => BROWN,
-        "gray" => GRAY,
-        "black" => BLACK,
-        "julia" => JULIA,
-        "sunstone" => SUNSTONE,
-        "moonstone" => MOONSTONE
+    theme_dictionary::Dict{Symbol,String} = Base.Dict(
+        :default => DEFAULT,
+        :red => RED,
+        :orange => ORANGE,
+        :yellow => YELLOW,
+        :green => GREEN,
+        :blue => BLUE,
+        :violet => VIOLET,
+        :magenta => MAGENTA,
+        :brown => BROWN,
+        :gray => GRAY,
+        :black => BLACK,
+        :julia => JULIA,
+        :sunstone => SUNSTONE,
+        :moonstone => MOONSTONE
     )
 
-    if Base.haskey(theme_dict, theme)
-        return theme_dict[theme]
+    if Base.haskey(theme_dictionary, theme)
+        theme = theme_dictionary[theme]
     else
         Base.throw(Base.ArgumentError("$(theme) is not a valid theme"))
     end
+
+    return """<style>\n$theme\n</style>\n"""
 end
 
-function writeid(id::AbstractString="")::String
+function iscssfile(file::AbstractString)::Bool
+    if file == ""
+        return false
+    end
+
+    return Base.splitext(file)[end] == ".css"
+end
+
+function writestyle(file::AbstractString; css::Bool)::String
+    if file == "" || !css
+        return ""
+    end
+
+    if iscssfile(file)
+        file = Base.read(file, String)
+    else
+        nothing
+    end
+
+    return """<style>\n$file\n</style>\n"""
+end
+
+function writestyle(files::AbstractVector; css::Bool)::String
+    if files == [] || !css
+        return ""
+    end
+
+    table_css::String = ""
+    for file in files
+        table_css *= Base.read(file, String)
+    end
+
+    return """<style>\n$table_css\n</style>\n"""
+end
+
+function writeid(id::AbstractString)::String
     if id == ""
         return ""
     else
@@ -39,7 +74,7 @@ function writeid(id::AbstractString="")::String
     end
 end
 
-function writeclasses(classes::AbstractString="")::String
+function writeclasses(classes::AbstractString)::String
     if classes == ""
         return ""
     else
@@ -48,14 +83,22 @@ function writeclasses(classes::AbstractString="")::String
 end
 
 function writeclasses(classes::Vector{AbstractString})::String
-    if Base.isempty(classes)
+    if classes == []
         return ""
     else
         return " class=\"" * Base.join(classes, " ") * "\""
     end
 end
 
-function writecaption(caption::AbstractString="")::String
+function writeclasses(classes::Tuple{AbstractString})::String
+    if classes == ()
+        return ""
+    else
+        return " class=\"" * Base.join(classes, " ") * "\""
+    end
+end
+
+function writecaption(caption::AbstractString)::String
     if caption == ""
         return ""
     else
@@ -63,7 +106,7 @@ function writecaption(caption::AbstractString="")::String
     end
 end
 
-function writetooltip(tooltips::Bool=true, cell_value="")::String
+function writetooltip(tooltips::Bool, cell_value)::String
     if tooltips
         return " title=\"$cell_value\""
     else
@@ -71,7 +114,7 @@ function writetooltip(tooltips::Bool=true, cell_value="")::String
     end
 end
 
-function writethead(tbl; header::Bool=true, editable::Bool=false)::String
+function writethead(tbl; header::Bool, editable::Bool)::String
     if !header
         return ""
     end
@@ -116,7 +159,7 @@ function css_rgb(color::Colors.Colorant)::String
     return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
-function cellcolor(tbl; colorscale::AbstractString="", cell_value::Any, css::Bool=true)::String
+function cellcolor(tbl; colorscale::AbstractString, cell_value, css::Bool=true)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
     if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !css
@@ -137,9 +180,9 @@ end
 function writetbody(
     tbl;
     colorscale::AbstractString="",
-    tooltips::Bool=true,
-    css::Bool=true,
-    editable::Bool=false)::String
+    tooltips::Bool,
+    css::Bool,
+    editable::Bool)::String
 
     contenteditable::String = ""
     if editable
@@ -156,7 +199,8 @@ function writetbody(
         for col in Base.names(tbl)
             cell_value = row[Base.Symbol(col)]
 
-            cell::String = "<td $contenteditable"
+            cell::String = ""
+            cell *= "<td $contenteditable"
             cell *= writetooltip(tooltips, cell_value)
             cell *= cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
             cell *= ">$cell_value</td>\n"
@@ -172,7 +216,7 @@ function writetbody(
     return tbody
 end
 
-function writetfoot(tbl; footer::Bool=true, editable::Bool=false)::String
+function writetfoot(tbl; footer::Bool, editable::Bool)::String
     if !footer
         return ""
     end
@@ -216,11 +260,11 @@ function table(
     header::Bool=true,
     footer::Bool=true,
     id::AbstractString="",
-    classes::Union{Vector{AbstractString},AbstractString}="",
+    classes::Union{AbstractString,Vector{AbstractString}}="",
     caption::AbstractString="",
     css::Bool=true,
     editable::Bool=false,
-    theme::AbstractString="default",
+    theme::Union{Symbol,AbstractString,AbstractVector}=:default,
     colorscale::AbstractString="",
     tooltips::Bool=true)::String
 
@@ -372,7 +416,7 @@ function converttable(tbl, format::AbstractString; out::AbstractString="table", 
         npminstall(["puppeteer"])
     end
 
-    node::Cmd = NodeJS.node()
+    node::Cmd = NodeJS_20_jll.node()
 
     Base.run(`$node -e "$embedded_js_content" --input-type=module`)
 

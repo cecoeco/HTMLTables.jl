@@ -20,10 +20,7 @@ Viewing HTML tables:
 """
 module HTMLTables
 
-using Cascadia, Colors, ColorSchemes, Gumbo, HTTP, Tables
-
-using NodeJS_20_jll
-const NodeJS::Module = NodeJS_20_jll
+using Cascadia, Colors, ColorSchemes, Gumbo, HTTP, NodeJS_20_jll, Tables
 
 export get, getall, read, readall, table, write, jpg, pdf, png, display, open
 

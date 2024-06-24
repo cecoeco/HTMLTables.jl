@@ -56,7 +56,6 @@ tfoot {
 
 const DEFAULT::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -68,12 +67,10 @@ table {
 tfoot {
   display: none;
 }
-</style>
 """
 
 const RED::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -93,12 +90,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(0, 100%, 65%);
 }
-</style>
 """
 
 const ORANGE::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -118,12 +113,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(25, 100%, 65%);
 }
-</style>
 """
 
 const YELLOW::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -143,12 +136,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(60, 100%, 65%);
 }
-</style>
 """
 
 const GREEN::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -168,12 +159,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(115, 100%, 65%);
 }
-</style>
 """
 
 const BLUE::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -193,12 +182,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(205, 100%, 65%);
 }
-</style>
 """
 
 const VIOLET::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -218,12 +205,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(260, 100%, 65%);
 }
-</style>
 """
 
 const MAGENTA::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -243,12 +228,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(320, 100%, 65%);
 }
-</style>
 """
 
 const BROWN::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -268,12 +251,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(20, 40%, 55%);
 }
-</style>
 """
 
 const GRAY::String = 
 """
-<style>
 $NORMALIZE
 
 $BASIC_STYLING
@@ -293,12 +274,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(0, 0%, 65%);
 }
-</style>
 """
 
 const BLACK::String = 
 """
-<style>
 $NORMALIZE
 
 table {
@@ -352,12 +331,10 @@ tbody tr:nth-child(even) {
 tfoot {
   background-color: hsl(0, 0%, 0%);
 }
-</style>
 """
 
 const JULIA::String = 
 """
-<style>
 @import url("https://fonts.googleapis.com/css2?family=Arya:wght@400;700");
 
 $NORMALIZE
@@ -374,12 +351,10 @@ thead, tfoot {
     font-family: "Arya";
     background-color: #a270ba;
 }
-</style>
 """
 
 const SUNSTONE::String = 
 """
-<style>
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 $NORMALIZE
@@ -435,12 +410,10 @@ th, td {
 tfoot {
   border-top: 2px solid #ff8850;
 }
-</style>
 """
 
 const MOONSTONE::String = 
 """
-<style>
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 $NORMALIZE
@@ -496,5 +469,4 @@ th, td {
 tfoot {
   border-top: 2px solid #477edf;
 }
-</style>
 """

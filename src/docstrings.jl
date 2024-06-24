@@ -125,11 +125,11 @@ const table_docstring::String =
         tbl;
         header::Bool=true,
         footer::Bool=true,
-        id::String="",
-        classes::String="",
+        id::AbstractString="",
+        classes::Union{AbstractString,Vector{AbstractString}}="",
         css::Bool=true,
         editable::Bool=false,
-        theme::String="default",
+        theme::Union{Symbol,AbstractString,AbstractVector}="default",
         colorscale="",
         tooltips::Bool=true
     )

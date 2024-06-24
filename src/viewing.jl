@@ -1,8 +1,8 @@
 """
 $open_docstring
 """
-function open(tbl, out::AbstractString="table.html"; kwargs...)::String
-    path::String = write(tbl, out; kwargs...)
+function open(tbl; kwargs...)::String
+    path::String = write(tbl; kwargs...)
 
     if Base.Sys.iswindows()
         Base.run(`start $path`)
