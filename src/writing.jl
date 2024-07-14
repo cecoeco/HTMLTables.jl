@@ -282,9 +282,9 @@ function table(
     tbl = numeric_string_to_number.(tbl)
 
     html_table::String = ""
-    html_table *= writecaption(caption)
     html_table *= writestyle(theme, css=css)
     html_table *= "<table$(writeid(id))$(writeclasses(classes))>\n"
+    html_table *= writecaption(caption)
     html_table *= writethead(tbl, header=header, editable=editable)
     html_table *= writetbody(tbl, colorscale=colorscale, tooltips=tooltips, css=css, editable=editable)
     html_table *= writetfoot(tbl, footer=footer, editable=editable)
