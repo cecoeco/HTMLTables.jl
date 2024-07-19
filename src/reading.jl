@@ -4,6 +4,10 @@ function isurl(source::AbstractString)::Bool
     return Base.occursin(url_pattern, source)
 end
 
+function ishtmlfile(source::AbstractString)::Bool
+    return Base.Filesystem.splitext(source)[2] == ".html"
+end
+
 """
 $get_docstring
 """
@@ -21,8 +25,10 @@ function get(
     if isurl(source) == true
         response::HTTP.Response = HTTP.get(source)
         html_content *= Base.String(response.body)
-    else
+    elseif ishtmlfile(source) == true
         html_content *= Base.read(source, String)
+    else
+        html_content *= source
     end
 
     html_document::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
@@ -63,8 +69,10 @@ function getall(source::AbstractString)::Vector
     if isurl(source) == true
         response::HTTP.Response = HTTP.get(source)
         html_content *= Base.String(response.body)
-    else
+    elseif ishtmlfile(source) == true
         html_content *= Base.read(source, String)
+    else
+        html_content *= source
     end
 
     html_document::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
