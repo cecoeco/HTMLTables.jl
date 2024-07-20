@@ -1,4 +1,5 @@
 using Test
+using HTMLTables
 using DataFrames
 
 df = DataFrame(x=1:10, y=1:10, z=1:10)
@@ -19,6 +20,18 @@ df = DataFrame(x=1:10, y=1:10, z=1:10)
     HTMLTables.write(df, colorscale="Purples", out="purples.html")
     @test Base.Filesystem.isfile("purples.html")
     Base.Filesystem.rm("purples.html")
+
+    HTMLTables.png(df, colorscale="viridis", out="viridis.png")
+    @test Base.Filesystem.isfile("viridis.png")
+    Base.Filesystem.rm("viridis.png")
+
+    HTMLTables.pdf(df, colorscale="plasma", out="plasma.pdf")
+    @test Base.Filesystem.isfile("plasma.pdf")
+    Base.Filesystem.rm("plasma.pdf")
+
+    HTMLTables.jpg(df, colorscale="magma", out="magma.jpg")
+    @test Base.Filesystem.isfile("magma.jpg")
+    Base.Filesystem.rm("magma.jpg")
 
     test_html = """
         <table>
