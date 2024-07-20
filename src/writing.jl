@@ -308,7 +308,7 @@ end
 
 function npminstall(npm_packages::AbstractVector)::Nothing
     for npm_package in npm_packages
-        Base.run(`$(NodeJS.npm) install $npm_package`)
+        Base.run(`$(NodeJS_20_jll.npm) install $npm_package`)
     end
 
     return nothing

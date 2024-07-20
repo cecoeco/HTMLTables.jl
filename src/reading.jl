@@ -1,7 +1,5 @@
 function isurl(source::AbstractString)::Bool
-    url_pattern::Regex = r"(?i)\b((?:https?|ftp):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?)\b"
-
-    return Base.occursin(url_pattern, source)
+    return startswith(source, "http://") || startswith(source, "https://") || startswith(source, "ftp://")
 end
 
 function ishtmlfile(source::AbstractString)::Bool
