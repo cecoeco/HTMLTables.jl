@@ -421,9 +421,7 @@ function converttable(tbl, format::AbstractString; out::AbstractString="table", 
         npminstall(["puppeteer"])
     end
 
-    node::Cmd = NodeJS_20_jll.node()
-
-    Base.run(`$node -e "$embedded_js_content" --input-type=module`)
+    Base.run(`$(NodeJS_20_jll.node()) -e "$embedded_js_content" --input-type=module`)
 
     Base.println("HTML table saved as $out")
 
