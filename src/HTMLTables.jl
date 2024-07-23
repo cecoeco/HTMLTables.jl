@@ -17,6 +17,7 @@ Writing HTML tables:
 Viewing HTML tables:
 - `HTMLTables.display` displays a julia table as an HTML table in julia.
 - `HTMLTables.open` opens a julia table as an HTML table in the browser.
+
 """
 module HTMLTables
 
