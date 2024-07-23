@@ -22,7 +22,9 @@
 
 `using Pkg; Pkg.add("HTMLTables")`
 
-### Example
+### Examples
+
+writiing a DataFrame into an HTML table:
 
 ```julia
 using HTMLTables, DataFrames
@@ -44,6 +46,46 @@ df = DataFrame(
 )
 
 HTMLTables.write(df, colorscale="viridis")
+```
+
+output:
+
+![viridis table example](docs/src/assets/viridis-a-z.png)
+
+creates a dataframe from parsing an html table from a website:
+
+```julia
+using HTMLTables, DataFrames
+
+df = HTMLTables.read("https://www.w3schools.com/html/html_tables.asp", DataFrame)
+```
+
+writing the html table data into a CSV file:
+
+```julia
+using CSV
+
+CSV.write("table.csv", df)
+```
+
+writing the html table data into a JSON file:
+
+```julia
+using JSON, JSONTables
+
+json = JSONTables.objecttable(df)
+
+Base.open("table.json", "w") do io
+    JSON3.pretty(io, json)
+end
+```
+
+writing the html table data into an Excel file:
+
+```julia
+using XLSX
+
+XLSX.writetable("table.xlsx", "Sheet 1" => df)
 ```
 
 ### Functions
