@@ -71,7 +71,7 @@ CSV.write("table.csv", df)
 writing the html table data into a JSON file:
 
 ```julia
-using JSON, JSONTables
+using JSON3, JSONTables
 
 json = JSONTables.objecttable(df)
 
