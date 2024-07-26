@@ -258,7 +258,53 @@ function numeric_string_to_number(cell_value)
 end
 
 """
-$table_docstring
+    HTMLTables.table(
+        tbl;
+        header::Bool=true,
+        footer::Bool=true,
+        id::AbstractString="",
+        classes::Union{AbstractString,Vector{AbstractString}}="",
+        css::Bool=true,
+        editable::Bool=false,
+        theme::Union{Symbol,AbstractString,AbstractVector}="default",
+        colorscale="",
+        tooltips::Bool=true
+    )
+
+Returns a julia table as an HTML table.
+
+## Argument
+
+- `tbl`: The table to write.
+
+## Keyword Arguments
+
+- `header`: Whether to include the table header.
+- `footer`: Whether to include the table footer.
+- `id`: The id of the HTML table.
+- `classes`: The classes of the HTML table.
+- `css`: Whether to include the CSS styles.
+- `editable`: Whether to enable table editing.
+- `theme`: The theme of the HTML table.
+- `colorscale`: The colorscale of the HTML table.
+- `tooltips`: Whether to include tooltips.
+
+## Returns
+
+- `html_table`: A string containing the HTML table.
+
+## Examples
+
+```julia
+using DataFrames, HTMLTables
+
+df = DataFrame(x=1:10, y=1:10)
+
+html = HTMLTables.table(df)
+
+println(html)
+```
+
 """
 function table(
     tbl;
@@ -294,157 +340,46 @@ function table(
 end
 
 """
-$write_docstring
+    HTMLTables.write(out::AbstractString, tbl; kwargs...)::String
+
+Writes a julia table as an HTML table to an HTML file.
+
+## Arguments
+
+- `out`: The file to write the table to.
+- `tbl`: The table to write.
+
+## Keyword Arguments
+
+- `header`: Whether to include the table header.
+- `footer`: Whether to include the table footer.
+- `id`: The id of the HTML table.
+- `classes`: The classes of the HTML table.
+- `css`: Whether to include the CSS styles.
+- `editable`: Whether to enable table editing.
+- `theme`: The theme of the HTML table.
+- `colorscale`: The colorscale of the HTML table.
+- `tooltips`: Whether to include tooltips.
+
+## Returns
+
+- `path`: The path to the HTML file.
+
+## Examples
+
+```julia
+using DataFrames, HTMLTables
+
+df = DataFrame(x=1:10, y=1:10)
+
+HTMLTables.write("table.html", df)
+```
+
 """
-function write(tbl; out::AbstractString="table.html", kwargs...)::String
-    Base.open(out, "w") do io
-        Base.write(io, table(tbl; kwargs...))
-    end
+function write(out::AbstractString, tbl; kwargs...)::String
+    Base.Filesystem.write(out, table(tbl; kwargs...))
 
     Base.println("HTML table saved as $out")
 
     return out
-end
-
-function npminstall(npm_packages::AbstractVector)::Nothing
-    for npm_package in npm_packages
-        Base.run(`$(NodeJS_20_jll.npm) install $npm_package`)
-    end
-
-    return nothing
-end
-
-function escape_html_for_js(html::AbstractString)::String
-    replacements::Dict{Char,String} = Base.Dict(
-        '\\' => "\\\\",
-        '"' => "\\\"",
-        '\'' => "\\'",
-        '\n' => "\\n",
-        '\r' => "\\r",
-        '\t' => "\\t",
-        '\b' => "\\b",
-        '\f' => "\\f"
-    )
-
-    return Base.join(Base.get(replacements, c, c) for c in html)
-end
-
-function html2jpg(html_table::AbstractString, out::AbstractString)::String
-    return """
-        const fs = require("fs");
-        const puppeteer = require("puppeteer");
-
-        async function html2jpg(htmlString, outputPath) {
-            const browser = await puppeteer.launch();
-            const page = await browser.newPage();
-            await page.goto(
-            `data:text/html;charset=utf-8,\${encodeURIComponent(htmlString)}`,
-            { waitUntil: "domcontentloaded" }
-            );
-            const jpegBuffer = await page.screenshot({ fullPage: true, type: "jpeg" });
-            fs.writeFileSync(outputPath, jpegBuffer);
-            await browser.close();
-        }
-
-        html2jpg(\"$html_table\", \"$out\")
-    """
-end
-
-function html2pdf(html_table::AbstractString, out::AbstractString)::String
-    return """
-        const puppeteer = require("puppeteer");
-
-        async function html2pdf(htmlString, outputPath) {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-
-        await page.setContent(htmlString, { waitUntil: "networkidle0" });
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-
-        const pdfOptions = {
-            path: outputPath,
-            printBackground: true,
-        };
-
-        await page.pdf(pdfOptions);
-        await browser.close();
-        }
-
-        html2pdf(\"$html_table\", \"$out\")
-    """
-end
-
-function html2png(html_table::AbstractString, out::AbstractString)::String
-    return """
-    const fs = require("fs");
-    const puppeteer = require("puppeteer");
-
-        async function html2png(htmlString, outputPath) {
-            const browser = await puppeteer.launch();
-            const page = await browser.newPage();
-            await page.goto(
-            `data:text/html;charset=utf-8,\${encodeURIComponent(htmlString)}`,
-            { waitUntil: "domcontentloaded" }
-            );
-            const pngBuffer = await page.screenshot({ fullPage: true });
-            fs.writeFileSync(outputPath, pngBuffer);
-            await browser.close();
-        }
-
-        html2png(\"$html_table\", \"$out\")
-    """
-end
-
-function converttable(tbl, format::AbstractString; out::AbstractString="table", kwargs...)::String
-    html_table::String = table(tbl; kwargs...) |> escape_html_for_js
-
-    ext::String = Base.Filesystem.splitext(out)[end]
-
-    if ext == ""
-        out = "$out.$format"
-    end
-
-    embedded_js_content::String = ""
-    if format == "jpg"
-        embedded_js_content = html2jpg(html_table, out)
-    elseif format == "pdf"
-        embedded_js_content = html2pdf(html_table, out)
-    elseif format == "png"
-        embedded_js_content = html2png(html_table, out)
-    else
-        Base.throw(Base.ArgumentError("Output format must be one of jpg, pdf, or png"))
-    end
-
-    if format in ["jpg", "png"]
-        npminstall(["fs", "puppeteer"])
-    elseif format == "pdf"
-        npminstall(["puppeteer"])
-    end
-
-    Base.run(`$(NodeJS_20_jll.node()) -e "$embedded_js_content" --input-type=module`)
-
-    Base.println("HTML table saved as $out")
-
-    return out
-end
-
-"""
-$jpg_docstring
-"""
-function jpg(tbl; kwargs...)::String
-    return converttable(tbl, "jpg"; kwargs...)
-end
-
-"""
-$pdf_docstring
-"""
-function pdf(tbl; kwargs...)::String
-    return converttable(tbl, "pdf"; kwargs...)
-end
-
-"""
-$png_docstring
-"""
-function png(tbl; kwargs...)::String
-    return converttable(tbl, "png"; kwargs...)
 end

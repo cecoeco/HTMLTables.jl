@@ -7,7 +7,17 @@ function ishtmlfile(source::AbstractString)::Bool
 end
 
 """
-$get_docstring
+    HTMLTables.get(source::String; id::String="", classes::Union{Vector{String},String}="", index::Int=1)
+
+Returns an HTML table a source as a string.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML table.
+- `id::String`: The id of the HTML table.
+- `classes::Union{Vector{String},String}`: The classes of the HTML table.
+- `index::Int`: The index of the HTML table in the HTML document.
+
 """
 function get(
     source::AbstractString;
@@ -60,7 +70,14 @@ function get(
 end
 
 """
-$getall_docstring
+    HTMLTables.getall(source::String)
+
+Extracts all tables from an HTML document or website.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML document or website.
+
 """
 function getall(source::AbstractString)::Vector
     html_content::String = ""
@@ -86,7 +103,47 @@ function extractrowdata(row::Gumbo.HTMLNode)::Vector
 end
 
 """
-$read_docstring
+    HTMLTables.read(source::String, sink::Function; id::String="", classes::Union{Vector{String},String}="")
+
+Reads a HTML table into a sink function such as `DataFrame`.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML table.
+- `sink`: The function that materializes the table data.
+- `id::String`: The id of the HTML table.
+- `classes::Union{Vector{String},String}`: The classes of the HTML table.
+- `index::Int`: The index of the HTML table in the HTML document.
+
+## Examples
+
+```julia
+# reading an HTML table into a DataFrame
+using HTMLTables, DataFrames
+
+df = HTMLTables.read("https://www.w3schools.com/html/html_tables.asp", DataFrame)
+
+# writing the html table data into a CSV file
+using CSV
+
+CSV.write("table.csv", df)
+
+# writing the html table data into a JSON file
+using JSON3, JSONTables
+
+json = JSONTables.objecttable(df)
+
+Base.open("table.json", "w") do io
+    JSON3.pretty(io, json)
+end
+
+# writing the html table data into an Excel file
+using XLSX
+
+XLSX.writetable("table.xlsx", "Sheet 1" => df)
+
+```
+
 """
 function read(
     source::AbstractString,
@@ -116,7 +173,15 @@ function read(
 end
 
 """
-$readall_docstring
+    HTMLTables.readall(source::String, sink::Function)
+
+Reads all HTML tables into a sink function such as `DataFrame`.
+
+## Arguments
+
+- `source::String`: URL or path to the HTML document or website.
+- `sink`: The function that materializes the table data.
+
 """
 function readall(source::AbstractString, sink)
     tables = getall(source)

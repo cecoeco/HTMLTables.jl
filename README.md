@@ -98,11 +98,4 @@ Reading HTML tables:
 
 Writing HTML tables:
 - `HTMLTables.table` uses the Tables.jl interface to write an HTML table as a string.
-- `HTMLTables.write` uses the Tables.jl interface to write an HTML table in an HTML file.
-- `HTMLTables.jpg` writes an HTML table as a JPG image.
-- `HTMLTables.pdf` writes an HTML table as a PDF document.
-- `HTMLTables.png` writes an HTML table as a PNG image.
-
-Viewing HTML tables:
-- `HTMLTables.display` displays a Julia table as an HTML table in a Julia IDE.
-- `HTMLTables.open` opens a Julia table as an HTML table in the browser.
+- `HTMLTables.write` uses the Tables.jl interface to write an HTML table in a file.

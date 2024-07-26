@@ -16,7 +16,6 @@ Documenter.makedocs(
         "Home" => "index.md",
         "Reading" => "reading.md",
         "Writing" => "writing.md",
-        "Viewing" => "viewing.md",
         "References" => "references.md"
     ],
     repo="https://github.com/cecoeco/HTMLTables.jl",
