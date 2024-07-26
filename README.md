@@ -9,7 +9,7 @@
 
 ## HTMLTables
 
-<i>Julia package for reading, writing, and viewing HTML tables.</i>
+<i>Julia package for reading and writing HTML tables.</i>
 
 ### :book: Documentation
 
