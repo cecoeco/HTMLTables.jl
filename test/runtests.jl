@@ -69,19 +69,19 @@ test_html = """
 """
 
 @testset "HTMLTables.jl" begin
-    HTMLTables.write(df, colorscale="Reds", out="reds.html")
+    HTMLTables.write("reds.html", df, colorscale="Reds")
     @test Base.Filesystem.isfile("reds.html")
     Base.Filesystem.rm("reds.html")
 
-    HTMLTables.write(df, colorscale="Blues", out="blues.html")
+    HTMLTables.write("blues.html", df, colorscale="Blues")
     @test Base.Filesystem.isfile("blues.html")
     Base.Filesystem.rm("blues.html")
 
-    HTMLTables.write(df, colorscale="Greens", out="greens.html")
+    HTMLTables.write("greens.html", df, colorscale="Greens")
     @test Base.Filesystem.isfile("greens.html")
     Base.Filesystem.rm("greens.html")
 
-    HTMLTables.write(df, colorscale="Purples", out="purples.html")
+    HTMLTables.write("purples.html", df, colorscale="Purples")
     @test Base.Filesystem.isfile("purples.html")
     Base.Filesystem.rm("purples.html")
 
