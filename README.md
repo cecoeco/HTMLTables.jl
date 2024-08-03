@@ -37,7 +37,7 @@ df = DataFrame(
     "y" => 481:500, "z" => 501:520
 )
 
-HTMLTables.write(df, colorscale="viridis")
+HTMLTables.write("viridis.html", df, colorscale="viridis")
 ```
 
 output:
