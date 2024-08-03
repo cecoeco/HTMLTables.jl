@@ -5,7 +5,7 @@
 <a href="https://www.contributor-covenant.org"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg" alt="Contributor Covenant"></a>
 </div>
 
-## HTMLTables
+# HTMLTables
 
 <i>Julia package for reading and writing HTML tables.</i>
 
