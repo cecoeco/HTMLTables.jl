@@ -1,7 +1,5 @@
 <div>
-<a href="https://github.com/cecoeco/HTMLTables.jl/blob/main/LICENSE.md"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
 <a href="https://github.com/cecoeco/HTMLTables.jl/actions/workflows/CI.yml"><img alt="CI test" src="https://github.com/cecoeco/HTMLTables.jl/actions/workflows/CI.yml/badge.svg"></a>
-<a href="https://github.com/JuliaDiff/BlueStyle"><img alt="Style: Blue" src="https://img.shields.io/badge/code%20style-blue-4495d1.svg"></a>
 <a href="https://zenodo.org/doi/10.5281/zenodo.11253769"><img src="https://zenodo.org/badge/779591300.svg" alt="DOI"></a>
 <a href="https://juliapkgstats.com/pkg/HTMLTables"><img src="https://img.shields.io/badge/dynamic/json?url=http%3A%2F%2Fjuliapkgstats.com%2Fapi%2Fv1%2Fmonthly_downloads%2FHTMLTables&query=total_requests&suffix=%2Fmonth&label=Downloads" alt="Package Statistics"></a>
 <a href="https://www.contributor-covenant.org"><img src="https://img.shields.io/badge/Contributor%20Covenant-v2.1%20adopted-ff69b4.svg" alt="Contributor Covenant"></a>
@@ -11,20 +9,14 @@
 
 <i>Julia package for reading and writing HTML tables.</i>
 
-### :book: Documentation
+:book: **Documentation:** <a href="https://cecoeco.github.io/HTMLTables.jl/stable/"><img src="https://img.shields.io/badge/docs-stable-royalblue.svg" alt="Documentation Stable" /></a> <a href="https://cecoeco.github.io/HTMLTables.jl/dev/"><img src="https://img.shields.io/badge/docs-dev-royalblue.svg" alt="Documentation Dev"></a>
 
-<div>
-<a href="https://cecoeco.github.io/HTMLTables.jl/stable/"><img src="https://img.shields.io/badge/docs-stable-blue.svg" alt="Documentation Stable" /></a>
-<a href="https://cecoeco.github.io/HTMLTables.jl/dev/"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Documentation Dev"></a>
-</div>
 
-### :arrow_down: Installation
+:arrow_down: **Installation:** use this command in the Julia REPL: `using Pkg; Pkg.add("HTMLTables")`
 
-`using Pkg; Pkg.add("HTMLTables")`
+**Examples:**
 
-### Examples
-
-writiing a DataFrame into an HTML table:
+create an HTML table using a `DataFrame`:
 
 ```julia
 using HTMLTables, DataFrames
@@ -52,50 +44,29 @@ output:
 
 ![viridis table example](docs/src/assets/viridis-a-z.png)
 
-creates a dataframe from parsing an html table from a website:
+create a `DataFrame` from parsing an HTML table from a website, `.html` document, or string:
 
 ```julia
 using HTMLTables, DataFrames
 
-df = HTMLTables.read("https://www.w3schools.com/html/html_tables.asp", DataFrame)
+url = "https://www.w3schools.com/html/html_tables.asp"
+
+df = HTMLTables.read(url, DataFrame)
+
+println(df)
 ```
 
-writing the html table data into a CSV file:
+output:
 
-```julia
-using CSV
-
-CSV.write("table.csv", df)
 ```
-
-writing the html table data into a JSON file:
-
-```julia
-using JSON3, JSONTables
-
-json = JSONTables.objecttable(df)
-
-Base.open("table.json", "w") do io
-    JSON3.pretty(io, json)
-end
+6×3 DataFrame
+ Row │ Company                       Contact           Country 
+     │ String                        String            String  
+─────┼─────────────────────────────────────────────────────────
+   1 │ Alfreds Futterkiste           Maria Anders      Germany
+   2 │ Centro comercial Moctezuma    Francisco Chang   Mexico
+   3 │ Ernst Handel                  Roland Mendel     Austria
+   4 │ Island Trading                Helen Bennett     UK
+   5 │ Laughing Bacchus Winecellars  Yoshi Tannamuri   Canada
+   6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
 ```
-
-writing the html table data into an Excel file:
-
-```julia
-using XLSX
-
-XLSX.writetable("table.xlsx", "Sheet 1" => df)
-```
-
-### Functions
-
-Reading HTML tables:
-- `HTMLTables.get` reads an HTML table as a string based on the given index.
-- `HTMLTables.getall` extracts all tables from an HTML document or website.
-- `HTMLTables.read` extracts the data from an HTML table using a sink function.
-- `HTMLTables.readall` extracts the data from all tables of an HTML document or website.
-
-Writing HTML tables:
-- `HTMLTables.table` uses the Tables.jl interface to write an HTML table as a string.
-- `HTMLTables.write` uses the Tables.jl interface to write an HTML table in a file.
