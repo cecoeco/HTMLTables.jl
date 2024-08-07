@@ -115,20 +115,33 @@ Reads a HTML table into a sink function such as `DataFrame`.
 - `classes::Union{Vector{String},String}`: The classes of the HTML table.
 - `index::Int`: The index of the HTML table in the HTML document.
 
-## Example
+## Examples
 
-```jldoctest
-julia> println(HTMLTables.read("https://www.w3schools.com/html/html_tables.asp", DataFrame))
-6×3 DataFrame
- Row │ Company                       Contact           Country 
-     │ String                        String            String  
-─────┼─────────────────────────────────────────────────────────
-   1 │ Alfreds Futterkiste           Maria Anders      Germany
-   2 │ Centro comercial Moctezuma    Francisco Chang   Mexico
-   3 │ Ernst Handel                  Roland Mendel     Austria
-   4 │ Island Trading                Helen Bennett     UK
-   5 │ Laughing Bacchus Winecellars  Yoshi Tannamuri   Canada
-   6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
+```julia
+# reading an HTML table into a DataFrame
+using HTMLTables, DataFrames
+
+df = HTMLTables.read("https://www.w3schools.com/html/html_tables.asp", DataFrame)
+
+# writing the html table data into a CSV file
+using CSV
+
+CSV.write("table.csv", df)
+
+# writing the html table data into a JSON file
+using JSON3, JSONTables
+
+json = JSONTables.objecttable(df)
+
+Base.open("table.json", "w") do io
+    JSON3.pretty(io, json)
+end
+
+# writing the html table data into an Excel file
+using XLSX
+
+XLSX.writetable("table.xlsx", "Sheet 1" => df)
+
 ```
 
 """
