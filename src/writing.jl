@@ -340,13 +340,13 @@ function table(
 end
 
 """
-    HTMLTables.write(out::AbstractString, tbl; kwargs...)::String
+    HTMLTables.write(out, tbl; kwargs...)::String
 
-Writes a julia table as an HTML table to an HTML file.
+Writes a julia table as an HTML table.
 
 ## Arguments
 
-- `out`: The file to write the table to.
+- `out`: The path to the HTML file or `IO`.
 - `tbl`: The table to write.
 
 ## Keyword Arguments
@@ -376,7 +376,7 @@ HTMLTables.write("table.html", df)
 ```
 
 """
-function write(out::AbstractString, tbl; kwargs...)::String
+function write(out, tbl; kwargs...)::String
     Base.Filesystem.write(out, table(tbl; kwargs...))
 
     Base.println("HTML table saved as $out")
