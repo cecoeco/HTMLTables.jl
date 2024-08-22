@@ -1,7 +1,9 @@
 using Test, HTMLTables, DataFrames
 
+const HTML_DIR::String = joinpath(dirname(@__FILE__), "html")
+
 @testset "read HTML table using DataFrame" begin
-    df::DataFrame = HTMLTables.read("test/html/example-01.html", DataFrame)
+    df::DataFrame = HTMLTables.read(joinpath(HTML_DIR, "example-01.html"), DataFrame)
 
     @test size(df) == (3, 3)
 
