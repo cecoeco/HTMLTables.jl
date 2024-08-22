@@ -1,7 +1,5 @@
 function isurl(source::AbstractString)::Bool
-    return startswith(source, "http://") ||
-           startswith(source, "https://") ||
-           startswith(source, "ftp://")
+    return Base.startswith(source, r"^(http://|https://|ftp://)")
 end
 
 function ishtmlfile(source::AbstractString)::Bool
@@ -114,9 +112,7 @@ function getall(source::AbstractString)::Vector
 end
 
 function extractrowdata(row::Gumbo.HTMLNode)::Vector
-    cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(
-        Cascadia.Selector("td,th"), row
-    )
+    cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
 
     return [Cascadia.nodeText(cell) for cell in cells]
 end
@@ -174,13 +170,11 @@ function read(
     sink;
     id::AbstractString="",
     classes::Union{Vector{AbstractString},AbstractString}="",
-    index::Int=1,
+    index::Int=1
 )
     table::Gumbo.HTMLNode = get(source, id=id, classes=classes, index=index)
 
-    rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(
-        Cascadia.Selector("tr"), table
-    )
+    rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
     headers::Vector = []
     data::Vector{Vector} = []
 
@@ -214,9 +208,7 @@ function readall(source::AbstractString, sink)
     results = Vector{Any}(undef, Base.length(tables))
 
     for (i, table) in Base.pairs(tables)
-        rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(
-            Cascadia.Selector("tr"), table
-        )
+        rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
         headers::Vector = []
         data::Vector{Vector} = []
 

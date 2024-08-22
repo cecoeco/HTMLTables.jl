@@ -1,90 +1,33 @@
 using Test, HTMLTables, DataFrames
 
-df = DataFrame(x=1:10, y=1:10, z=1:10)
+@testset "read HTML table using DataFrame" begin
+    df::DataFrame = HTMLTables.read("test/html/example-01.html", DataFrame)
 
-test_html = """
-    <table>
-        <thead>
-            <tr>
-                <th>x</th>
-                <th>y</th>
-                <th>z</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>2</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>3</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>4</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>5</td>
-                <td>5</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>6</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>7</td>
-                <td>7</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>8</td>
-                <td>8</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>9</td>
-                <td>9</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>10</td>
-                <td>10</td>
-            </tr>
-        </tbody>
-    </table>
-"""
+    @test size(df) == (3, 3)
 
-@testset "HTMLTables.jl" begin
-    HTMLTables.write("reds.html", df, colorscale="Reds")
-    @test Base.Filesystem.isfile("reds.html")
-    Base.Filesystem.rm("reds.html")
+    @test df[1, 1] == "Alice"
+    @test df[1, 2] == "30"
+    @test df[1, 3] == "Engineer"
 
-    HTMLTables.write("blues.html", df, colorscale="Blues")
-    @test Base.Filesystem.isfile("blues.html")
-    Base.Filesystem.rm("blues.html")
+    @test df[2, 1] == "Bob"
+    @test df[2, 2] == "25"
+    @test df[2, 3] == "Designer"
 
-    HTMLTables.write("greens.html", df, colorscale="Greens")
-    @test Base.Filesystem.isfile("greens.html")
-    Base.Filesystem.rm("greens.html")
+    @test df[3, 1] == "Charlie"
+    @test df[3, 2] == "35"
+    @test df[3, 3] == "Teacher"
 
-    HTMLTables.write("purples.html", df, colorscale="Purples")
-    @test Base.Filesystem.isfile("purples.html")
-    Base.Filesystem.rm("purples.html")
+    @test typeof(df) == DataFrame
 
-    Base.Filesystem.write("test.html", test_html)
-    @test typeof(HTMLTables.read(test_html, DataFrame)) == DataFrame
-    @test typeof(HTMLTables.read("test.html", DataFrame)) == DataFrame
-    Base.Filesystem.rm("test.html")
+    @test typeof(df[1, 1]) == String
+    @test typeof(df[1, 2]) == String
+    @test typeof(df[1, 3]) == String
+
+    @test typeof(df[2, 1]) == String
+    @test typeof(df[2, 2]) == String
+    @test typeof(df[2, 3]) == String
+
+    @test typeof(df[3, 1]) == String
+    @test typeof(df[3, 2]) == String
+    @test typeof(df[3, 3]) == String
 end
