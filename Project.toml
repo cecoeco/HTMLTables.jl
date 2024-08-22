@@ -1,6 +1,6 @@
 name = "HTMLTables"
 uuid = "b1afcece-b80e-4563-b90e-36b4cc56d3fa"
-authors = ["Ceco E. Maples <mapleselijah9@gmail.com>"]
+authors = ["Ceco Elijah Maples <mapleselijah9@gmail.com>"]
 version = "0.4.2"
 
 [deps]

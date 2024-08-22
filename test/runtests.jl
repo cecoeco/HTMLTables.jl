@@ -1,6 +1,4 @@
-using Test
-using HTMLTables
-using DataFrames
+using Test, HTMLTables, DataFrames
 
 df = DataFrame(x=1:10, y=1:10, z=1:10)
 
