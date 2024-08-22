@@ -1,5 +1,4 @@
-const NORMALIZE::String =
-"""
+const NORMALIZE::String = """
 * {
   margin: 0;
   padding: 0;
@@ -15,8 +14,7 @@ html, body {
 }
 """
 
-const BASIC_STYLING::String = 
-"""
+const BASIC_STYLING::String = """
 table {
   font-family: Helvetica;
   font-size: 15px;
@@ -54,8 +52,7 @@ tfoot {
 }
 """
 
-const DEFAULT::String = 
-"""
+const DEFAULT::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -69,8 +66,7 @@ tfoot {
 }
 """
 
-const RED::String = 
-"""
+const RED::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -92,8 +88,7 @@ tfoot {
 }
 """
 
-const ORANGE::String = 
-"""
+const ORANGE::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -115,8 +110,7 @@ tfoot {
 }
 """
 
-const YELLOW::String = 
-"""
+const YELLOW::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -138,8 +132,7 @@ tfoot {
 }
 """
 
-const GREEN::String = 
-"""
+const GREEN::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -161,8 +154,7 @@ tfoot {
 }
 """
 
-const BLUE::String = 
-"""
+const BLUE::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -184,8 +176,7 @@ tfoot {
 }
 """
 
-const VIOLET::String = 
-"""
+const VIOLET::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -207,8 +198,7 @@ tfoot {
 }
 """
 
-const MAGENTA::String = 
-"""
+const MAGENTA::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -230,8 +220,7 @@ tfoot {
 }
 """
 
-const BROWN::String = 
-"""
+const BROWN::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -253,8 +242,7 @@ tfoot {
 }
 """
 
-const GRAY::String = 
-"""
+const GRAY::String = """
 $NORMALIZE
 
 $BASIC_STYLING
@@ -276,8 +264,7 @@ tfoot {
 }
 """
 
-const BLACK::String = 
-"""
+const BLACK::String = """
 $NORMALIZE
 
 table {
@@ -333,8 +320,7 @@ tfoot {
 }
 """
 
-const JULIA::String = 
-"""
+const JULIA::String = """
 @import url("https://fonts.googleapis.com/css2?family=Arya:wght@400;700");
 
 $NORMALIZE
@@ -353,8 +339,7 @@ thead, tfoot {
 }
 """
 
-const SUNSTONE::String = 
-"""
+const SUNSTONE::String = """
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 $NORMALIZE
@@ -412,8 +397,7 @@ tfoot {
 }
 """
 
-const MOONSTONE::String = 
-"""
+const MOONSTONE::String = """
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 $NORMALIZE

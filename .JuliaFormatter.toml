@@ -1,0 +1,4 @@
+style = "blue"
+format_markdown = true
+separate_kwargs_with_semicolon = false
+margin = 90
