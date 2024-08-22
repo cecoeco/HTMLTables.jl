@@ -203,7 +203,7 @@ Reads all HTML tables into a sink function such as `DataFrame`.
 - `sink`: The function that materializes the table data.
 
 """
-function readall(source::AbstractString, sink)
+function readall(source::AbstractString, sink)::Vector
     tables = getall(source)
     results = Vector{Any}(undef, Base.length(tables))
 
