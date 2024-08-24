@@ -28,7 +28,7 @@ HTMLTables.write("viridis.html", df, colorscale="viridis")
 
 output:
 
-![viridis table example](docs/src/assets/viridis-a-z.png)
+![viridis table example](gallery/viridis.png)
 
 create a `DataFrame` from parsing HTML:
 
