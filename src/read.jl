@@ -202,6 +202,22 @@ Reads all HTML tables into a sink function such as `DataFrame`.
 - `source::String`: URL or path to the HTML document or website.
 - `sink`: The function that materializes the table data.
 
+## Examples
+
+```julia
+# reading all HTML tables into a DataFrame
+using HTMLTables, DataFrames
+
+url::String = "https://www.w3schools.com/html/html_tables.asp"
+
+dataframes::Vector{DataFrame} = HTMLTables.readall(url, DataFrame)
+
+for idx in eachindex(dataframes)
+    println("DataFrame \$idx:")
+    println(dataframes[idx])
+end
+```
+
 """
 function readall(source::AbstractString, sink)::Vector
     tables = getall(source)
