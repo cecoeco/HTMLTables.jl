@@ -37,7 +37,7 @@ end
 
     @test !occursin("<style>", table_01)
 
-    table_02 = HTMLTables.table(df; css=false, theme=[:gold, joinpath(CSS_DIR, "example-02.css")], colorscale="Viridis")
+    table_02 = HTMLTables.table(df; css=false, theme=[:gold, joinpath(CSS_DIR, "example-02.css")], colorscale="viridis")
 
     @test !occursin("<style>", table_02)
 
