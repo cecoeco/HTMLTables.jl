@@ -17,6 +17,9 @@ function writestyle(theme::Symbol; css::Bool)::String
         :brown => BROWN,
         :gray => GRAY,
         :black => BLACK,
+        :gold => GOLD,
+        :silver => SILVER,
+        :bronze => BRONZE,
         :julia => JULIA,
         :sunstone => SUNSTONE,
         :moonstone => MOONSTONE
@@ -44,13 +47,12 @@ function writestyle(file::AbstractString; css::Bool)::String
         return ""
     end
 
-    if file in ["default", "red", "orange", "yellow", "green", "blue", "violet", "magenta", "brown", "gray", "black", "julia", "sunstone", "moonstone"]
-        file = Symbol(file)
-        return writestyle(file, css=css)
+    if file in ["default", "red", "orange", "yellow", "green", "blue", "violet", "magenta", "brown", "gray", "black", "gold", "silver", "bronze", "julia", "sunstone", "moonstone"]
+        return writestyle(Symbol(file), css=css)
     end
 
     if iscssfile(file)
-        file = Base.read(file, String)
+        file::String = Base.read(file, String)
     else
         nothing
     end
@@ -87,7 +89,7 @@ function writeclasses(classes::AbstractString)::String
     end
 end
 
-function writeclasses(classes::Vector{AbstractString})::String
+function writeclasses(classes::AbstractVector)::String
     if classes == []
         return ""
     else
@@ -263,7 +265,7 @@ end
         header::Bool=true,
         footer::Bool=true,
         id::AbstractString="",
-        classes::Union{AbstractString,Vector{AbstractString}}="",
+        classes::Union{AbstractString,AbstractVector}="",
         css::Bool=true,
         editable::Bool=false,
         theme::Union{Symbol,AbstractString,AbstractVector}="default",
@@ -311,7 +313,7 @@ function table(
     header::Bool=true,
     footer::Bool=true,
     id::AbstractString="",
-    classes::Union{AbstractString,Vector{AbstractString}}="",
+    classes::Union{AbstractString,AbstractVector}="",
     caption::AbstractString="",
     css::Bool=true,
     editable::Bool=false,

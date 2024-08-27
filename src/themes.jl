@@ -320,6 +320,72 @@ tfoot {
 }
 """
 
+const GOLD::String = """
+$NORMALIZE
+
+$BASIC_STYLING
+
+thead {
+  background: linear-gradient(135deg, #FFD700 0%, #FFFACD 100%);
+}
+
+tbody tr:nth-child(odd) {
+  background: linear-gradient(135deg, #FFF8DC 0%, #FFD700 100%);
+}
+
+tbody tr:nth-child(even) {
+  background: linear-gradient(135deg, #FFFACD 0%, #FFD700 100%);
+}
+
+tfoot {
+  background: linear-gradient(135deg, #FFD700 0%, #FFFACD 100%);
+}
+"""
+
+const SILVER::String = """
+$NORMALIZE
+
+$BASIC_STYLING
+
+thead {
+  background: linear-gradient(135deg, #C0C0C0 0%, #E0E0E0 100%);
+}
+
+tbody tr:nth-child(odd) {
+  background: linear-gradient(135deg, #D3D3D3 0%, #C0C0C0 100%);
+}
+
+tbody tr:nth-child(even) {
+  background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 100%);
+}
+
+tfoot {
+  background: linear-gradient(135deg, #C0C0C0 0%, #E0E0E0 100%);
+}
+"""
+
+const BRONZE::String = """
+$NORMALIZE
+
+$BASIC_STYLING
+
+thead {
+  background: linear-gradient(135deg, #CD7F32 0%, #F4A460 100%);
+}
+
+tbody tr:nth-child(odd) {
+  background: linear-gradient(135deg, #D2B48C 0%, #CD7F32 100%);
+}
+
+tbody tr:nth-child(even) {
+  background: linear-gradient(135deg, #F4A460 0%, #CD7F32 100%);
+}
+
+tfoot {
+  background: linear-gradient(135deg, #CD7F32 0%, #F4A460 100%);
+}
+"""
+
 const JULIA::String = """
 @import url("https://fonts.googleapis.com/css2?family=Arya:wght@400;700");
 
@@ -328,14 +394,14 @@ $NORMALIZE
 $BASIC_STYLING
 
 table {
-    font-size: 15px;
-    color: #222222;
-    background-color: white;
+	font-size: 15px;
+	color: #222222;
+	background-color: white;
 }
 
 thead, tfoot {
-    font-family: "Arya";
-    background-color: #a270ba;
+	font-family: "Arya";
+	background-color: #a270ba;
 }
 """
 
