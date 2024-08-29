@@ -39,8 +39,7 @@ function get(
 
     html_content::String = ""
     if isurl(source) == true
-        response::HTTP.Response = HTTP.get(source)
-        html_content *= Base.String(response.body)
+        html_content *= Base.String(HTTP.get(source).body)
     elseif ishtmlfile(source) == true
         html_content *= Base.read(source, String)
     else
@@ -82,6 +81,15 @@ function get(
     return table
 end
 
+function get(
+    source::IO;
+    id::AbstractString="",
+    classes::Union{Vector{AbstractString},AbstractString}="",
+    index::Int=1,
+)
+    return get(Base.read(source, String); id=id, classes=classes, index=index)
+end
+
 """
 	HTMLTables.getall(source::String)::Vector
 
@@ -95,8 +103,7 @@ Extracts all tables from an HTML document or website.
 function getall(source::AbstractString)::Vector
     html_content::String = ""
     if isurl(source) == true
-        response::HTTP.Response = HTTP.get(source)
-        html_content *= Base.String(response.body)
+        html_content *= Base.String(HTTP.get(source).body)
     elseif ishtmlfile(source) == true
         html_content *= Base.read(source, String)
     else
@@ -109,6 +116,10 @@ function getall(source::AbstractString)::Vector
     )
 
     return tables
+end
+
+function getall(source::IO)::Vector
+    return getall(Base.read(source, String))
 end
 
 function extractrowdata(row::Gumbo.HTMLNode)::Vector
@@ -170,7 +181,7 @@ function read(
     sink;
     id::AbstractString="",
     classes::Union{Vector{AbstractString},AbstractString}="",
-    index::Int=1
+    index::Int=1,
 )
     table::Gumbo.HTMLNode = get(source, id=id, classes=classes, index=index)
 
@@ -190,6 +201,16 @@ function read(
     tuples::Vector = [Base.Tuple(row) for row in data]
 
     return sink(tuples, headers)
+end
+
+function read(
+    source::IO,
+    sink;
+    id::AbstractString="",
+    classes::Union{Vector{AbstractString},AbstractString}="",
+    index::Int=1,
+)
+    return read(Base.read(source, String), sink, id=id, classes=classes, index=index)
 end
 
 """
@@ -242,4 +263,8 @@ function readall(source::AbstractString, sink)::Vector
     end
 
     return results
+end
+
+function readall(source::IO, sink)::Vector
+    return readall(Base.read(source, String), sink)
 end
