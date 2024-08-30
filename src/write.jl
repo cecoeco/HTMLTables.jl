@@ -22,7 +22,7 @@ function writestyle(theme::Symbol; css::Bool)::String
         :bronze => BRONZE,
         :julia => JULIA,
         :sunstone => SUNSTONE,
-        :moonstone => MOONSTONE
+        :moonstone => MOONSTONE,
     )
 
     if Base.haskey(theme_dictionary, theme)
@@ -47,8 +47,26 @@ function writestyle(file::AbstractString; css::Bool)::String
         return ""
     end
 
-    if file in ["default", "red", "orange", "yellow", "green", "blue", "violet", "magenta", "brown", "gray", "black", "gold", "silver", "bronze", "julia", "sunstone", "moonstone"]
-        return writestyle(Symbol(file), css=css)
+    if file in [
+        "default",
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "blue",
+        "violet",
+        "magenta",
+        "brown",
+        "gray",
+        "black",
+        "gold",
+        "silver",
+        "bronze",
+        "julia",
+        "sunstone",
+        "moonstone",
+    ]
+        return writestyle(Symbol(file); css=css)
     end
 
     if iscssfile(file)
@@ -173,9 +191,13 @@ function cellcolor(tbl; colorscale::AbstractString, cell_value, css::Bool=true):
         return ""
     end
 
-    colorscheme::ColorSchemes.ColorScheme = Base.getfield(ColorSchemes, Symbol(colorscale))
+    colorscheme::ColorSchemes.ColorScheme = Base.getfield(
+        ColorSchemes, Symbol(colorscale)
+    )
 
-    cell_position::Float64 = (cell_value - Base.minimum(numbers)) / (Base.maximum(numbers) - Base.minimum(numbers))
+    cell_position::Float64 =
+        (cell_value - Base.minimum(numbers)) /
+        (Base.maximum(numbers) - Base.minimum(numbers))
 
     color::Colors.Colorant = ColorSchemes.get(colorscheme, cell_position)
 
@@ -185,12 +207,8 @@ function cellcolor(tbl; colorscale::AbstractString, cell_value, css::Bool=true):
 end
 
 function writetbody(
-    tbl;
-    colorscale::AbstractString="",
-    tooltips::Bool,
-    css::Bool,
-    editable::Bool)::String
-
+    tbl; colorscale::AbstractString="", tooltips::Bool, css::Bool, editable::Bool
+)::String
     contenteditable::String = ""
     if editable
         contenteditable *= " contenteditable=\"true\""
@@ -209,7 +227,7 @@ function writetbody(
             cell::String = ""
             cell *= "<td $contenteditable"
             cell *= writetooltip(tooltips, cell_value)
-            cell *= cellcolor(tbl, colorscale=colorscale, cell_value=cell_value, css=css)
+            cell *= cellcolor(tbl; colorscale=colorscale, cell_value=cell_value, css=css)
             cell *= ">$cell_value</td>\n"
 
             tbody *= cell
@@ -321,8 +339,8 @@ function table(
     editable::Bool=false,
     theme::Union{Symbol,AbstractString,AbstractVector}=:default,
     colorscale::AbstractString="",
-    tooltips::Bool=true)::String
-
+    tooltips::Bool=true,
+)::String
     if colorscale != ""
         if !Base.isa(Base.getfield(ColorSchemes, Symbol(colorscale)), ColorScheme)
             Base.throw(Base.ArgumentError("$colorscale is not a valid color scheme"))
@@ -332,12 +350,14 @@ function table(
     tbl = numeric_string_to_number.(tbl)
 
     html_table::String = ""
-    html_table *= writestyle(theme, css=css)
+    html_table *= writestyle(theme; css=css)
     html_table *= "<table$(writeid(id))$(writeclasses(classes))>\n"
     html_table *= writecaption(caption)
-    html_table *= writethead(tbl, header=header, editable=editable)
-    html_table *= writetbody(tbl, colorscale=colorscale, tooltips=tooltips, css=css, editable=editable)
-    html_table *= writetfoot(tbl, footer=footer, editable=editable)
+    html_table *= writethead(tbl; header=header, editable=editable)
+    html_table *= writetbody(
+        tbl; colorscale=colorscale, tooltips=tooltips, css=css, editable=editable
+    )
+    html_table *= writetfoot(tbl; footer=footer, editable=editable)
     html_table *= "</table>"
 
     return html_table

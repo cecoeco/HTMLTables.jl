@@ -122,6 +122,7 @@ println(df)
 
 output:
 
+```
 6×3 DataFrame
  Row │ Company                       Contact           Country
      │ String                        String            String
@@ -132,6 +133,7 @@ output:
    4 │ Island Trading                Helen Bennett     UK
    5 │ Laughing Bacchus Winecellars  Yoshi Tannamuri   Canada
    6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
+```
 
 """
 function read(
@@ -141,7 +143,7 @@ function read(
     classes::Union{Vector{AbstractString},AbstractString}="",
     index::Int=1,
 )
-    table::Gumbo.HTMLNode = get(source, id=id, classes=classes, index=index)
+    table::Gumbo.HTMLNode = get(source; id=id, classes=classes, index=index)
 
     rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
     headers::Vector = []
@@ -191,7 +193,7 @@ function read(
     classes::Union{Vector{AbstractString},AbstractString}="",
     index::Int=1,
 )
-    return read(Base.read(source, String), sink, id=id, classes=classes, index=index)
+    return read(Base.read(source, String), sink; id=id, classes=classes, index=index)
 end
 
 """
@@ -206,8 +208,9 @@ Reads all HTML tables into a sink function such as `DataFrame`.
 
 ## Examples
 
+reading all HTML tables from a website into a vector of DataFrames:
+
 ```julia
-# reading all HTML tables into a DataFrame
 using HTMLTables, DataFrames
 
 url::String = "https://www.w3schools.com/html/html_tables.asp"
