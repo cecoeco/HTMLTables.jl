@@ -266,6 +266,7 @@ end
         footer::Bool=true,
         id::AbstractString="",
         classes::Union{AbstractString,AbstractVector}="",
+        caption::AbstractString="",
         css::Bool=true,
         editable::Bool=false,
         theme::Union{Symbol,AbstractString,AbstractVector}="default",
@@ -285,6 +286,7 @@ Returns a julia table as an HTML table.
 - `footer`: Whether to include the table footer.
 - `id`: The id of the HTML table.
 - `classes`: The classes of the HTML table.
+- `caption`: The caption of the HTML table.
 - `css`: Whether to include the CSS styles.
 - `editable`: Whether to enable table editing.
 - `theme`: The theme of the HTML table.
@@ -357,6 +359,7 @@ Writes a julia table as an HTML table.
 - `footer`: Whether to include the table footer.
 - `id`: The id of the HTML table.
 - `classes`: The classes of the HTML table.
+- `caption`: The caption of the HTML table.
 - `css`: Whether to include the CSS styles.
 - `editable`: Whether to enable table editing.
 - `theme`: The theme of the HTML table.

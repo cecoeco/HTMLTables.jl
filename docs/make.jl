@@ -1,3 +1,5 @@
+module DocsHTMLTables
+
 using Documenter, HTMLTables
 
 Documenter.makedocs(
@@ -9,3 +11,5 @@ Documenter.makedocs(
 )
 
 Documenter.deploydocs(repo="github.com/cecoeco/HTMLTables.jl.git")
+
+end
