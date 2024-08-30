@@ -1,17 +1,14 @@
-function isurl(source::AbstractString)::Bool
+function isurl(source::String)::Bool
     return Base.startswith(source, r"^(http://|https://|ftp://)")
 end
 
-function ishtmlfile(source::AbstractString)::Bool
+function ishtmlfile(source::String)::Bool
     return Base.Filesystem.splitext(source)[2] == ".html"
 end
 
-function get(
-    source::AbstractString;
-    id::AbstractString="",
-    classes::Union{Vector{AbstractString},AbstractString}="",
-    index::Int=1,
-)
+function get_table(
+    source::String; id::String="", class::Union{String,Vector{String}}="", index::Int=1
+)::Gumbo.HTMLNode
     if index <= 0 || Base.isinteger(index) == false
         Base.throw(Base.ArgumentError("Index must be a positive integer"))
     end
@@ -29,12 +26,12 @@ function get(
 
     selector::String = ""
     if Base.isempty(id)
-        if Base.isempty(classes)
+        if Base.isempty(class)
             selector *= "table"
-        elseif !Base.isempty(classes) && Base.isa(classes, String)
-            selector *= "table.$classes"
-        elseif !Base.isempty(classes) && Base.isa(classes, Vector{String})
-            selector *= "table." * Base.join(classes, ".")
+        elseif !Base.isempty(class) && Base.isa(class, String)
+            selector *= "table.$class"
+        elseif !Base.isempty(class) && Base.isa(class, Vector{String})
+            selector *= "table." * Base.join(class, ".")
         end
     elseif !Base.isempty(id)
         selector *= "#$id"
@@ -60,7 +57,7 @@ function get(
     return table
 end
 
-function getall(source::AbstractString)::Vector
+function get_tables(source::String)::Vector{Gumbo.HTMLNode}
     html_content::String = ""
     if isurl(source) == true
         html_content *= Base.String(HTTP.get(source).body)
@@ -78,20 +75,20 @@ function getall(source::AbstractString)::Vector
     return tables
 end
 
-function extractrowdata(row::Gumbo.HTMLNode)::Vector
+function extract_row_data(row::Gumbo.HTMLNode)::Vector
     cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
 
     return [Cascadia.nodeText(cell) for cell in cells]
 end
 
 """
-	HTMLTables.read(
-		source::String,
-		sink::Function; 
-		id::String="", 
-		classes::Union{Vector{String},String}="",
+    HTMLTables.read(
+        source::String,
+        sink::Function; 
+        id::String="", 
+        class::Union{String,Vector{String}}="",
         index::Int=1
-	)
+    )
 
 Reads a HTML table into a sink function such as `DataFrame`.
 
@@ -103,7 +100,7 @@ Reads a HTML table into a sink function such as `DataFrame`.
 ## Keyword Arguments
 
 - `id::String`: The id of the HTML table.
-- `classes::Union{Vector{String},String}`: The classes of the HTML table.
+- `class::Union{String,Vector{String}}`: The class of the HTML table.
 - `index::Int`: The index of the HTML table in the HTML document.
 
 ## Examples
@@ -137,20 +134,20 @@ output:
 
 """
 function read(
-    source::AbstractString,
+    source::String,
     sink;
-    id::AbstractString="",
-    classes::Union{Vector{AbstractString},AbstractString}="",
+    id::String="",
+    class::Union{String,Vector{String}}="",
     index::Int=1,
 )
-    table::Gumbo.HTMLNode = get(source; id=id, classes=classes, index=index)
+    table::Gumbo.HTMLNode = get_table(source; id=id, class=class, index=index)
 
     rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
     headers::Vector = []
     data::Vector{Vector} = []
 
     for (i, row) in Base.enumerate(rows)
-        rowdata = extractrowdata(row)
+        rowdata = extract_row_data(row)
         if (i == 1 && Base.isempty(headers)) == true
             headers = rowdata
         else
@@ -168,7 +165,7 @@ end
         source::IO,
         sink::Function; 
         id::String="", 
-        classes::Union{Vector{String},String}="",
+        class::Union{String,Vector{String}}="",
         index::Int=1
     )
 
@@ -182,22 +179,18 @@ Reads a HTML table into a sink function such as `DataFrame`.
 ## Keyword Arguments
 
 - `id::String`: The id of the HTML table.
-- `classes::Union{Vector{String},String}`: The classes of the HTML table.
+- `class::Union{String,Vector{String}}`: The class of the HTML table.
 - `index::Int`: The index of the HTML table in the HTML document.
 
 """
 function read(
-    source::IO,
-    sink;
-    id::AbstractString="",
-    classes::Union{Vector{AbstractString},AbstractString}="",
-    index::Int=1,
+    source::IO, sink; id::String="", class::Union{String,Vector{String}}="", index::Int=1
 )
-    return read(Base.read(source, String), sink; id=id, classes=classes, index=index)
+    return read(Base.read(source, String), sink; id=id, class=class, index=index)
 end
 
 """
-	HTMLTables.readall(source::String, sink::Function)::Vector
+	HTMLTables.readall(source::String, sink)::Vector
 
 Reads all HTML tables into a sink function such as `DataFrame`.
 
@@ -218,14 +211,45 @@ url::String = "https://www.w3schools.com/html/html_tables.asp"
 dataframes::Vector{DataFrame} = HTMLTables.readall(url, DataFrame)
 
 for idx in eachindex(dataframes)
-    println("DataFrame \$idx:")
-    println(dataframes[idx])
+    println("DataFrame \$idx:\\n\$(dataframes[idx])\\n")
 end
 ```
 
+output:
+
+```
+DataFrame 1:
+6×3 DataFrame
+ Row │ Company                       Contact           Country 
+     │ String                        String            String  
+─────┼─────────────────────────────────────────────────────────
+   1 │ Alfreds Futterkiste           Maria Anders      Germany
+   2 │ Centro comercial Moctezuma    Francisco Chang   Mexico
+   3 │ Ernst Handel                  Roland Mendel     Austria
+   4 │ Island Trading                Helen Bennett     UK
+   5 │ Laughing Bacchus Winecellars  Yoshi Tannamuri   Canada
+   6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
+
+DataFrame 2:
+10×2 DataFrame
+ Row │ Tag         Description                       
+     │ String      String                            
+─────┼───────────────────────────────────────────────
+   1 │ <table>     Defines a table
+   2 │ <th>        Defines a header cell in a table
+   3 │ <tr>        Defines a row in a table
+   4 │ <td>        Defines a cell in a table
+   5 │ <caption>   Defines a table caption
+   6 │ <colgroup>  Specifies a group of one or more…
+   7 │ <col>       Specifies column properties for …
+   8 │ <thead>     Groups the header content in a t…
+   9 │ <tbody>     Groups the body content in a tab…
+  10 │ <tfoot>     Groups the footer content in a t…
+```
+
 """
-function readall(source::AbstractString, sink)::Vector
-    tables = getall(source)
+function readall(source::String, sink)::Vector
+    tables = get_tables(source)
     results = Vector{Any}(undef, Base.length(tables))
 
     for (i, table) in Base.pairs(tables)
@@ -234,7 +258,7 @@ function readall(source::AbstractString, sink)::Vector
         data::Vector{Vector} = []
 
         for (j, row) in Base.enumerate(rows)
-            rowdata = extractrowdata(row)
+            rowdata = extract_row_data(row)
             if (j == 1 && Base.isempty(headers)) == true
                 headers = rowdata
             else
@@ -250,7 +274,7 @@ function readall(source::AbstractString, sink)::Vector
 end
 
 """
-    HTMLTables.readall(source::IO, sink::Function)::Vector
+    HTMLTables.readall(source::IO, sink)::Vector
 
 Reads all HTML tables into a sink function such as `DataFrame`.
 

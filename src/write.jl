@@ -99,27 +99,27 @@ function writeid(id::AbstractString)::String
     end
 end
 
-function writeclasses(classes::AbstractString)::String
-    if classes == ""
+function writeclass(class::AbstractString)::String
+    if class == ""
         return ""
     else
-        return " class=\"$classes\""
+        return " class=\"$class\""
     end
 end
 
-function writeclasses(classes::AbstractVector)::String
-    if classes == []
+function writeclass(class::AbstractVector)::String
+    if class == []
         return ""
     else
-        return " class=\"" * Base.join(classes, " ") * "\""
+        return " class=\"" * Base.join(class, " ") * "\""
     end
 end
 
-function writeclasses(classes::Tuple{AbstractString})::String
-    if classes == ()
+function writeclass(class::Tuple{AbstractString})::String
+    if class == ()
         return ""
     else
-        return " class=\"" * Base.join(classes, " ") * "\""
+        return " class=\"" * Base.join(class, " ") * "\""
     end
 end
 
@@ -283,7 +283,7 @@ end
         header::Bool=true,
         footer::Bool=true,
         id::AbstractString="",
-        classes::Union{AbstractString,AbstractVector}="",
+        class::Union{AbstractString,AbstractVector}="",
         caption::AbstractString="",
         css::Bool=true,
         editable::Bool=false,
@@ -303,7 +303,7 @@ Returns a julia table as an HTML table.
 - `header`: Whether to include the table header.
 - `footer`: Whether to include the table footer.
 - `id`: The id of the HTML table.
-- `classes`: The classes of the HTML table.
+- `class`: The class of the HTML table.
 - `caption`: The caption of the HTML table.
 - `css`: Whether to include the CSS styles.
 - `editable`: Whether to enable table editing.
@@ -333,7 +333,7 @@ function table(
     header::Bool=true,
     footer::Bool=true,
     id::AbstractString="",
-    classes::Union{AbstractString,AbstractVector}="",
+    class::Union{AbstractString,AbstractVector}="",
     caption::AbstractString="",
     css::Bool=true,
     editable::Bool=false,
@@ -351,7 +351,7 @@ function table(
 
     html_table::String = ""
     html_table *= writestyle(theme; css=css)
-    html_table *= "<table$(writeid(id))$(writeclasses(classes))>\n"
+    html_table *= "<table$(writeid(id))$(writeclass(class))>\n"
     html_table *= writecaption(caption)
     html_table *= writethead(tbl; header=header, editable=editable)
     html_table *= writetbody(
@@ -378,7 +378,7 @@ Writes a julia table as an HTML table.
 - `header`: Whether to include the table header.
 - `footer`: Whether to include the table footer.
 - `id`: The id of the HTML table.
-- `classes`: The classes of the HTML table.
+- `class`: The class of the HTML table.
 - `caption`: The caption of the HTML table.
 - `css`: Whether to include the CSS styles.
 - `editable`: Whether to enable table editing.

@@ -76,23 +76,23 @@ end
     @test occursin("id=\"table_02\"", table_02)
 end
 
-@testset "classes" begin
-    table_01 = HTMLTables.table(GLOBAL_DF_01; classes="table_01")
+@testset "class" begin
+    table_01 = HTMLTables.table(GLOBAL_DF_01; class="table_01")
     @test occursin("class=\"table_01\"", table_01)
 
-    table_02 = HTMLTables.table(GLOBAL_DF_01; classes="table_02")
+    table_02 = HTMLTables.table(GLOBAL_DF_01; class="table_02")
     @test occursin("class=\"table_02\"", table_02)
 
-    table_03 = HTMLTables.table(GLOBAL_DF_01; classes="table_01 table_02")
+    table_03 = HTMLTables.table(GLOBAL_DF_01; class="table_01 table_02")
     @test occursin("class=\"table_01 table_02\"", table_03)
 
-    table_04 = HTMLTables.table(GLOBAL_DF_01; classes="table_02 table_01")
+    table_04 = HTMLTables.table(GLOBAL_DF_01; class="table_02 table_01")
     @test occursin("class=\"table_02 table_01\"", table_04)
 
-    table_05 = HTMLTables.table(GLOBAL_DF_01; classes=["table_01", "table_02"])
+    table_05 = HTMLTables.table(GLOBAL_DF_01; class=["table_01", "table_02"])
     @test occursin("class=\"table_01 table_02\"", table_05)
 
-    table_06 = HTMLTables.table(GLOBAL_DF_01; classes=["table_02", "table_01"])
+    table_06 = HTMLTables.table(GLOBAL_DF_01; class=["table_02", "table_01"])
     @test occursin("class=\"table_02 table_01\"", table_06)
 end
 
