@@ -5,8 +5,6 @@ Julia package for reading and writing HTML tables.
 
 Read HTML tables:
 
-- `HTMLTables.get` reads an HTML table as a string based on the given index.
-- `HTMLTables.getall` extracts all tables from an HTML document or website.
 - `HTMLTables.read` extracts the data from an HTML table using a sink function.
 - `HTMLTables.readall` extracts the data from all tables of an HTML document or website.
 
@@ -19,7 +17,7 @@ module HTMLTables
 
 using Cascadia, Colors, ColorSchemes, Gumbo, HTTP, Tables
 
-export get, getall, read, readall, table, write
+export read, readall, table, write
 
 include("read.jl")
 include("write.jl")

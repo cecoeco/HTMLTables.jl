@@ -6,27 +6,6 @@ function ishtmlfile(source::AbstractString)::Bool
     return Base.Filesystem.splitext(source)[2] == ".html"
 end
 
-"""
-	HTMLTables.get(
-		source::String; 
-		id::String="", 
-		classes::Union{Vector{String},String}="", 
-		index::Int=1
-	)
-
-Returns an HTML table a source as a string.
-
-## Arguments
-
-- `source::String`: URL or path to the HTML table.
-
-## Keyword Arguments
-
-- `id::String`: The id of the HTML table.
-- `classes::Union{Vector{String},String}`: The classes of the HTML table.
-- `index::Int`: The index of the HTML table in the HTML document.
-
-"""
 function get(
     source::AbstractString;
     id::AbstractString="",
@@ -81,25 +60,6 @@ function get(
     return table
 end
 
-function get(
-    source::IO;
-    id::AbstractString="",
-    classes::Union{Vector{AbstractString},AbstractString}="",
-    index::Int=1,
-)
-    return get(Base.read(source, String); id=id, classes=classes, index=index)
-end
-
-"""
-	HTMLTables.getall(source::String)::Vector
-
-Extracts all tables from an HTML document or website.
-
-## Arguments
-
-- `source::String`: URL or path to the HTML document or website.
-
-"""
 function getall(source::AbstractString)::Vector
     html_content::String = ""
     if isurl(source) == true
@@ -118,10 +78,6 @@ function getall(source::AbstractString)::Vector
     return tables
 end
 
-function getall(source::IO)::Vector
-    return getall(Base.read(source, String))
-end
-
 function extractrowdata(row::Gumbo.HTMLNode)::Vector
     cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
 
@@ -130,7 +86,7 @@ end
 
 """
 	HTMLTables.read(
-		source::String, 
+		source::String,
 		sink::Function; 
 		id::String="", 
 		classes::Union{Vector{String},String}="",
@@ -152,28 +108,30 @@ Reads a HTML table into a sink function such as `DataFrame`.
 
 ## Examples
 
+reading an HTML table from a website into a DataFrame:
+
 ```julia
-# reading an HTML table into a DataFrame
 using HTMLTables, DataFrames
 
-df = HTMLTables.read("https://www.w3schools.com/html/html_tables.asp", DataFrame)
+url::String = "https://www.w3schools.com/html/html_tables.asp"
 
-# writing the html table data into a CSV file
-using CSV
+df = HTMLTables.read(url, DataFrame; index=1)
 
-CSV.write("table.csv", df)
-
-# writing the html table data into a JSON file
-using JSON3, JSONTables
-
-JSON3.write("table.json", JSONTables.objecttable(df)
-
-# writing the html table data into an Excel file
-using XLSX
-
-XLSX.writetable("table.xlsx", "Sheet 1" => df)
-
+println(df)
 ```
+
+output:
+
+6×3 DataFrame
+ Row │ Company                       Contact           Country
+     │ String                        String            String
+─────┼─────────────────────────────────────────────────────────
+   1 │ Alfreds Futterkiste           Maria Anders      Germany
+   2 │ Centro comercial Moctezuma    Francisco Chang   Mexico
+   3 │ Ernst Handel                  Roland Mendel     Austria
+   4 │ Island Trading                Helen Bennett     UK
+   5 │ Laughing Bacchus Winecellars  Yoshi Tannamuri   Canada
+   6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
 
 """
 function read(
@@ -203,6 +161,29 @@ function read(
     return sink(tuples, headers)
 end
 
+"""
+    HTMLTables.read(
+        source::IO,
+        sink::Function; 
+        id::String="", 
+        classes::Union{Vector{String},String}="",
+        index::Int=1
+    )
+
+Reads a HTML table into a sink function such as `DataFrame`.
+
+## Arguments
+
+- `source::IO`: IO stream of the HTML table.
+- `sink`: The function that materializes the table data.
+
+## Keyword Arguments
+
+- `id::String`: The id of the HTML table.
+- `classes::Union{Vector{String},String}`: The classes of the HTML table.
+- `index::Int`: The index of the HTML table in the HTML document.
+
+"""
 function read(
     source::IO,
     sink;
@@ -265,6 +246,17 @@ function readall(source::AbstractString, sink)::Vector
     return results
 end
 
+"""
+    HTMLTables.readall(source::IO, sink::Function)::Vector
+
+Reads all HTML tables into a sink function such as `DataFrame`.
+
+## Arguments
+
+- `source::IO`: IO stream of the HTML document or website.
+- `sink`: The function that materializes the table data.
+
+"""
 function readall(source::IO, sink)::Vector
     return readall(Base.read(source, String), sink)
 end

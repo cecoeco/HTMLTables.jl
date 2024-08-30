@@ -110,7 +110,7 @@ end
     dataframes::Vector{DataFrame} = HTMLTables.readall(URL_01, DataFrame)
 
     for idx in eachindex(dataframes)
-        println("DataFrame \$idx:")
+        println("DataFrame $idx:")
         println(dataframes[idx])
     end
 
