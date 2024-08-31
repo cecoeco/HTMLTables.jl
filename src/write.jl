@@ -78,7 +78,7 @@ function writestyle(file::String; css::Bool)::String
     return """<style>\n$file\n</style>\n"""
 end
 
-function writestyle(files::Vector{String}; css::Bool)::String
+function writestyle(files::Vector; css::Bool)::String
     if files == [] || !css
         return ""
     end
@@ -107,7 +107,7 @@ function writeclass(class::String)::String
     end
 end
 
-function writeclass(class::Vector{String})::String
+function writeclass(class::Vector)::String
     if class == []
         return ""
     else
@@ -283,11 +283,11 @@ end
         header::Bool=true,
         footer::Bool=true,
         id::String="",
-        class::Union{String,Vector{String}}="",
+        class::Union{String,Vector}="",
         caption::String="",
         css::Bool=true,
         editable::Bool=false,
-        theme::Union{Symbol,String,Vector{String}}="default",
+        theme::Union{Symbol,String,Vector}="default",
         colorscale="",
         tooltips::Bool=true
     )
@@ -333,11 +333,11 @@ function table(
     header::Bool=true,
     footer::Bool=true,
     id::String="",
-    class::Union{String,Vector{String}}="",
+    class::Union{String,Vector}="",
     caption::String="",
     css::Bool=true,
     editable::Bool=false,
-    theme::Union{Symbol,String,Vector{String}}=:default,
+    theme::Union{Symbol,String,Vector}=:default,
     colorscale::String="",
     tooltips::Bool=true,
 )::String
