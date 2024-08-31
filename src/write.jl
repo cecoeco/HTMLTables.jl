@@ -34,7 +34,7 @@ function writestyle(theme::Symbol; css::Bool)::String
     return """<style>\n$theme\n</style>\n"""
 end
 
-function iscssfile(file::AbstractString)::Bool
+function iscssfile(file::String)::Bool
     if file == ""
         return false
     end
@@ -42,7 +42,7 @@ function iscssfile(file::AbstractString)::Bool
     return Base.splitext(file)[end] == ".css"
 end
 
-function writestyle(file::AbstractString; css::Bool)::String
+function writestyle(file::String; css::Bool)::String
     if file == "" || !css
         return ""
     end
@@ -78,7 +78,7 @@ function writestyle(file::AbstractString; css::Bool)::String
     return """<style>\n$file\n</style>\n"""
 end
 
-function writestyle(files::AbstractVector; css::Bool)::String
+function writestyle(files::Vector{String}; css::Bool)::String
     if files == [] || !css
         return ""
     end
@@ -91,7 +91,7 @@ function writestyle(files::AbstractVector; css::Bool)::String
     return """<style>\n$table_css\n</style>\n"""
 end
 
-function writeid(id::AbstractString)::String
+function writeid(id::String)::String
     if id == ""
         return ""
     else
@@ -99,7 +99,7 @@ function writeid(id::AbstractString)::String
     end
 end
 
-function writeclass(class::AbstractString)::String
+function writeclass(class::String)::String
     if class == ""
         return ""
     else
@@ -107,7 +107,7 @@ function writeclass(class::AbstractString)::String
     end
 end
 
-function writeclass(class::AbstractVector)::String
+function writeclass(class::Vector{String})::String
     if class == []
         return ""
     else
@@ -115,7 +115,7 @@ function writeclass(class::AbstractVector)::String
     end
 end
 
-function writeclass(class::Tuple{AbstractString})::String
+function writeclass(class::Tuple{String})::String
     if class == ()
         return ""
     else
@@ -123,7 +123,7 @@ function writeclass(class::Tuple{AbstractString})::String
     end
 end
 
-function writecaption(caption::AbstractString)::String
+function writecaption(caption::String)::String
     if caption == ""
         return ""
     else
@@ -184,7 +184,7 @@ function css_rgb(color::Colors.Colorant)::String
     return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
-function cellcolor(tbl; colorscale::AbstractString, cell_value, css::Bool=true)::String
+function cellcolor(tbl; colorscale::String, cell_value, css::Bool=true)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
     if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !css
@@ -207,7 +207,7 @@ function cellcolor(tbl; colorscale::AbstractString, cell_value, css::Bool=true):
 end
 
 function writetbody(
-    tbl; colorscale::AbstractString="", tooltips::Bool, css::Bool, editable::Bool
+    tbl; colorscale::String="", tooltips::Bool, css::Bool, editable::Bool
 )::String
     contenteditable::String = ""
     if editable
@@ -282,12 +282,12 @@ end
         tbl;
         header::Bool=true,
         footer::Bool=true,
-        id::AbstractString="",
-        class::Union{AbstractString,AbstractVector}="",
-        caption::AbstractString="",
+        id::String="",
+        class::Union{String,Vector{String}}="",
+        caption::String="",
         css::Bool=true,
         editable::Bool=false,
-        theme::Union{Symbol,AbstractString,AbstractVector}="default",
+        theme::Union{Symbol,String,Vector{String}}="default",
         colorscale="",
         tooltips::Bool=true
     )
@@ -332,13 +332,13 @@ function table(
     tbl;
     header::Bool=true,
     footer::Bool=true,
-    id::AbstractString="",
-    class::Union{AbstractString,AbstractVector}="",
-    caption::AbstractString="",
+    id::String="",
+    class::Union{String,Vector{String}}="",
+    caption::String="",
     css::Bool=true,
     editable::Bool=false,
-    theme::Union{Symbol,AbstractString,AbstractVector}=:default,
-    colorscale::AbstractString="",
+    theme::Union{Symbol,String,Vector{String}}=:default,
+    colorscale::String="",
     tooltips::Bool=true,
 )::String
     if colorscale != ""
