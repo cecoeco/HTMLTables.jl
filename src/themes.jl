@@ -520,3 +520,6 @@ tfoot {
   border-top: 2px solid #477edf;
 }
 """
+
+const DRACULA::String = """
+"""

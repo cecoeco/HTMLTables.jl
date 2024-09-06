@@ -1,5 +1,5 @@
 @testset "read HTML table from HTML documents using DataFrame" begin
-    df_01::DataFrame = HTMLTables.read(HTML_FILE_01, DataFrame)
+    df_01::DataFrame = HTMLTables.readtable(HTML_FILE_01, DataFrame)
 
     df_01[!, :Age] = parse.(Int, df_01[!, :Age])
 
@@ -33,7 +33,7 @@
     @test isa(df_01[3, 2], Int)
     @test isa(df_01[3, 3], String)
 
-    df_02::DataFrame = HTMLTables.read(HTML_FILE_02, DataFrame)
+    df_02::DataFrame = HTMLTables.readtable(HTML_FILE_02, DataFrame)
 
     @test size(df_02) == (3, 3)
 
@@ -53,7 +53,7 @@
 end
 
 @testset "read HTML table from HTML string using DataFrame" begin
-    df_01::DataFrame = HTMLTables.read(Base.read(HTML_FILE_01, String), DataFrame)
+    df_01::DataFrame = HTMLTables.readtable(Base.read(HTML_FILE_01, String), DataFrame)
 
     df_01[!, :Age] = parse.(Int, df_01[!, :Age])
 
@@ -87,7 +87,7 @@ end
     @test isa(df_01[3, 2], Int)
     @test isa(df_01[3, 3], String)
 
-    df_02::DataFrame = HTMLTables.read(Base.read(HTML_FILE_02, String), DataFrame)
+    df_02::DataFrame = HTMLTables.readtable(Base.read(HTML_FILE_02, String), DataFrame)
 
     @test size(df_02) == (3, 3)
 
@@ -106,20 +106,10 @@ end
     end
 end
 
-@testset "read HTML table from URL using DataFrame" begin
-    dataframes::Vector{DataFrame} = HTMLTables.readall(URL_01, DataFrame)
-
-    for idx in eachindex(dataframes)
-        println("DataFrame $idx:\n$(dataframes[idx])\n")
-    end
-
-    @test length(dataframes) == 2
-end
-
 @testset "read HTML table from IO using DataFrame" begin
     html_io_01::IO = open(HTML_FILE_01, "r")
 
-    df_01::DataFrame = HTMLTables.read(html_io_01, DataFrame)
+    df_01::DataFrame = HTMLTables.readtable(html_io_01, DataFrame)
 
     df_01[!, :Age] = parse.(Int, df_01[!, :Age])
 
@@ -155,7 +145,7 @@ end
 
     html_io_02::IO = Base.open(HTML_FILE_02, "r")
 
-    df_02::DataFrame = HTMLTables.read(html_io_02, DataFrame)
+    df_02::DataFrame = HTMLTables.readtable(html_io_02, DataFrame)
 
     @test size(df_02) == (3, 3)
 

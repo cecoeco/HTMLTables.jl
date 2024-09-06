@@ -23,12 +23,12 @@ using HTMLTables, DataFrames
 
 df = DataFrame([i:i+19 for i in 1:20:501], Symbol.("a":"z"))
 
-HTMLTables.write("viridis.html", df, colorscale="viridis")
+HTMLTables.writetable("viridis.html", df, colorscale="viridis")
 ```
 
 output:
 
-![viridis table example](gallery/viridis.png)
+![viridis table example](examples/viridis.png)
 
 create a `DataFrame` from parsing HTML:
 
@@ -37,7 +37,7 @@ using HTMLTables, DataFrames
 
 url = "https://www.w3schools.com/html/html_tables.asp"
 
-df = HTMLTables.read(url, DataFrame)
+df = HTMLTables.readtable(url, DataFrame)
 
 println(df)
 ```

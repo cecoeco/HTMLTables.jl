@@ -1,5 +1,4 @@
 ## Reading
 ```@docs
-HTMLTables.read
-HTMLTables.readall
+HTMLTables.readtable
 ```

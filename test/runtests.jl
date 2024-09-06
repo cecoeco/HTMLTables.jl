@@ -18,10 +18,10 @@ const HTML_STRING_02::String = Base.read(HTML_FILE_02, String)
 
 const URL_01::String = "https://www.w3schools.com/html/html_tables.asp"
 
-const GLOBAL_DF_01::DataFrame = HTMLTables.read(HTML_FILE_01, DataFrame)
-const GLOBAL_DF_02::DataFrame = HTMLTables.read(HTML_FILE_02, DataFrame)
+const GLOBAL_DF_01::DataFrame = HTMLTables.readtable(HTML_FILE_01, DataFrame)
+const GLOBAL_DF_02::DataFrame = HTMLTables.readtable(HTML_FILE_02, DataFrame)
 
-include("read.jl")
-include("write.jl")
+include("readtests.jl")
+include("writetests.jl")
 
 end
