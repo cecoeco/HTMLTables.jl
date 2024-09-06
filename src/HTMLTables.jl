@@ -3,6 +3,11 @@
 
 Julia package for reading and writing HTML tables using the Tables.jl interface
 
+## exported functions:
+
+- `readtable`: reads an HTML table from into a sink function such as `DataFrame`.
+- `writetable`: writes an HTML table to a file, url, io stream, or as a string.
+
 """
 module HTMLTables
 
