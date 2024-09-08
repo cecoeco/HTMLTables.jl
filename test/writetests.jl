@@ -20,10 +20,16 @@
     ]
 
     for theme in themes
-        table_01::String = HTMLTables.writetable(GLOBAL_DF_01; theme=theme)
+        io_01::IO = IOBuffer()
+        HTMLTables.writetable(io_01, GLOBAL_DF_01; theme=theme)
+        table_01::String = String(Base.take!(io_01))
+        Base.close(io_01)
         @test occursin("<style>", table_01)
 
-        table_02::String = HTMLTables.writetable(GLOBAL_DF_01; theme=string(theme))
+        io_02::IO = IOBuffer()
+        HTMLTables.writetable(io_02, GLOBAL_DF_01; theme=string(theme))
+        table_02::String = String(Base.take!(io_02))
+        Base.close(io_02)
         @test occursin("<style>", table_02)
 
         @test table_01 == table_02
@@ -31,118 +37,202 @@
 end
 
 @testset "CSS file" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; theme=CSS_FILE_01)
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; css=CSS_FILE_01)
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("<style>", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; theme=CSS_FILE_02)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; css=CSS_FILE_02)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test occursin("<style>", table_02)
 end
 
 @testset "CSS string" begin
-    table_01::String = HTMLTables.writetable(GLOBAL_DF_01; theme=CSS_STRING_01)
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; css=CSS_STRING_01)
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("<style>", table_01)
 
-    table_02::String = HTMLTables.writetable(GLOBAL_DF_01; theme=CSS_STRING_02)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; css=CSS_STRING_02)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test occursin("<style>", table_02)
 end
 
 @testset "header" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; header=true)
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; header=true)
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("<thead", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; header=false)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; header=false)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test !occursin("<thead", table_02)
 
-    table_03 = HTMLTables.writetable(GLOBAL_DF_01)
+    io_03::IO = IOBuffer()
+    HTMLTables.writetable(io_03, GLOBAL_DF_01)
+    table_03::String = String(Base.take!(io_03))
+    Base.close(io_03)
     @test occursin("<thead", table_03)
 end
 
 @testset "footer" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; footer=true)
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; footer=true)
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("<tfoot", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; footer=false)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; footer=false)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test !occursin("<tfoot", table_02)
 
-    table_03 = HTMLTables.writetable(GLOBAL_DF_01)
+    io_03::IO = IOBuffer()
+    HTMLTables.writetable(io_03, GLOBAL_DF_01)
+    table_03::String = String(Base.take!(io_03))
+    Base.close(io_03)
     @test occursin("<tfoot", table_03)
 end
 
 @testset "id" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; id="table_01")
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; id="table_01")
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("id=\"table_01\"", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; id="table_02")
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; id="table_02")
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test occursin("id=\"table_02\"", table_02)
 end
 
 @testset "class" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; class="table_01")
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; class="table_01")
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("class=\"table_01\"", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; class="table_02")
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; class="table_02")
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test occursin("class=\"table_02\"", table_02)
 
-    table_03 = HTMLTables.writetable(GLOBAL_DF_01; class="table_01 table_02")
+    io_03::IO = IOBuffer()
+    HTMLTables.writetable(io_03, GLOBAL_DF_01; class="table_01 table_02")
+    table_03::String = String(Base.take!(io_03))
+    Base.close(io_03)
     @test occursin("class=\"table_01 table_02\"", table_03)
 
-    table_04 = HTMLTables.writetable(GLOBAL_DF_01; class="table_02 table_01")
+    io_04::IO = IOBuffer()
+    HTMLTables.writetable(io_04, GLOBAL_DF_01; class="table_02 table_01")
+    table_04::String = String(Base.take!(io_04))
+    Base.close(io_04)
     @test occursin("class=\"table_02 table_01\"", table_04)
 
-    table_05 = HTMLTables.writetable(GLOBAL_DF_01; class=["table_01", "table_02"])
+    io_05::IO = IOBuffer()
+    HTMLTables.writetable(io_05, GLOBAL_DF_01; class=["table_01", "table_02"])
+    table_05::String = String(Base.take!(io_05))
+    Base.close(io_05)
     @test occursin("class=\"table_01 table_02\"", table_05)
 
-    table_06 = HTMLTables.writetable(GLOBAL_DF_01; class=["table_02", "table_01"])
+    io_06::IO = IOBuffer()
+    HTMLTables.writetable(io_06, GLOBAL_DF_01; class=["table_02", "table_01"])
+    table_06::String = String(Base.take!(io_06))
+    Base.close(io_06)
     @test occursin("class=\"table_02 table_01\"", table_06)
 end
 
 @testset "caption" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; caption="Table 1")
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; caption="Table 1")
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("<caption", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test !occursin("<caption", table_02)
 end
 
 @testset "tooltips" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; tooltips=true)
-    @test occursin("title=\"", table_01)
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; tooltips=true)
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
+    @test occursin("title", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; tooltips=false)
-    @test !occursin("title=\"", table_02)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; tooltips=false)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
+    @test !occursin("title", table_02)
 
-    table_03 = HTMLTables.writetable(GLOBAL_DF_01)
-    @test occursin("title=\"", table_03)
+    io_03::IO = IOBuffer()
+    HTMLTables.writetable(io_03, GLOBAL_DF_01)
+    table_03::String = String(Base.take!(io_03))
+    Base.close(io_03)
+    @test occursin("title", table_03)
 end
 
 @testset "editable" begin
-    table_01 = HTMLTables.writetable(GLOBAL_DF_01; editable=true)
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; editable=true)
+    table_01::String = String(Base.take!(io_01))
+    Base.close(io_01)
     @test occursin("contenteditable", table_01)
 
-    table_02 = HTMLTables.writetable(GLOBAL_DF_01; editable=false)
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; editable=false)
+    table_02::String = String(Base.take!(io_02))
+    Base.close(io_02)
     @test !occursin("contenteditable", table_02)
 
-    table_03 = HTMLTables.writetable(GLOBAL_DF_01)
+    io_03::IO = IOBuffer()
+    HTMLTables.writetable(io_03, GLOBAL_DF_01)
+    table_03::String = String(Base.take!(io_03))
+    Base.close(io_03)
     @test !occursin("contenteditable", table_03)
 end
 
 @testset "disabled CSS" begin
-    table_01 = HTMLTables.writetable(
+    io_01::IO = IOBuffer()
+    HTMLTables.writetable(
+        io_01,
         GLOBAL_DF_01;
-        css=false,
-        theme=["default", CSS_FILE_01, CSS_STRING_02],
+        styles=false,
+        css=CSS_STRING_01,
+        theme=:default,
         colorscale="Reds",
     )
-
+    table_01::String = String(Base.take!(io_01))
     @test !occursin("<style>", table_01)
 
-    table_02 = HTMLTables.writetable(
+    io_02::IO = IOBuffer()
+    HTMLTables.writetable(
+        io_02,
         GLOBAL_DF_01;
-        css=false,
-        theme=[:gold, CSS_FILE_02, CSS_STRING_01],
-        colorscale="viridis",
+        styles=false,
+        css=CSS_FILE_01,
+        theme=:gold,
+        colorscale="Viridis",
     )
-
+    table_02::String = String(Base.take!(io_02))
     @test !occursin("<style>", table_02)
 
     @test table_01 == table_02

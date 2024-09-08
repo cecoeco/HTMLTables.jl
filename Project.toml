@@ -1,7 +1,7 @@
 name = "HTMLTables"
 uuid = "b1afcece-b80e-4563-b90e-36b4cc56d3fa"
 authors = ["Ceco Elijah Maples <mapleselijah9@gmail.com>"]
-version = "0.5.0"
+version = "0.5.1"
 
 [deps]
 Cascadia = "54eefc05-d75b-58de-a785-1a3403f0919f"

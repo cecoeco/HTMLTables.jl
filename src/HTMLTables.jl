@@ -40,22 +40,22 @@ end
         index::Int=1
     )
 
-Reads a HTML table into a sink function such as `DataFrame`.
+Reads an HTML table into a sink function such as `DataFrame`.
 
 ## Arguments
 
 - `source::String`: URL or path to the HTML table.
-- `sink`: The function that materializes the table data.
+- `sink`: the function that materializes the table data.
 
 ## Keyword Arguments
 
-- `id::String`: The id of the HTML table.
-- `class::Union{String,Vector{String}}`: The class of the HTML table.
-- `index::Int`: The index of the HTML table in the HTML document.
+- `id::String`: the id of the HTML table in the HTML document.
+- `class::Union{String,Vector{String}}`: the class of the HTML table.
+- `index::Int`: the index of the HTML table in the HTML document.
 
 ## Returns
 
-- `sink`: The sink function such as `DataFrame` with the HTML table data.
+- `sink`: the sink function such as `DataFrame` with the HTML table data.
 
 ## Examples
 
@@ -142,8 +142,8 @@ function readtable(source, sink; id::String="", class="", index::Int=1)
     return sink(tuples, headers)
 end
 
-function writestyle(theme::Symbol; css::Bool)::String
-    if theme == "" || !css
+function writetheme(theme::Symbol; styles::Bool)::String
+    if theme == "" || !styles
         return ""
     end
 
@@ -176,6 +176,10 @@ function writestyle(theme::Symbol; css::Bool)::String
     return """<style>\n$theme\n</style>\n"""
 end
 
+function writetheme(theme::String; styles::Bool)::String
+    return writetheme(Symbol(theme); styles=styles)
+end
+
 function iscssfile(file::String)::Bool
     if file == ""
         return false
@@ -184,53 +188,16 @@ function iscssfile(file::String)::Bool
     return Base.splitext(file)[end] == ".css"
 end
 
-function writestyle(file::String; css::Bool)::String
-    if file == "" || !css
+function writestyle(css::String; styles::Bool)::String
+    if css == "" || !styles
         return ""
     end
 
-    if file in [
-        "default",
-        "red",
-        "orange",
-        "yellow",
-        "green",
-        "blue",
-        "violet",
-        "magenta",
-        "brown",
-        "gray",
-        "black",
-        "gold",
-        "silver",
-        "bronze",
-        "julia",
-        "sunstone",
-        "moonstone",
-    ]
-        return writestyle(Symbol(file); css=css)
+    if iscssfile(css)
+        css::String = Base.read(css, String)
     end
 
-    if iscssfile(file)
-        file::String = Base.read(file, String)
-    else
-        nothing
-    end
-
-    return """<style>\n$file\n</style>\n"""
-end
-
-function writestyle(files::Vector; css::Bool)::String
-    if files == [] || !css
-        return ""
-    end
-
-    table_css::String = ""
-    for file in files
-        table_css *= Base.read(file, String)
-    end
-
-    return """<style>\n$table_css\n</style>\n"""
+    return """<style>\n$css\n</style>\n"""
 end
 
 function writeid(id::String)::String
@@ -251,14 +218,6 @@ end
 
 function writeclass(class::Vector)::String
     if class == []
-        return ""
-    else
-        return " class=\"" * Base.join(class, " ") * "\""
-    end
-end
-
-function writeclass(class::Tuple{String})::String
-    if class == ()
         return ""
     else
         return " class=\"" * Base.join(class, " ") * "\""
@@ -326,10 +285,13 @@ function css_rgb(color::Colors.Colorant)::String
     return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
-function cellcolor(tbl; colorscale::String, cell_value, css::Bool=true)::String
+function cellcolor(tbl; colorscale::String, cell_value, styles::Bool)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
-    if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !css
+    if colorscale == "" ||
+        Base.ismissing(cell_value) ||
+        !(cell_value in numbers) ||
+        !styles
         return ""
     end
 
@@ -349,8 +311,8 @@ function cellcolor(tbl; colorscale::String, cell_value, css::Bool=true)::String
 end
 
 function writetbody(
-    tbl; colorscale::String="", tooltips::Bool, css::Bool, editable::Bool
-)::String
+    tbl; colorscale::String="", tooltips::Bool, styles::Bool, editable::Bool
+)
     contenteditable::String = ""
     if editable
         contenteditable *= " contenteditable=\"true\""
@@ -369,7 +331,9 @@ function writetbody(
             cell::String = ""
             cell *= "<td $contenteditable"
             cell *= writetooltip(tooltips, cell_value)
-            cell *= cellcolor(tbl; colorscale=colorscale, cell_value=cell_value, css=css)
+            cell *= cellcolor(
+                tbl; colorscale=colorscale, cell_value=cell_value, styles=styles
+            )
             cell *= ">$cell_value</td>\n"
 
             tbody *= cell
@@ -406,7 +370,7 @@ function writetfoot(tbl; footer::Bool, editable::Bool)::String
     return tfoot
 end
 
-"""  
+"""
     writetable(
         out,
         tbl;
@@ -415,31 +379,34 @@ end
         id::String="",
         class::Union{String,Vector}="",
         caption::String="",
-        css::Bool=true,
         editable::Bool=false,
-        theme::Union{Symbol,String,Vector}=:default,
-        colorscale::String="",
-        tooltips::Bool=true)::String
+        tooltips::Bool=true,
+        styles::Bool=true,
+        css::String="",
+        theme::Union{String,Symbol}=:default,
+        colorscale::Union{String,Symbol}=""
+    )
 
 Uses the Tables.jl interface to write an HTML table.
 
 ## Arguments
 
-- `out`: nothing, filepath, string or IO stream.
-- `tbl`: The table to write.
+- `out`: accepts the same types as `Base.Filesystem.write`. 
+- `tbl`: the table to write.
 
 ## Keyword Arguments
 
-- `header`: Whether to include the table header.
-- `footer`: Whether to include the table footer.
-- `id`: The id of the HTML table.
-- `class`: The class of the HTML table.
-- `caption`: The caption of the HTML table.
-- `css`: Whether to include the CSS styles.
-- `editable`: Whether to enable table editing.
-- `theme`: The theme of the HTML table.
-- `colorscale`: The colorscale of the HTML table.
-- `tooltips`: Whether to include tooltips.
+- `header::Bool`: whether to include the table header.
+- `footer::Bool`: whether to include the table footer.
+- `id::String`: the id of the HTML table.
+- `class::Union{String,Vector}`: the class of the HTML table.
+- `caption::String`: the caption of the HTML table.
+- `editable::Bool`: whether to enable table editing.
+- `tooltips::Bool`: whether to include tooltips.
+- `styles::Bool`: whether to include the CSS. If false `css`, `theme` and `colorscale` are ignored.
+- `css::String`: the path to the CSS file to include.
+- `theme::Union{Symbol,String}`: the theme of the HTML table.
+- `colorscale::Union{Symbol,String}`: the colorscale of the HTML table.
 
 """
 function writetable(
@@ -450,60 +417,28 @@ function writetable(
     id::String="",
     class::Union{String,Vector}="",
     caption::String="",
-    css::Bool=true,
     editable::Bool=false,
-    theme::Union{Symbol,String,Vector}=:default,
-    colorscale::String="",
     tooltips::Bool=true,
+    styles::Bool=true,
+    css::String="",
+    theme::Union{String,Symbol}=:default,
+    colorscale::Union{String,Symbol}="",
 )
     html_table::String = ""
-
-    html_table *= writestyle(theme; css=css)
+    html_table *= writetheme(theme; styles=styles)
+    html_table *= writestyle(css; styles=styles)
     html_table *= "<table$(writeid(id))$(writeclass(class))>\n"
     html_table *= writecaption(caption)
     html_table *= writethead(tbl; header=header, editable=editable)
     html_table *= writetbody(
-        tbl; colorscale=colorscale, tooltips=tooltips, css=css, editable=editable
+        tbl; colorscale=colorscale, tooltips=tooltips, styles=styles, editable=editable
     )
     html_table *= writetfoot(tbl; footer=footer, editable=editable)
     html_table *= "</table>"
 
-    if !Base.isnothing(out)
-        Base.Filesystem.write(out, html_table)
+    Base.Filesystem.write(out, html_table)
 
-        return nothing
-    else
-        return html_table
-    end
-end
-
-function writetable(
-    tbl;
-    header::Bool=true,
-    footer::Bool=true,
-    id::String="",
-    class::Union{String,Vector}="",
-    caption::String="",
-    css::Bool=true,
-    editable::Bool=false,
-    theme::Union{Symbol,String,Vector}=:default,
-    colorscale::String="",
-    tooltips::Bool=true,
-)
-    return writetable(
-        nothing,
-        tbl;
-        header=header,
-        footer=footer,
-        id=id,
-        class=class,
-        caption=caption,
-        css=css,
-        editable=editable,
-        theme=theme,
-        colorscale=colorscale,
-        tooltips=tooltips,
-    )
+    return nothing
 end
 
 end

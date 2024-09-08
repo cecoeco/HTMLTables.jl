@@ -21,7 +21,7 @@ create an HTML table using a `DataFrame`:
 ```julia
 using HTMLTables, DataFrames
 
-df = DataFrame([i:i+19 for i in 1:20:501], Symbol.("a":"z"))
+df = DataFrame([i:i+19 for i in 1:20:501], Symbol.('a':'z'))
 
 HTMLTables.writetable("viridis.html", df, colorscale="viridis")
 ```
