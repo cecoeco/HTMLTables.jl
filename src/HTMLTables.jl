@@ -391,7 +391,7 @@ Uses the Tables.jl interface to write an HTML table.
 
 ## Arguments
 
-- `out`: accepts the same types as `Base.Filesystem.write`. 
+- `out`: accepts the same types as [`Base.write`](https://docs.julialang.org/en/v1/base/io-network/#Base.write). 
 - `tbl`: the table to write.
 
 ## Keyword Arguments
@@ -436,7 +436,7 @@ function writetable(
     html_table *= writetfoot(tbl; footer=footer, editable=editable)
     html_table *= "</table>"
 
-    Base.Filesystem.write(out, html_table)
+    Base.write(out, html_table)
 
     return nothing
 end
