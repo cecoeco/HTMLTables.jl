@@ -5,8 +5,8 @@ Julia package for reading and writing HTML tables using the Tables.jl interface
 
 ## exported functions:
 
-- `readtable`: reads an HTML table from into a sink function such as `DataFrame`.
-- `writetable`: writes an HTML table to a file, url, io stream, or as a string.
+- `HTMLTables.readtable`: reads an HTML table into a Julia table such as a `DataFrame`.
+- `HTMLTables.writetable`: converts a Julia table to an HTML table and writes it to a file or IO stream.
 
 """
 module HTMLTables
@@ -310,7 +310,7 @@ function cellcolor(tbl; colorscale::String, cell_value, styles::Bool)::String
 end
 
 function writetbody(
-    tbl; colorscale::String="", tooltips::Bool, styles::Bool, editable::Bool
+    tbl; colorscale::String, tooltips::Bool, styles::Bool, editable::Bool
 )::String
     contenteditable::String = ""
     if editable
@@ -406,6 +406,28 @@ Uses the Tables.jl interface to write an HTML table.
 - `css::String`: the path to the CSS file to include.
 - `theme::Union{Symbol,String}`: the theme of the HTML table.
 - `colorscale::Union{Symbol,String}`: the colorscale of the HTML table.
+
+## Examples
+
+creates a simple HTML table from a DataFrame and writes it to the standard output:
+
+```julia
+using HTMLTables, DataFrames
+
+df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
+
+HTMLTables.writetable(stdout, df)
+```
+
+creates a simple HTML table from a DataFrame and writes it to a file:
+
+```julia
+using HTMLTables, DataFrames
+
+df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
+
+HTMLTables.writetable("table.html", df)
+```
 
 """
 function writetable(

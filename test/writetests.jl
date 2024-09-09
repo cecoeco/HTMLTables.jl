@@ -17,6 +17,8 @@
         :julia,
         :sunstone,
         :moonstone,
+        :dracula,
+        :solarized
     ]
 
     for theme in themes
