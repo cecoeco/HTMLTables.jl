@@ -33,8 +33,8 @@ end
 
 """
     readtable(
-        source::Union{IO,String},
-        sink::Function; 
+        source,
+        sink; 
         id::String="", 
         class::Union{String,Vector{String}}="",
         index::Int=1
@@ -44,7 +44,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 
 ## Arguments
 
-- `source::String`: URL or path to the HTML table.
+- `source`: URL or path to the HTML table.
 - `sink`: the function that materializes the table data.
 
 ## Keyword Arguments
@@ -64,7 +64,7 @@ reading an HTML table from a website into a DataFrame:
 ```julia
 using HTMLTables, DataFrames
 
-url::String = "https://www.w3schools.com/html/html_tables.asp"
+url = "https://www.w3schools.com/html/html_tables.asp"
 
 df = HTMLTables.readtable(url, DataFrame, index=1)
 
@@ -87,7 +87,9 @@ output:
 ```
 
 """
-function readtable(source, sink; id::String="", class="", index::Int=1)
+function readtable(
+    source, sink; id::String="", class::Union{String,Vector{String}}="", index::Int=1
+)
     if isa(source, IO)
         source = Base.read(source, String)
     end
@@ -165,6 +167,8 @@ function writetheme(theme::Symbol; styles::Bool)::String
         :julia => JULIA,
         :sunstone => SUNSTONE,
         :moonstone => MOONSTONE,
+        :dracula => DRACULA,
+        :solarized => SOLARIZED
     )
 
     if Base.haskey(theme_dictionary, theme)
@@ -288,16 +292,11 @@ end
 function cellcolor(tbl; colorscale::String, cell_value, styles::Bool)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
-    if colorscale == "" ||
-        Base.ismissing(cell_value) ||
-        !(cell_value in numbers) ||
-        !styles
+    if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !styles
         return ""
     end
 
-    colorscheme::ColorSchemes.ColorScheme = Base.getfield(
-        ColorSchemes, Symbol(colorscale)
-    )
+    colorscheme::ColorSchemes.ColorScheme = Base.getfield(ColorSchemes, Symbol(colorscale))
 
     cell_position::Float64 =
         (cell_value - Base.minimum(numbers)) /
@@ -312,7 +311,7 @@ end
 
 function writetbody(
     tbl; colorscale::String="", tooltips::Bool, styles::Bool, editable::Bool
-)
+)::String
     contenteditable::String = ""
     if editable
         contenteditable *= " contenteditable=\"true\""
@@ -377,7 +376,7 @@ end
         header::Bool=true,
         footer::Bool=true,
         id::String="",
-        class::Union{String,Vector}="",
+        class::Union{String,Vector{String}}="",
         caption::String="",
         editable::Bool=false,
         tooltips::Bool=true,
@@ -399,7 +398,7 @@ Uses the Tables.jl interface to write an HTML table.
 - `header::Bool`: whether to include the table header.
 - `footer::Bool`: whether to include the table footer.
 - `id::String`: the id of the HTML table.
-- `class::Union{String,Vector}`: the class of the HTML table.
+- `class::Union{String,Vector{String}}`: the class of the HTML table.
 - `caption::String`: the caption of the HTML table.
 - `editable::Bool`: whether to enable table editing.
 - `tooltips::Bool`: whether to include tooltips.
@@ -415,7 +414,7 @@ function writetable(
     header::Bool=true,
     footer::Bool=true,
     id::String="",
-    class::Union{String,Vector}="",
+    class::Union{String,Vector{String}}="",
     caption::String="",
     editable::Bool=false,
     tooltips::Bool=true,

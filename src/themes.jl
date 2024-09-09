@@ -2,6 +2,7 @@ const NORMALIZE::String = """
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html, body {
@@ -71,7 +72,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(0, 100%, 60%);
 }
 
@@ -82,10 +83,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(0, 100%, 85%);
 }
-
-tfoot {
-  background-color: hsl(0, 100%, 65%);
-}
 """
 
 const ORANGE::String = """
@@ -93,7 +90,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(25, 100%, 60%);
 }
 
@@ -105,9 +102,6 @@ tbody tr:nth-child(even) {
   background-color: hsl(25, 100%, 85%);
 }
 
-tfoot {
-  background-color: hsl(25, 100%, 65%);
-}
 """
 
 const YELLOW::String = """
@@ -115,7 +109,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(60, 100%, 60%);
 }
 
@@ -126,10 +120,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(60, 100%, 85%);
 }
-
-tfoot {
-  background-color: hsl(60, 100%, 65%);
-}
 """
 
 const GREEN::String = """
@@ -137,7 +127,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(115, 100%, 60%);
 }
 
@@ -148,10 +138,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(115, 100%, 85%);
 }
-
-tfoot {
-  background-color: hsl(115, 100%, 65%);
-}
 """
 
 const BLUE::String = """
@@ -159,7 +145,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(205, 100%, 60%);
 }
 
@@ -170,10 +156,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(205, 100%, 85%);
 }
-
-tfoot {
-  background-color: hsl(205, 100%, 65%);
-}
 """
 
 const VIOLET::String = """
@@ -181,7 +163,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(260, 100%, 60%);
 }
 
@@ -192,10 +174,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(260, 100%, 85%);
 }
-
-tfoot {
-  background-color: hsl(260, 100%, 65%);
-}
 """
 
 const MAGENTA::String = """
@@ -203,7 +181,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(320, 100%, 60%);
 }
 
@@ -214,10 +192,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(320, 100%, 85%);
 }
-
-tfoot {
-  background-color: hsl(320, 100%, 65%);
-}
 """
 
 const BROWN::String = """
@@ -225,7 +199,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(20, 40%, 50%);
 }
 
@@ -236,10 +210,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(20, 40%, 75%);
 }
-
-tfoot {
-  background-color: hsl(20, 40%, 55%);
-}
 """
 
 const GRAY::String = """
@@ -247,7 +217,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background-color: hsl(0, 0%, 60%);
 }
 
@@ -257,10 +227,6 @@ tbody tr:nth-child(odd) {
 
 tbody tr:nth-child(even) {
   background-color: hsl(0, 0%, 85%);
-}
-
-tfoot {
-  background-color: hsl(0, 0%, 65%);
 }
 """
 
@@ -303,7 +269,7 @@ tfoot {
   border-top: 1px solid white;
 }
 
-thead {
+thead, tfoot {
   background-color: hsl(0, 0%, 0%);
 }
 
@@ -314,10 +280,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background-color: hsl(0, 0%, 20%);
 }
-
-tfoot {
-  background-color: hsl(0, 0%, 0%);
-}
 """
 
 const GOLD::String = """
@@ -325,7 +287,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background: linear-gradient(135deg, #FFD700 0%, #FFFACD 100%);
 }
 
@@ -336,10 +298,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background: linear-gradient(135deg, #FFFACD 0%, #FFD700 100%);
 }
-
-tfoot {
-  background: linear-gradient(135deg, #FFD700 0%, #FFFACD 100%);
-}
 """
 
 const SILVER::String = """
@@ -347,7 +305,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background: linear-gradient(135deg, #C0C0C0 0%, #E0E0E0 100%);
 }
 
@@ -358,10 +316,6 @@ tbody tr:nth-child(odd) {
 tbody tr:nth-child(even) {
   background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 100%);
 }
-
-tfoot {
-  background: linear-gradient(135deg, #C0C0C0 0%, #E0E0E0 100%);
-}
 """
 
 const BRONZE::String = """
@@ -369,7 +323,7 @@ $NORMALIZE
 
 $BASIC_STYLING
 
-thead {
+thead, tfoot {
   background: linear-gradient(135deg, #CD7F32 0%, #F4A460 100%);
 }
 
@@ -379,10 +333,6 @@ tbody tr:nth-child(odd) {
 
 tbody tr:nth-child(even) {
   background: linear-gradient(135deg, #F4A460 0%, #CD7F32 100%);
-}
-
-tfoot {
-  background: linear-gradient(135deg, #CD7F32 0%, #F4A460 100%);
 }
 """
 
@@ -521,5 +471,44 @@ tfoot {
 }
 """
 
+# https://draculatheme.com/
 const DRACULA::String = """
+$NORMALIZE
+
+$BASIC_STYLING
+
+thead {
+  color: #bd93f9;
+}
+
+thead, tfoot {
+  background-color: hsl(232, 15%, 18%);
+}
+
+tbody tr:nth-child(odd) {
+  background-color: hsl(232, 15%, 31%);
+}
+
+tbody tr:nth-child(even) {
+  background-color: hsl(232, 15%, 25%);
+}
+"""
+
+# https://ethanschoonover.com/solarized/
+const SOLARIZED::String = """
+$NORMALIZE
+
+$BASIC_STYLING
+
+thead {
+  color: #2aa198;
+}
+
+thead, tfoot, tbody tr:nth-child(odd) {
+  background-color: hsl(45, 81%, 95%);
+}
+
+tbody tr:nth-child(even) {
+  background-color: hsl(45, 41%, 90%);
+}
 """
