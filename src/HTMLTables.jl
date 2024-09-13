@@ -145,7 +145,7 @@ function readtable(
 end
 
 function writetheme(theme::Symbol; styles::Bool)::String
-    if Base.isempty(theme) || !styles
+    if theme == "" || !styles
         return ""
     end
 
