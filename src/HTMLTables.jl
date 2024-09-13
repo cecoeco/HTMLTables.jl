@@ -145,7 +145,7 @@ function readtable(
 end
 
 function writetheme(theme::Symbol; styles::Bool)::String
-    if theme == "" || !styles
+    if Base.isempty(theme) || !styles
         return ""
     end
 
@@ -185,7 +185,7 @@ function writetheme(theme::String; styles::Bool)::String
 end
 
 function iscssfile(file::String)::Bool
-    if file == ""
+    if Base.isempty(file)
         return false
     end
 
@@ -193,7 +193,7 @@ function iscssfile(file::String)::Bool
 end
 
 function writestyle(css::String; styles::Bool)::String
-    if css == "" || !styles
+    if Base.isempty(css) || !styles
         return ""
     end
 
@@ -205,7 +205,7 @@ function writestyle(css::String; styles::Bool)::String
 end
 
 function writeid(id::String)::String
-    if id == ""
+    if Base.isempty(id)
         return ""
     else
         return " id=\"$id\""
@@ -213,7 +213,7 @@ function writeid(id::String)::String
 end
 
 function writeclass(class::String)::String
-    if class == ""
+    if Base.isempty(class)
         return ""
     else
         return " class=\"$class\""
@@ -221,7 +221,7 @@ function writeclass(class::String)::String
 end
 
 function writeclass(class::Vector)::String
-    if class == []
+    if Base.isempty(class)
         return ""
     else
         return " class=\"" * Base.join(class, " ") * "\""
@@ -229,7 +229,7 @@ function writeclass(class::Vector)::String
 end
 
 function writecaption(caption::String)::String
-    if caption == ""
+    if Base.isempty(caption)
         return ""
     else
         return "<caption>$caption</caption>\n"
