@@ -168,7 +168,7 @@ function writetheme(theme::Symbol; styles::Bool)::String
         :sunstone => SUNSTONE,
         :moonstone => MOONSTONE,
         :dracula => DRACULA,
-        :solarized => SOLARIZED
+        :solarized => SOLARIZED,
     )
 
     if Base.haskey(theme_dictionary, theme)
@@ -298,15 +298,12 @@ function cellcolor(tbl; colorscale::String, cell_value, styles::Bool)::String
 
     colorscheme::ColorSchemes.ColorScheme = Base.getfield(ColorSchemes, Symbol(colorscale))
 
-    cell_position::Float64 =
-        (cell_value - Base.minimum(numbers)) /
-        (Base.maximum(numbers) - Base.minimum(numbers))
+    cell_position::Float64 = Base.div(
+        (cell_value - Base.minimum(numbers)),
+        (Base.maximum(numbers) - Base.minimum(numbers)),
+    )
 
-    color::Colors.Colorant = ColorSchemes.get(colorscheme, cell_position)
-
-    css_color::String = css_rgb(color)
-
-    return " style=\"background-color: $css_color;\""
+    return " style=\"background-color: $(css_rgb(ColorSchemes.get(colorscheme, cell_position)));\""
 end
 
 function writetbody(
