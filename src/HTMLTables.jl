@@ -66,7 +66,7 @@ using HTMLTables, DataFrames
 
 url = "https://www.w3schools.com/html/html_tables.asp"
 
-df = HTMLTables.readtable(url, DataFrame, index=1)
+df = HTMLTables.readtable(url, DataFrame)
 
 println(df)
 ```
@@ -316,16 +316,16 @@ function writetbody(
         contenteditable *= ""
     end
 
-    tbody::String = "<tbody $contenteditable>\n"
+    tbody::String = "<tbody$contenteditable>\n"
 
     for row in Tables.rows(tbl)
-        tbody *= "<tr $contenteditable>\n"
+        tbody *= "<tr$contenteditable>\n"
 
         for col in Base.names(tbl)
             cell_value = row[Base.Symbol(col)]
 
             cell::String = ""
-            cell *= "<td $contenteditable"
+            cell *= "<td$contenteditable"
             cell *= writetooltip(tooltips, cell_value)
             cell *= cellcolor(
                 tbl; colorscale=colorscale, cell_value=cell_value, styles=styles
@@ -355,10 +355,10 @@ function writetfoot(tbl; footer::Bool, editable::Bool)::String
         contenteditable *= ""
     end
 
-    tfoot::String = "<tfoot $contenteditable>\n<tr>\n"
+    tfoot::String = "<tfoot$contenteditable>\n<tr>\n"
 
     for _ in Base.names(tbl)
-        tfoot *= "<td $contenteditable></td>\n"
+        tfoot *= "<td$contenteditable></td>\n"
     end
 
     tfoot *= "</tr>\n</tfoot>\n"
@@ -408,22 +408,69 @@ Uses the Tables.jl interface to write an HTML table.
 
 creates a simple HTML table from a DataFrame and writes it to the standard output:
 
-```julia
-using HTMLTables, DataFrames
+```jldoctest
+julia> using HTMLTables, DataFrames
 
-df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
+julia> df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
 
-HTMLTables.writetable(stdout, df)
+julia> println(df)
+3×2 DataFrame
+ Row │ x     y
+     │ Int64 Int64
+─────┼─────────────
+   1 │    1     45
+   2 │    2     67
+   3 │    3     89
+
+julia> HTMLTables.writetable(stdout, df, styles=false)
+<table>
+<thead>
+<tr>
+<td>x</td>
+<td>y</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td title="1">1</td>
+<td title="45">45</td>
+</tr>
+<tr>
+<td title="2">2</td>
+<td title="67">67</td>
+</tr>
+<tr>
+<td title="3">3</td>
+<td title="89">89</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tfoot>
+</table>
 ```
 
 creates a simple HTML table from a DataFrame and writes it to a file:
 
-```julia
-using HTMLTables, DataFrames
+```jldoctest
+julia> using HTMLTables, DataFrames
 
-df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
+julia> df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
 
-HTMLTables.writetable("table.html", df)
+julia> println(df)
+3×2 DataFrame
+ Row │ x     y
+     │ Int64 Int64
+─────┼─────────────
+   1 │    1     4
+   2 │    2    11
+   3 │    3    28
+
+julia> HTMLTables.writetable("table.html", df)
+"table.html"
 ```
 
 """
