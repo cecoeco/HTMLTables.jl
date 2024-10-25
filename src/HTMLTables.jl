@@ -86,6 +86,71 @@ output:
    6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
 ```
 
+reading the second HTML table from a file into a DataFrame:
+
+```julia
+using HTMLTables, DataFrames
+
+url = "tables.html"
+
+df = HTMLTables.readtable(url, DataFrame, index=2)
+
+println(df)
+```
+
+output:
+
+```
+4×2 DataFrame
+ Row │ Name       Age
+     │ String     Int64
+─────┼─────────────────
+   1 │ Bob         25
+   2 │ Charlie     35
+   3 │ Alice       30
+   4 │ David       40
+```
+
+reading an HTML table with id="myTable" from a string into a DataFrame:
+
+```julia
+using HTMLTables, DataFrames
+
+html_str = \"\"\"
+<table id="myTable">
+  <tr>
+    <th>Name</th>
+    <th>Age</th>
+  </tr>
+  <tr>
+    <td>Bob</td>
+    <td>25</td>
+  </tr>
+  <tr>
+    <td>Charlie</td>
+    <td>35</td>
+  </tr>
+  <tr>
+    <td>Alice</td>
+    <td>30</td>
+  </tr>
+  <tr>
+    <td>David</td>
+    <td>40</td>
+  </tr>
+</table>
+\"\"\"
+
+df = HTMLTables.readtable(html_str, DataFrame, id="myTable")
+
+println(df)
+```
+
+output:
+
+```
+```
+  
 """
 function readtable(
     source, sink; id::String="", class::Union{String,Vector{String}}="", index::Int=1
@@ -408,23 +473,17 @@ Uses the Tables.jl interface to write an HTML table.
 
 creates a simple HTML table from a DataFrame and writes it to the standard output:
 
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames")
+```julia
+using HTMLTables, DataFrames
 
-julia> using HTMLTables, DataFrames
+df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
 
-julia> df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
+HTMLTables.writetable(stdout, df, styles=false)
+```
 
-julia> println(df)
-3×2 DataFrame
- Row │ x     y
-     │ Int64 Int64
-─────┼─────────────
-   1 │    1     45
-   2 │    2     67
-   3 │    3     89
+output:
 
-julia> HTMLTables.writetable(stdout, df, styles=false)
+```html
 <table>
 <thead>
 <tr>
@@ -457,24 +516,12 @@ julia> HTMLTables.writetable(stdout, df, styles=false)
 
 creates a simple HTML table from a DataFrame and writes it to a file:
 
-```jldoctest
-julia> using Pkg; Pkg.add("DataFrames")
+```julia
+using HTMLTables, DataFrames
 
-julia> using HTMLTables, DataFrames
+df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
 
-julia> df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
-
-julia> println(df)
-3×2 DataFrame
- Row │ x     y
-     │ Int64 Int64
-─────┼─────────────
-   1 │    1     4
-   2 │    2    11
-   3 │    3    28
-
-julia> HTMLTables.writetable("table.html", df)
-"table.html"
+HTMLTables.writetable("table.html", df)
 ```
 
 """
