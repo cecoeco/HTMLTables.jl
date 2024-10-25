@@ -69,8 +69,6 @@ df = HTMLTables.readtable(url, DataFrame)
 println(df)
 ```
 
-output:
-
 ```
 6×3 DataFrame
  Row │ Company                       Contact           Country
@@ -95,8 +93,6 @@ df = HTMLTables.readtable(url, DataFrame, index=2)
 
 println(df)
 ```
-
-output:
 
 ```
 4×2 DataFrame
@@ -143,8 +139,6 @@ df = HTMLTables.readtable(html_str, DataFrame, id="myTable")
 
 println(df)
 ```
-
-output:
 
 ```
 4×2 DataFrame
@@ -488,8 +482,6 @@ df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
 
 HTMLTables.writetable(stdout, df, styles=false)
 ```
-
-output:
 
 ```html
 <table>
