@@ -15,8 +15,6 @@ using Cascadia, Colors, ColorSchemes, Gumbo, HTTP, Tables
 
 export readtable, writetable
 
-include("themes.jl")
-
 function isurl(source::String)::Bool
     return Base.startswith(source, r"^(http://|https://|ftp://)")
 end
@@ -59,7 +57,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 
 ## Examples
 
-reading an HTML table from a website into a DataFrame:
+1. reading an HTML table from a website into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
@@ -86,7 +84,7 @@ output:
    6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
 ```
 
-reading the second HTML table from a file into a DataFrame:
+2. reading the second HTML table from a file into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
@@ -111,7 +109,7 @@ output:
    4 │ David       40
 ```
 
-reading an HTML table with id="myTable" from a string into a DataFrame:
+3. reading an HTML table with id="myTable" from a string into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
@@ -149,6 +147,14 @@ println(df)
 output:
 
 ```
+4×2 DataFrame
+ Row │ Name       Age
+     │ String     Int64
+─────┼─────────────────
+   1 │ Bob         25
+   2 │ Charlie     35
+   3 │ Alice       30
+   4 │ David       40
 ```
   
 """
@@ -208,6 +214,8 @@ function readtable(
 
     return sink(tuples, headers)
 end
+
+include("themes.jl")
 
 function writetheme(theme::Symbol; styles::Bool)::String
     if theme == "" || !styles
@@ -471,7 +479,7 @@ Uses the Tables.jl interface to write an HTML table.
 
 ## Examples
 
-creates a simple HTML table from a DataFrame and writes it to the standard output:
+1. creates a simple HTML table from a DataFrame and writes it to the standard output:
 
 ```julia
 using HTMLTables, DataFrames
@@ -514,7 +522,7 @@ output:
 </table>
 ```
 
-creates a simple HTML table from a DataFrame and writes it to a file:
+2. creates a simple HTML table from a DataFrame and writes it to a file:
 
 ```julia
 using HTMLTables, DataFrames
