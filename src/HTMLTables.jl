@@ -57,7 +57,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 
 ## Examples
 
-1. reading an HTML table from a website into a DataFrame:
+reading an HTML table from a website into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
@@ -84,7 +84,7 @@ output:
    6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy
 ```
 
-2. reading the second HTML table from a file into a DataFrame:
+reading the second HTML table from a file into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
@@ -109,13 +109,13 @@ output:
    4 │ David       40
 ```
 
-3. reading an HTML table with id="myTable" from a string into a DataFrame:
+reading an HTML table with id="Table" from a string into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
 
 html_str = \"\"\"
-<table id="myTable">
+<table id="Table">
   <tr>
     <th>Name</th>
     <th>Age</th>
@@ -479,7 +479,7 @@ Uses the Tables.jl interface to write an HTML table.
 
 ## Examples
 
-1. creates a simple HTML table from a DataFrame and writes it to the standard output:
+creates a simple HTML table from a DataFrame and writes it to the standard output:
 
 ```julia
 using HTMLTables, DataFrames
@@ -522,7 +522,7 @@ output:
 </table>
 ```
 
-2. creates a simple HTML table from a DataFrame and writes it to a file:
+creates a simple HTML table from a DataFrame and writes it to a file:
 
 ```julia
 using HTMLTables, DataFrames
