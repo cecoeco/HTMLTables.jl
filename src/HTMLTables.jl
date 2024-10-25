@@ -409,6 +409,8 @@ Uses the Tables.jl interface to write an HTML table.
 creates a simple HTML table from a DataFrame and writes it to the standard output:
 
 ```jldoctest
+julia> using Pkg; Pkg.add("DataFrames")
+
 julia> using HTMLTables, DataFrames
 
 julia> df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
@@ -456,6 +458,8 @@ julia> HTMLTables.writetable(stdout, df, styles=false)
 creates a simple HTML table from a DataFrame and writes it to a file:
 
 ```jldoctest
+julia> using Pkg; Pkg.add("DataFrames")
+
 julia> using HTMLTables, DataFrames
 
 julia> df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
