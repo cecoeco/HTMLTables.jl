@@ -9,7 +9,7 @@
 
 url = &quot;https://www.w3schools.com/html/html_tables.asp&quot;
 
-df = HTMLTables.readtable(url, DataFrame, index=1)
+df = HTMLTables.readtable(url, DataFrame)
 
 println(df)</code></pre><p>output:</p><pre><code class="nohighlight hljs">6×3 DataFrame
  Row │ Company                       Contact           Country
@@ -20,4 +20,46 @@ println(df)</code></pre><p>output:</p><pre><code class="nohighlight hljs">6×3 D
    3 │ Ernst Handel                  Roland Mendel     Austria
    4 │ Island Trading                Helen Bennett     UK
    5 │ Laughing Bacchus Winecellars  Yoshi Tannamuri   Canada
-   6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/cecoeco/HTMLTables.jl/blob/aadf712d28a77c7e73c00b0cba85fce28c7c254b/src/HTMLTables.jl#L34-L89">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../writing/">Writing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Thursday 24 October 2024 06:18">Thursday 24 October 2024</span>. Using Julia version 1.11.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+   6 │ Magazzini Alimentari Riuniti  Giovanni Rovelli  Italy</code></pre><p>reading the second HTML table from a file into a DataFrame:</p><pre><code class="language-julia hljs">using HTMLTables, DataFrames
+
+url = &quot;tables.html&quot;
+
+df = HTMLTables.readtable(url, DataFrame, index=2)
+
+println(df)</code></pre><p>output:</p><pre><code class="nohighlight hljs">4×2 DataFrame
+ Row │ Name       Age
+     │ String     Int64
+─────┼─────────────────
+   1 │ Bob         25
+   2 │ Charlie     35
+   3 │ Alice       30
+   4 │ David       40</code></pre><p>reading an HTML table with id=&quot;myTable&quot; from a string into a DataFrame:</p><pre><code class="language-julia hljs">using HTMLTables, DataFrames
+
+html_str = &quot;&quot;&quot;
+&lt;table id=&quot;myTable&quot;&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Name&lt;/th&gt;
+    &lt;th&gt;Age&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Bob&lt;/td&gt;
+    &lt;td&gt;25&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Charlie&lt;/td&gt;
+    &lt;td&gt;35&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Alice&lt;/td&gt;
+    &lt;td&gt;30&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;David&lt;/td&gt;
+    &lt;td&gt;40&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&quot;&quot;&quot;
+
+df = HTMLTables.readtable(html_str, DataFrame, id=&quot;myTable&quot;)
+
+println(df)</code></pre><p>output:</p><pre><code class="nohighlight hljs"></code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/cecoeco/HTMLTables.jl/blob/ccee84f71f3f19be19d5c7dc0b951608197f0784/src/HTMLTables.jl#L34-L154">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../writing/">Writing »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Friday 25 October 2024 02:59">Friday 25 October 2024</span>. Using Julia version 1.11.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
