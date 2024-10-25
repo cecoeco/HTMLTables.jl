@@ -105,13 +105,13 @@ println(df)
    4 │ David       40
 ```
 
-reading an HTML table with id="Table" from a string into a DataFrame:
+reading an HTML table with the id "htmltable" from a string into a DataFrame:
 
 ```julia
 using HTMLTables, DataFrames
 
 html_str = \"\"\"
-<table id="Table">
+<table id="htmltable">
   <tr>
     <th>Name</th>
     <th>Age</th>
@@ -135,7 +135,7 @@ html_str = \"\"\"
 </table>
 \"\"\"
 
-df = HTMLTables.readtable(html_str, DataFrame, id="myTable")
+df = HTMLTables.readtable(html_str, DataFrame, id="htmltable")
 
 println(df)
 ```
