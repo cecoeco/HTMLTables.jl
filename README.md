@@ -42,7 +42,7 @@ HTMLTables.writetable("viridis.html", df; colorscale=:viridis)
 
 output:
 
-![viridis table example](examples/viridis.html)
+![viridis table example](examples/viridis.svg)
 
 create a `DataFrame` from parsing HTML:
 
