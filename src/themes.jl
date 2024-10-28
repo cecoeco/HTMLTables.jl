@@ -1,21 +1,4 @@
-const NORMALIZE::String = """
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-"""
-
-const BASIC_STYLING::String = """
+const BASIC_TABLE_STYLING::String = """
 table {
   font-family: Helvetica;
   font-size: 15px;
@@ -54,9 +37,7 @@ tfoot {
 """
 
 const DEFAULT::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 table {
   background-color: white;
@@ -68,9 +49,7 @@ tfoot {
 """
 
 const RED::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(0, 100%, 60%);
@@ -86,9 +65,7 @@ tbody tr:nth-child(even) {
 """
 
 const ORANGE::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(25, 100%, 60%);
@@ -105,9 +82,7 @@ tbody tr:nth-child(even) {
 """
 
 const YELLOW::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(60, 100%, 60%);
@@ -123,9 +98,7 @@ tbody tr:nth-child(even) {
 """
 
 const GREEN::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(115, 100%, 60%);
@@ -141,9 +114,7 @@ tbody tr:nth-child(even) {
 """
 
 const BLUE::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(205, 100%, 60%);
@@ -159,9 +130,7 @@ tbody tr:nth-child(even) {
 """
 
 const VIOLET::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(260, 100%, 60%);
@@ -177,9 +146,7 @@ tbody tr:nth-child(even) {
 """
 
 const MAGENTA::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(320, 100%, 60%);
@@ -195,9 +162,7 @@ tbody tr:nth-child(even) {
 """
 
 const BROWN::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(20, 40%, 50%);
@@ -213,9 +178,7 @@ tbody tr:nth-child(even) {
 """
 
 const GRAY::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background-color: hsl(0, 0%, 60%);
@@ -231,8 +194,6 @@ tbody tr:nth-child(even) {
 """
 
 const BLACK::String = """
-$NORMALIZE
-
 table {
   font-family: Helvetica;
   font-size: 15px;
@@ -283,9 +244,7 @@ tbody tr:nth-child(even) {
 """
 
 const GOLD::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background: linear-gradient(135deg, #FFD700 0%, #FFFACD 100%);
@@ -301,9 +260,7 @@ tbody tr:nth-child(even) {
 """
 
 const SILVER::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background: linear-gradient(135deg, #C0C0C0 0%, #E0E0E0 100%);
@@ -319,9 +276,7 @@ tbody tr:nth-child(even) {
 """
 
 const BRONZE::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead, tfoot {
   background: linear-gradient(135deg, #CD7F32 0%, #F4A460 100%);
@@ -339,9 +294,7 @@ tbody tr:nth-child(even) {
 const JULIA::String = """
 @import url("https://fonts.googleapis.com/css2?family=Arya:wght@400;700");
 
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 table {
 	font-size: 15px;
@@ -357,8 +310,6 @@ thead, tfoot {
 
 const SUNSTONE::String = """
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
-$NORMALIZE
 
 table {
   font-family: "Arial";
@@ -416,8 +367,6 @@ tfoot {
 const MOONSTONE::String = """
 @import url('https://fonts.googleapis.com/css2?family=Caladea:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
-$NORMALIZE
-
 table {
   font-family: "Arial";
   font-size: 15px;
@@ -473,9 +422,7 @@ tfoot {
 
 # https://draculatheme.com/
 const DRACULA::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead {
   color: #bd93f9;
@@ -496,9 +443,7 @@ tbody tr:nth-child(even) {
 
 # https://ethanschoonover.com/solarized/
 const SOLARIZED::String = """
-$NORMALIZE
-
-$BASIC_STYLING
+$BASIC_TABLE_STYLING
 
 thead {
   color: #2aa198;

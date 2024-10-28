@@ -356,7 +356,7 @@ function css_rgb(color::Colors.Colorant)::String
     return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
-function cellcolor(tbl; colorscale::String, cell_value, styles::Bool)::String
+function cellcolor(tbl; colorscale::Union{String,Symbol}, cell_value, styles::Bool)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
     if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !styles
@@ -373,7 +373,7 @@ function cellcolor(tbl; colorscale::String, cell_value, styles::Bool)::String
 end
 
 function writetbody(
-    tbl; colorscale::String, tooltips::Bool, styles::Bool, editable::Bool
+    tbl; colorscale::Union{String,Symbol}, tooltips::Bool, styles::Bool, editable::Bool
 )::String
     contenteditable::String = ""
     if editable
@@ -468,7 +468,7 @@ Uses the Tables.jl interface to write an HTML table.
 - `styles::Bool`: whether to include the CSS. If false `css`, `theme` and `colorscale` are ignored.
 - `css::String`: the path to the CSS file to include.
 - `theme::Union{Symbol,String}`: the theme of the HTML table.
-- `colorscale::Union{Symbol,String}`: the colorscale of the HTML table.
+- `colorscale::Union{Symbol,String}`: the colorscale from [ColorSchemes.jl](https://juliagraphics.github.io/ColorSchemes.jl/stable/catalogue/) for numeric data.
 
 ## Examples
 

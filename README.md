@@ -37,12 +37,12 @@ df = DataFrame(
     "y" => 481:500, "z" => 501:520
 )
 
-HTMLTables.writetable("viridis.html", df, colorscale="viridis")
+HTMLTables.writetable("viridis.html", df; colorscale=:viridis)
 ```
 
 output:
 
-![viridis table example](examples/viridis.png)
+![viridis table example](examples/viridis.html)
 
 create a `DataFrame` from parsing HTML:
 
