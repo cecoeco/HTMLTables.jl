@@ -334,8 +334,8 @@ writetable("table.html", df)
 
 """
 function writetable(
-    out,
-    tbl;
+    out::Any,
+    tbl::Any;
     header::Bool=true,
     footer::Bool=true,
     id::String="",

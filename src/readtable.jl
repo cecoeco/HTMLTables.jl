@@ -23,7 +23,7 @@ end
 """
     readtable(
         source,
-        sink; 
+        sink::Union{Function,Nothing}=nothing; 
         id::String="", 
         class::Union{String,Vector{String}}="",
         index::Int=1,
@@ -36,7 +36,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 ## Arguments
 
 - `source`: URL or path to the HTML table.
-- `sink`: the function that materializes the table data.
+- `sink::Union{Function,Nothing}`: the function that materializes the table data.
 
 ## Keyword Arguments
 
@@ -48,7 +48,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 
 ## Returns
 
-- `sink::Function`: the sink function such as `DataFrame` with the HTML table data if `sink` is specified.
+- `sink`: the sink function such as `DataFrame` with the HTML table data if `sink` is specified.
 - `tuples::Vector`: the table data if `sink` is not specified and the `header` keyword argument is false.
 - `headers::Vector`: the table headers if `sink` is not specified and the `header` keyword argument is true.
 
@@ -150,8 +150,8 @@ println(df)
 
 """
 function readtable(
-    source,
-    sink=nothing;
+    source::Any,
+    sink::Union{Function,Nothing}=nothing;
     id::String="",
     class::Union{String,Vector{String}}="",
     index::Int=1,
