@@ -6,10 +6,18 @@ function ishtmlfile(source::String)::Bool
     return Base.Filesystem.splitext(source)[2] == ".html"
 end
 
-function extract_row_data(row::Gumbo.HTMLNode)::Vector
+function parse_number(html_text::String, number_type::DataType)::Union{Number,String}
+    try
+        return parse(number_type, html_text)
+    catch
+        return html_text
+    end
+end
+
+function extract_row_data(row::Gumbo.HTMLNode, number_type::DataType)::Vector
     cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
 
-    return [Cascadia.nodeText(cell) for cell in cells]
+    return [parse_number(Cascadia.nodeText(cell), number_type) for cell in cells]
 end
 
 """
@@ -18,7 +26,8 @@ end
         sink; 
         id::String="", 
         class::Union{String,Vector{String}}="",
-        index::Int=1
+        index::Int=1,
+        number_type::DataType=Number
     )
 
 Reads an HTML table into a sink function such as `DataFrame`.
@@ -33,6 +42,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 - `id::String`: the id of the HTML table in the HTML document.
 - `class::Union{String,Vector{String}}`: the class of the HTML table.
 - `index::Int`: the index of the HTML table in the HTML document.
+- `number_type::DataType`: the return type of the numeric table data.
 
 ## Returns
 
@@ -80,7 +90,7 @@ println(df)
 ```
 4×2 DataFrame
  Row │ Name       Age
-     │ String     Int64
+     │ String     String
 ─────┼─────────────────
    1 │ Bob         25
    2 │ Charlie     35
@@ -118,7 +128,7 @@ html_str = \"\"\"
 </table>
 \"\"\"
 
-df = HTMLTables.readtable(html_str, DataFrame, id="htmltable")
+df = HTMLTables.readtable(html_str, DataFrame, id="htmltable", number_type=Int64)
 
 println(df)
 ```
@@ -133,12 +143,17 @@ println(df)
    3 │ Alice       30
    4 │ David       40
 ```
-  
+
 """
 function readtable(
-    source, sink; id::String="", class::Union{String,Vector{String}}="", index::Int=1
+    source,
+    sink;
+    id::String="",
+    class::Union{String,Vector{String}}="",
+    index::Int=1,
+    number_type::DataType=Number,
 )
-    if isa(source, IO)
+    if Base.isa(source, IO)
         source = Base.read(source, String)
     end
 
@@ -179,7 +194,7 @@ function readtable(
     data::Vector{Vector} = []
 
     for (i, row) in Base.enumerate(rows)
-        rowdata = extract_row_data(row)
+        rowdata::Vector = extract_row_data(row, number_type)
         if (i == 1 && Base.isempty(headers)) == true
             headers = rowdata
         else

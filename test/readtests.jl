@@ -163,3 +163,21 @@ end
         @test df_02[row, :Occupation] == "" || Base.ismissing(df_02[row, :Occupation])
     end
 end
+
+@testset "read HTML table with number_type kwarg" begin
+    df::DataFrame = HTMLTables.readtable(HTML_FILE_01, DataFrame)
+    @test Base.isa(df[!, :Age], Vector{String})
+    @test Base.all(x -> Base.isa(x, String), df[!, :Age])
+
+    df_int::DataFrame = HTMLTables.readtable(HTML_FILE_01, DataFrame; number_type=Int64)
+    @test Base.isa(df_int[!, :Age], Vector{Int64})
+    @test Base.all(x -> Base.isa(x, Int64), df_int[!, :Age])
+
+    df_float::DataFrame = HTMLTables.readtable(HTML_FILE_01, DataFrame; number_type=Float64)
+    @test Base.isa(df_float[!, :Age], Vector{Float64})
+    @test Base.all(x -> Base.isa(x, Float64), df_float[!, :Age])
+
+    df_string::DataFrame = HTMLTables.readtable(HTML_FILE_01, DataFrame; number_type=String)
+    @test Base.isa(df_string[!, :Age], Vector{String})
+    @test Base.all(x -> Base.isa(x, String), df_string[!, :Age])
+end
