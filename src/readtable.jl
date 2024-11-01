@@ -23,7 +23,7 @@ end
 """
     readtable(
         source,
-        sink::Union{Function,Nothing}=nothing; 
+        sink=nothing; 
         id::String="", 
         class::Union{String,Vector{String}}="",
         index::Int=1,
@@ -36,7 +36,7 @@ Reads an HTML table into a sink function such as `DataFrame`.
 ## Arguments
 
 - `source`: URL or path to the HTML table.
-- `sink::Union{Function,Nothing}`: the function that materializes the table data.
+- `sink`: the function that materializes the table data.
 
 ## Keyword Arguments
 
@@ -150,8 +150,8 @@ println(df)
 
 """
 function readtable(
-    source::Any,
-    sink::Union{Function,Nothing}=nothing;
+    source,
+    sink=nothing;
     id::String="",
     class::Union{String,Vector{String}}="",
     index::Int=1,
