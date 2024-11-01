@@ -148,6 +148,37 @@ println(df)
    4 │ David       40
 ```
 
+read the data from the HTML table as a vector of tuples:
+
+```julia
+using HTMLTables
+
+url = "tables.html"
+
+tuples = readtable(url, number_type=Int64, header=false)
+
+println(tuples)
+```
+
+```
+[("Bob", 25), ("Charlie", 35), ("Alice", 30), ("David", 40)]
+```
+
+read the data from the HTML table as a matrix:
+
+```julia
+using HTMLTables, Tables
+
+url = "tables.html"
+
+mtx = readtable(url, Tables.matrix; number_type=Int64, header=false)
+
+println(mtx)
+```
+
+```
+Any["Bob" 25; "Charlie" 35; "Alice" 30; "David" 40]
+```
 """
 function readtable(
     source,
