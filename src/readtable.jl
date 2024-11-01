@@ -6,15 +6,15 @@ function ishtmlfile(source::String)::Bool
     return Base.Filesystem.splitext(source)[2] == ".html"
 end
 
-function parse_number(html_text::String, number_type::DataType)::Union{Number,String}
+function parse_number(html_text::String, number_type::Type)::Union{Number,String}
     try
-        return parse(number_type, html_text)
+        return Base.parse(number_type, html_text)
     catch
         return html_text
     end
 end
 
-function extract_row_data(row::Gumbo.HTMLNode, number_type::DataType)::Vector
+function extract_row_data(row::Gumbo.HTMLNode, number_type::Type)::Vector
     cells::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("td,th"), row)
 
     return [parse_number(Cascadia.nodeText(cell), number_type) for cell in cells]
@@ -27,7 +27,8 @@ end
         id::String="", 
         class::Union{String,Vector{String}}="",
         index::Int=1,
-        number_type::DataType=Number
+        header::Bool=true,
+        number_type::Type=Any
     )
 
 Reads an HTML table into a sink function such as `DataFrame`.
@@ -42,11 +43,14 @@ Reads an HTML table into a sink function such as `DataFrame`.
 - `id::String`: the id of the HTML table in the HTML document.
 - `class::Union{String,Vector{String}}`: the class of the HTML table.
 - `index::Int`: the index of the HTML table in the HTML document.
-- `number_type::DataType`: the return type of the numeric table data.
+- `header::Bool`: whether to include the table header.
+- `number_type::Type`: the return type of the numeric table data.
 
 ## Returns
 
-- `sink`: the sink function such as `DataFrame` with the HTML table data.
+- `sink::Function`: the sink function such as `DataFrame` with the HTML table data if `sink` is specified.
+- `tuples::Vector`: the table data if `sink` is not specified and the `header` keyword argument is false.
+- `headers::Vector`: the table headers if `sink` is not specified and the `header` keyword argument is true.
 
 ## Examples
 
@@ -57,7 +61,7 @@ using HTMLTables, DataFrames
 
 url = "https://www.w3schools.com/html/html_tables.asp"
 
-df = HTMLTables.readtable(url, DataFrame)
+df = readtable(url, DataFrame)
 
 println(df)
 ```
@@ -82,7 +86,7 @@ using HTMLTables, DataFrames
 
 url = "tables.html"
 
-df = HTMLTables.readtable(url, DataFrame, index=2)
+df = readtable(url, DataFrame, index=2)
 
 println(df)
 ```
@@ -128,7 +132,7 @@ html_str = \"\"\"
 </table>
 \"\"\"
 
-df = HTMLTables.readtable(html_str, DataFrame, id="htmltable", number_type=Int64)
+df = DataFrame(readtable(html_str, id="htmltable", number_type=Int64))
 
 println(df)
 ```
@@ -147,11 +151,12 @@ println(df)
 """
 function readtable(
     source,
-    sink;
+    sink=nothing;
     id::String="",
     class::Union{String,Vector{String}}="",
     index::Int=1,
-    number_type::DataType=Number,
+    header::Bool=true,
+    number_type::Type=Number,
 )
     if Base.isa(source, IO)
         source = Base.read(source, String)
@@ -204,5 +209,9 @@ function readtable(
 
     tuples::Vector = [Base.Tuple(row) for row in data]
 
-    return sink(tuples, headers)
+    if header
+        return sink !== nothing ? sink(tuples, headers) : (tuples, headers)
+    else
+        return sink !== nothing ? sink(tuples) : tuples
+    end
 end

@@ -288,7 +288,7 @@ using HTMLTables, DataFrames
 
 df = DataFrame(x=[1, 2, 3], y=[45, 67, 89])
 
-HTMLTables.writetable(stdout, df, styles=false)
+writetable(stdout, df, styles=false)
 ```
 
 ```html
@@ -329,7 +329,7 @@ using HTMLTables, DataFrames
 
 df = DataFrame(x=[1, 2, 3], y=[4, 11, 28])
 
-HTMLTables.writetable("table.html", df)
+writetable("table.html", df)
 ```
 
 """
