@@ -8,14 +8,16 @@ end
 
 function parse_source(source)::Gumbo.HTMLDocument
     html_string::String = ""
-    if isurl(source)
-        html_string *= Base.String(HTTP.get(source).body)
-    elseif ishtmlfile(source)
-        html_string *= Base.read(source, String)
+    if Base.isa(source, String)
+        if isurl(source)
+            html_string *= Base.String(HTTP.get(source).body)
+        elseif ishtmlfile(source)
+            html_string *= Base.read(source, String)
+        else
+            html_string *= source
+        end
     elseif Base.isa(source, IO)
         html_string *= Base.read(source, String)
-    else
-        html_string *= source
     end
 
     return Gumbo.parsehtml(html_string)
