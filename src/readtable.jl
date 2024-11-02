@@ -6,6 +6,40 @@ function ishtmlfile(source::String)::Bool
     return Base.Filesystem.splitext(source)[2] == ".html"
 end
 
+function parse_source(source)::Gumbo.HTMLDocument
+    html_string::String = ""
+    if isurl(source)
+        html_string *= Base.String(HTTP.get(source).body)
+    elseif ishtmlfile(source)
+        html_string *= Base.read(source, String)
+    elseif Base.isa(source, IO)
+        html_string *= Base.read(source, String)
+    else
+        html_string *= source
+    end
+
+    return Gumbo.parsehtml(html_string)
+end
+
+function htmltable_selector(
+    id::Union{Nothing,String}=nothing, class::Union{Nothing,String,Vector{String}}=nothing
+)::String
+    selector::String = ""
+    if Base.isnothing(id)
+        if Base.isnothing(class)
+            selector *= "table"
+        elseif Base.isa(class, String)
+            selector *= "table.$class"
+        elseif Base.isa(class, Vector{String})
+            selector *= "table." * Base.join(class, ".")
+        end
+    elseif !Base.isnothing(id)
+        selector *= "#$id"
+    end
+
+    return selector
+end
+
 function parse_number(html_text::String, number_type::Type)::Union{Number,String}
     try
         return Base.parse(number_type, html_text)
@@ -23,11 +57,11 @@ end
 """
     readtable(
         source,
-        sink=nothing; 
-        id::String="", 
-        class::Union{String,Vector{String}}="",
-        index::Int=1,
+        sink=nothing;
         header::Bool=true,
+        id::Union{Nothing,String}=nothing,
+        class::Union{Nothing,String,Vector{String}}=nothing,
+        index::Int=1,
         number_type::Type=Any
     )
 
@@ -40,10 +74,10 @@ Reads an HTML table into a sink function such as `DataFrame`.
 
 ## Keyword Arguments
 
+- `header::Bool`: whether to include the table header.
 - `id::String`: the id of the HTML table in the HTML document.
 - `class::Union{String,Vector{String}}`: the class of the HTML table.
 - `index::Int`: the index of the HTML table in the HTML document.
-- `header::Bool`: whether to include the table header.
 - `number_type::Type`: the return type of the numeric table data.
 
 ## Returns
@@ -183,58 +217,30 @@ Any["Bob" 25; "Charlie" 35; "Alice" 30; "David" 40]
 function readtable(
     source,
     sink=nothing;
-    id::String="",
-    class::Union{String,Vector{String}}="",
-    index::Int=1,
     header::Bool=true,
+    id::Union{Nothing,String}=nothing,
+    class::Union{Nothing,String,Vector{String}}=nothing,
+    index::Int=1,
     number_type::Type=Number,
 )
-    if Base.isa(source, IO)
-        source = Base.read(source, String)
-    end
+    htmltable::Gumbo.HTMLNode = Base.eachmatch(
+        Cascadia.Selector(htmltable_selector(id, class)), parse_source(source).root
+    )[index]
 
-    html_content::String = ""
-    if isurl(source) == true
-        html_content *= Base.String(HTTP.get(source).body)
-    elseif ishtmlfile(source) == true
-        html_content *= Base.read(source, String)
-    else
-        html_content *= source
-    end
-
-    html_document::Gumbo.HTMLDocument = Gumbo.parsehtml(html_content)
-
-    selector::String = ""
-    if Base.isempty(id)
-        if Base.isempty(class)
-            selector *= "table"
-        elseif !Base.isempty(class) && Base.isa(class, String)
-            selector *= "table.$class"
-        elseif !Base.isempty(class) && Base.isa(class, Vector{String})
-            selector *= "table." * Base.join(class, ".")
-        end
-    elseif !Base.isempty(id)
-        selector *= "#$id"
-    end
-
-    tables::Vector{Gumbo.HTMLNode} = Base.eachmatch(
-        Cascadia.Selector(selector), html_document.root
+    htmltable_rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(
+        Cascadia.Selector("tr"), htmltable
     )
-
-    table::Gumbo.HTMLNode = tables[index]
-
-    rows::Vector{Gumbo.HTMLNode} = Base.eachmatch(Cascadia.Selector("tr"), table)
 
     headers::Vector = []
 
     data::Vector{Vector} = []
 
-    for (i, row) in Base.enumerate(rows)
-        rowdata::Vector = extract_row_data(row, number_type)
+    for (i, row) in Base.enumerate(htmltable_rows)
+        row_data::Vector = extract_row_data(row, number_type)
         if (i == 1 && Base.isempty(headers)) == true
-            headers = rowdata
+            headers = row_data
         else
-            Base.push!(data, rowdata)
+            Base.push!(data, row_data)
         end
     end
 
