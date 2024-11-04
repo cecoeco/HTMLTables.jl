@@ -242,26 +242,12 @@ end
 
 @testset "disabled CSS" begin
     io_01::IO = IOBuffer()
-    HTMLTables.writetable(
-        io_01,
-        GLOBAL_DF_01;
-        styles=false,
-        css=CSS_STRING_01,
-        theme=:default,
-        colorscale="Reds",
-    )
+    HTMLTables.writetable(io_01, GLOBAL_DF_01; theme=nothing)
     table_01::String = String(Base.take!(io_01))
     @test !Base.occursin("<style>", table_01)
 
     io_02::IO = IOBuffer()
-    HTMLTables.writetable(
-        io_02,
-        GLOBAL_DF_01;
-        styles=false,
-        css=CSS_FILE_01,
-        theme=:gold,
-        colorscale="Viridis",
-    )
+    HTMLTables.writetable(io_02, GLOBAL_DF_01; theme=nothing)
     table_02::String = String(Base.take!(io_02))
     @test !Base.occursin("<style>", table_02)
 

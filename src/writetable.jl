@@ -1,8 +1,8 @@
-function writetheme(theme::Symbol; styles::Bool)::String
-    if theme == "" || !styles
-        return ""
-    end
+function writetheme(theme::Nothing)::String
+    return ""
+end
 
+function writetheme(theme::Symbol)::String
     theme_dictionary::Dict{Symbol,String} = Base.Dict(
         :default => DEFAULT,
         :red => RED,
@@ -34,8 +34,8 @@ function writetheme(theme::Symbol; styles::Bool)::String
     return """<style>\n$theme\n</style>\n"""
 end
 
-function writetheme(theme::String; styles::Bool)::String
-    return writetheme(Symbol(theme); styles=styles)
+function writetheme(theme::String)::String
+    return writetheme(Symbol(theme))
 end
 
 function isjsfile(file::String)::Bool
@@ -46,11 +46,11 @@ function isjsfile(file::String)::Bool
     return Base.splitext(file)[end] == ".js"
 end
 
-function writescript(js::String)::String
-    if Base.isempty(js)
-        return ""
-    end
+function writescript(js::Nothing)::String
+    return ""
+end
 
+function writescript(js::String)::String
     if isjsfile(js)
         js::String = Base.read(js, String)
     end
@@ -66,11 +66,11 @@ function iscssfile(file::String)::Bool
     return Base.splitext(file)[end] == ".css"
 end
 
-function writestyle(css::String; styles::Bool)::String
-    if Base.isempty(css) || !styles
-        return ""
-    end
+function writestyle(css::Nothing)::String
+    return ""
+end
 
+function writestyle(css::String)::String
     if iscssfile(css)
         css::String = Base.read(css, String)
     end
@@ -78,36 +78,32 @@ function writestyle(css::String; styles::Bool)::String
     return """<style>\n$css\n</style>\n"""
 end
 
+function writeid(id::Nothing)::String
+    return ""
+end
+
 function writeid(id::String)::String
-    if Base.isempty(id)
-        return ""
-    else
-        return " id=\"$id\""
-    end
+    return " id=\"$id\""
+end
+
+function writeclass(class::Nothing)::String
+    return ""
 end
 
 function writeclass(class::String)::String
-    if Base.isempty(class)
-        return ""
-    else
-        return " class=\"$class\""
-    end
+    return " class=\"$class\""
 end
 
-function writeclass(class::Vector)::String
-    if Base.isempty(class)
-        return ""
-    else
-        return " class=\"" * Base.join(class, " ") * "\""
-    end
+function writeclass(class::Vector{String})::String
+    return " class=\"" * Base.join(class, " ") * "\""
+end
+
+function writecaption(caption::Nothing)::String
+    return ""
 end
 
 function writecaption(caption::String)::String
-    if Base.isempty(caption)
-        return ""
-    else
-        return "<caption>$caption</caption>\n"
-    end
+    return "<caption>$caption</caption>\n"
 end
 
 function writetooltip(tooltips::Bool, cell_value)::String
@@ -163,10 +159,10 @@ function css_rgb(color::Colors.Colorant)::String
     return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
 end
 
-function cellcolor(tbl; colorscale::Union{String,Symbol}, cell_value, styles::Bool)::String
+function cellcolor(tbl; colorscale::Union{Nothing,String,Symbol}, cell_value)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
-    if colorscale == "" || Base.ismissing(cell_value) || !(cell_value in numbers) || !styles
+    if isnothing(colorscale) || Base.ismissing(cell_value) || !(cell_value in numbers)
         return ""
     end
 
@@ -180,7 +176,7 @@ function cellcolor(tbl; colorscale::Union{String,Symbol}, cell_value, styles::Bo
 end
 
 function writetbody(
-    tbl; colorscale::Union{String,Symbol}, tooltips::Bool, styles::Bool, editable::Bool
+    tbl; colorscale::Union{Nothing,String,Symbol}, tooltips::Bool, editable::Bool
 )::String
     contenteditable::String = ""
     if editable
@@ -200,9 +196,7 @@ function writetbody(
             cell::String = ""
             cell *= "<td$contenteditable"
             cell *= writetooltip(tooltips, cell_value)
-            cell *= cellcolor(
-                tbl; colorscale=colorscale, cell_value=cell_value, styles=styles
-            )
+            cell *= cellcolor(tbl; colorscale=colorscale, cell_value=cell_value)
             cell *= ">$cell_value</td>\n"
 
             tbody *= cell
@@ -245,16 +239,15 @@ end
         tbl;
         header::Bool=true,
         footer::Bool=true,
-        id::String="",
-        class::Union{String,Vector{String}}="",
-        caption::String="",
+        id::Union{Nothing,String}=nothing,
+        class::Union{Nothing,String,Vector{String}}=nothing,
+        caption::Union{Nothing,String}=nothing,
         editable::Bool=false,
         tooltips::Bool=true,
-        js::String="",
-        styles::Bool=true,
-        css::String="",
-        theme::Union{String,Symbol}=:default,
-        colorscale::Union{String,Symbol}=""
+        js::Union{Nothing,String}=nothing,
+        css::Union{Nothing,String}=nothing,
+        theme::Union{Nothing,String,Symbol}=:default,
+        colorscale::Union{Nothing,String,Symbol}=nothing
     )
 
 Uses the Tables.jl interface to write an HTML table.
@@ -268,16 +261,15 @@ Uses the Tables.jl interface to write an HTML table.
 
 - `header::Bool`: whether to include the table header.
 - `footer::Bool`: whether to include the table footer.
-- `id::String`: the id of the HTML table.
-- `class::Union{String,Vector{String}}`: the class of the HTML table.
-- `caption::String`: the caption of the HTML table.
+- `id::Union{Nothing,String}`: the id of the HTML table.
+- `class::Union{Nothing,String,Vector{String}}`: the class of the HTML table.
+- `caption::Union{Nothing,String}`: the caption of the HTML table.
 - `editable::Bool`: whether to enable table editing.
 - `tooltips::Bool`: whether to include tooltips.
-- `js::String`: the JavaScript to include.
-- `styles::Bool`: whether to include the CSS. If false `css`, `theme` and `colorscale` are ignored.
-- `css::String`: the path to the CSS file to include.
-- `theme::Union{Symbol,String}`: the theme of the HTML table.
-- `colorscale::Union{Symbol,String}`: the colorscale from [ColorSchemes.jl](https://juliagraphics.github.io/ColorSchemes.jl/stable/catalogue/) for numeric data.
+- `js::Union{Nothing,String}`: the JavaScript to include.
+- `css::Union{Nothing,String}`: the path to the CSS file to include.
+- `theme::Union{Nothing,Symbol,String}`: the theme of the HTML table.
+- `colorscale::Union{Nothing,Symbol,String}`: the colorscale from [ColorSchemes.jl](https://juliagraphics.github.io/ColorSchemes.jl/stable/catalogue/) for numeric data.
 
 ## Examples
 
@@ -338,31 +330,30 @@ function writetable(
     tbl;
     header::Bool=true,
     footer::Bool=true,
-    id::String="",
-    class::Union{String,Vector{String}}="",
-    caption::String="",
+    id::Union{Nothing,String}=nothing,
+    class::Union{Nothing,String,Vector{String}}=nothing,
+    caption::Union{Nothing,String}=nothing,
     editable::Bool=false,
     tooltips::Bool=true,
-    js::String="",
-    styles::Bool=true,
-    css::String="",
-    theme::Union{String,Symbol}=:default,
-    colorscale::Union{String,Symbol}="",
-)
-    html_table::String = ""
-    html_table *= writescript(js)
-    html_table *= writetheme(theme; styles=styles)
-    html_table *= writestyle(css; styles=styles)
-    html_table *= "<table$(writeid(id))$(writeclass(class))>\n"
-    html_table *= writecaption(caption)
-    html_table *= writethead(tbl; header=header, editable=editable)
-    html_table *= writetbody(
-        tbl; colorscale=colorscale, tooltips=tooltips, styles=styles, editable=editable
+    js::Union{Nothing,String}=nothing,
+    css::Union{Nothing,String}=nothing,
+    theme::Union{Nothing,String,Symbol}=:default,
+    colorscale::Union{Nothing,String,Symbol}=nothing
+)::Nothing
+    htmltable::String = ""
+    htmltable *= writescript(js)
+    htmltable *= writetheme(theme)
+    htmltable *= writestyle(css)
+    htmltable *= "<table$(writeid(id))$(writeclass(class))>\n"
+    htmltable *= writecaption(caption)
+    htmltable *= writethead(tbl; header=header, editable=editable)
+    htmltable *= writetbody(
+        tbl; colorscale=colorscale, tooltips=tooltips, editable=editable
     )
-    html_table *= writetfoot(tbl; footer=footer, editable=editable)
-    html_table *= "</table>"
+    htmltable *= writetfoot(tbl; footer=footer, editable=editable)
+    htmltable *= "</table>"
 
-    Base.write(out, html_table)
+    Base.write(out, htmltable)
 
     return nothing
 end
