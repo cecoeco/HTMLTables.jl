@@ -28,7 +28,9 @@ function writetheme(theme::Symbol)::String
     if Base.haskey(theme_dictionary, theme)
         theme = theme_dictionary[theme]
     else
-        Base.throw(Base.ArgumentError("$(theme) is not a valid theme"))
+        Base.throw(
+            Base.ArgumentError("$(theme) is not in themes: $(Base.keys(theme_dictionary))")
+        )
     end
 
     return """<style>\n$theme\n</style>\n"""
@@ -39,10 +41,6 @@ function writetheme(theme::String)::String
 end
 
 function isjsfile(file::String)::Bool
-    if Base.isempty(file)
-        return false
-    end
-
     return Base.splitext(file)[end] == ".js"
 end
 
@@ -51,18 +49,10 @@ function writescript(js::Nothing)::String
 end
 
 function writescript(js::String)::String
-    if isjsfile(js)
-        js::String = Base.read(js, String)
-    end
-
-    return """<script>\n$js\n</script>\n"""
+    return """<script>\n$(isjsfile(js) ? Base.read(js, String) : js)\n</script>\n"""
 end
 
 function iscssfile(file::String)::Bool
-    if Base.isempty(file)
-        return false
-    end
-
     return Base.splitext(file)[end] == ".css"
 end
 
@@ -71,11 +61,7 @@ function writestyle(css::Nothing)::String
 end
 
 function writestyle(css::String)::String
-    if iscssfile(css)
-        css::String = Base.read(css, String)
-    end
-
-    return """<style>\n$css\n</style>\n"""
+    return """<style>\n$(iscssfile(css) ? Base.read(css, String) : css)\n</style>\n"""
 end
 
 function writeid(id::Nothing)::String
@@ -151,18 +137,14 @@ function getnumbers(tbl)::Vector{Float64}
     return numbers
 end
 
-function css_rgb(color::Colors.Colorant)::String
-    r::Float64 = Colors.red(color) * 255
-    g::Float64 = Colors.green(color) * 255
-    b::Float64 = Colors.blue(color) * 255
-
-    return "rgb(" * Base.join(["$r", "$g", "$b"], ",") * ")"
+function css_color(color::Colors.Colorant)::String
+    return Base.string("rgb(", color.r * 255, ",", color.g * 255, ",", color.b * 255, ")")
 end
 
 function cellcolor(tbl; colorscale::Union{Nothing,String,Symbol}, cell_value)::String
     numbers::Vector{Number} = getnumbers(tbl)
 
-    if isnothing(colorscale) || Base.ismissing(cell_value) || !(cell_value in numbers)
+    if Base.isnothing(colorscale) || Base.ismissing(cell_value) || !(cell_value in numbers)
         return ""
     end
 
@@ -172,7 +154,7 @@ function cellcolor(tbl; colorscale::Union{Nothing,String,Symbol}, cell_value)::S
         cell_value - Base.minimum(numbers), Base.maximum(numbers) - Base.minimum(numbers)
     )
 
-    return " style=\"background-color: $(css_rgb(ColorSchemes.get(colorscheme, cell_position)));\""
+    return " style=\"background-color: $(css_color(ColorSchemes.get(colorscheme, cell_position)));\""
 end
 
 function writetbody(
@@ -266,9 +248,9 @@ Uses the Tables.jl interface to write an HTML table.
 - `caption::Union{Nothing,String}`: the caption of the HTML table.
 - `editable::Bool`: whether to enable table editing.
 - `tooltips::Bool`: whether to include tooltips.
-- `js::Union{Nothing,String}`: the JavaScript to include.
-- `css::Union{Nothing,String}`: the path to the CSS file to include.
-- `theme::Union{Nothing,Symbol,String}`: the theme of the HTML table.
+- `js::Union{Nothing,String}`: the JavaScript of the HTML table.
+- `css::Union{Nothing,String}`: the CSS of the HTML table.
+- `theme::Union{Nothing,Symbol,String}`: the built-in theme of the HTML table.
 - `colorscale::Union{Nothing,Symbol,String}`: the colorscale from [ColorSchemes.jl](https://juliagraphics.github.io/ColorSchemes.jl/stable/catalogue/) for numeric data.
 
 ## Examples
@@ -338,7 +320,7 @@ function writetable(
     js::Union{Nothing,String}=nothing,
     css::Union{Nothing,String}=nothing,
     theme::Union{Nothing,String,Symbol}=:default,
-    colorscale::Union{Nothing,String,Symbol}=nothing
+    colorscale::Union{Nothing,String,Symbol}=nothing,
 )::Nothing
     htmltable::String = ""
     htmltable *= writescript(js)
