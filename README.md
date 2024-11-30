@@ -22,7 +22,7 @@ using HTMLTables, DataFrames
 
 df = DataFrame(x=[10, 40, 70], y=[20, 50, 80], z=[30, 60, 90])
 
-writetable(stdout, df, styles=false, footer=false)
+writetable(stdout, df, theme=nothing, footer=false)
 ```
 
 output:
